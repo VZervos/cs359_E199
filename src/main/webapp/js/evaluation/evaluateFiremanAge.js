@@ -1,4 +1,4 @@
-import {ErrorMessage} from "./ErrorMessage.js";
+import {ErrorMessage} from "../utility/ErrorMessage.js";
 
 const BIRTHDATE_FIELD_ID = "birthdate";
 

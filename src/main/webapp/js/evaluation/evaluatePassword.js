@@ -1,4 +1,4 @@
-import {ErrorMessage} from "./ErrorMessage.js";
+import {ErrorMessage} from "../utility/ErrorMessage.js";
 
 const STRONG_PASSWORD = "Strong";
 const MEDIUM_PASSWORD = "Medium";

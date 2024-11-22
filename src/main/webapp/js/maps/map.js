@@ -1,4 +1,4 @@
-import {getAddress, verifyAddress} from "./evaluateAddress.js"
+import {getAddress, verifyAddress} from "../evaluation/evaluateAddress.js"
 
 const MESSAGE_SHOW_ADDRESS_ON_MAP = "Show Address on Map";
 const MESSAGE_HIDE_MAP = "Hide map";

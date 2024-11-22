@@ -1,8 +1,8 @@
-import verifyPassword from "./evaluatePassword.js";
-import verifyFiremanAge from "./evaluateFiremanAge.js";
-import verifyAddress, {getAddress} from "./evaluateAddress.js";
-import {registerUser} from "./ajax/ajax.js";
-import {isEmailAvailable, isTelephoneAvailable, isUsernameAvailable} from "./checkForDuplicates.js";
+import verifyPassword from "../evaluation/evaluatePassword.js";
+import verifyFiremanAge from "../evaluation/evaluateFiremanAge.js";
+import verifyAddress, {getAddress} from "../evaluation/evaluateAddress.js";
+import {registerUser} from "../ajax/ajax.js";
+import {isEmailAvailable, isTelephoneAvailable, isUsernameAvailable} from "../evaluation/checkForDuplicates.js";
 
 const scrollAtComponent = (component_id) =>
     $('html, body').animate({scrollTop: $('#' + component_id).offset().top}, 500);
@@ -62,7 +62,7 @@ $(document).ready(() => {
             const userData = extractFormValues();
             console.log("Form submitted successfully!");
             registerUser(userData);
-            window.location.href = 'html/registrationSuccess.html';
+            window.location.href = '../../html/registrationSuccess.html';
         } else if (!isFormValid) {
             const firstInvalidField = form.querySelector(':invalid');
             firstInvalidField.scrollIntoView({behavior: 'smooth', block: 'center'});

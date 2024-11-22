@@ -1,5 +1,5 @@
-import {reverseGeocode} from "./geocoding.js"
-import {ErrorMessage} from "./ErrorMessage.js";
+import {reverseGeocode} from "../maps/geocoding.js"
+import {ErrorMessage} from "../utility/ErrorMessage.js";
 
 const ADDRESS_FIELD_ID = "address";
 

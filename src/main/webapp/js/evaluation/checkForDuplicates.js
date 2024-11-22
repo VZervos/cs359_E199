@@ -1,4 +1,4 @@
-import {checkForDuplicate} from "./ajax/ajax.js";
+import {checkForDuplicate} from "../ajax/ajax.js";
 
 const RESULT_STYLE = {
     [true]: "green",
