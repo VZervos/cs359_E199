@@ -13,9 +13,6 @@
 
     <link rel="stylesheet" href="../css/default.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-
     <script type="module" src="../js/evaluation/evaluateAddress.js"></script>
 </head>
 <body class="bg-body-secondary">
@@ -28,7 +25,7 @@
                     <h4 class="note mb-0">Don't have an account?</h4>
                 </div>
                 <div class="col-auto">
-                    <a href="login.html" class="main-button" id="registerButton">Register</a>
+                    <a href="register.html" class="main-button">Register</a>
                 </div>
             </div>
         </div>
@@ -41,9 +38,9 @@
         </div>
         <div>
             <div class="section-content">
-                <label class="field-title" for="username">Username:</label>
+                <label class="field-title" for="login-username">Username:</label>
                 <input type="text"
-                       id="username"
+                       id="login-username"
                        name="username"
                        pattern="[A-Za-z][A-Za-z]{7,}"
                        title="Username must start with a latin character and be at least 8 characters long."
@@ -53,9 +50,9 @@
             </div>
 
             <div class="section-content">
-                <label class="field-title" for="password">Password:</label>
+                <label class="field-title" for="login-password">Password:</label>
                 <input type="password"
-                       id="password"
+                       id="login-password"
                        name="password"
                        pattern="(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,18}"
                        title="Password must be 8-18 characters long and contain at least 1 uppercase letter, 1 number and 1 symbol."
@@ -64,20 +61,19 @@
                        required
                 >
                 <button
-                        onmousedown="showPassword('password')"
-                        onmouseup="hidePassword('password')"
+                        onmousedown="showPassword('login-password')"
+                        onmouseup="hidePassword('login-password')"
                         type="button"
                 >
                     Show
                 </button>
+                <p id="login_result_message"></p>
             </div>
 
-            <input
+            <button
                     id="loginButton"
-                    type="submit"
-                    value="Login"
                     class="main-button"
-            >
+            >Login</button>
         </div>
     </section>
 </main>

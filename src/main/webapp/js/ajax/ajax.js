@@ -1,22 +1,20 @@
+// const urlEncodedData = Object.keys(dataObj)
+//     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(dataObj[key]))
+//     .join('&');
+
 export function registerUser(userData) {
     const dataObj = typeof userData === "string" ? JSON.parse(userData) : userData;
-
-    // const urlEncodedData = Object.keys(dataObj)
-    //     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(dataObj[key]))
-    //     .join('&');
 
     console.log(userData);
 
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            // $("#ajaxContent").html("Successful Registration");
             console.log("Registered");
             const response = JSON.parse(xhr.responseText);
             console.log('Message:', response.message);
             console.log(JSON.stringify(dataObj));
         } else if (xhr.status !== 200) {
-            // $("#ajaxContent").html("Error Occurred");
             console.log("Error occurred");
             const response = JSON.parse(xhr.responseText);
             console.log('Message:', response.message);
@@ -27,6 +25,74 @@ export function registerUser(userData) {
     xhr.open('POST', 'RegisterUser');
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(JSON.stringify(dataObj));
+}
+
+export function loginUser(user) {
+    console.log(user)
+
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Login success");
+                const response = JSON.parse(xhr.responseText);
+                console.log('Message:', response.message);
+                console.log(JSON.stringify(dataObj));
+            } else if (xhr.status !== 200) {
+                console.log("Error occurred");
+                const response = JSON.parse(xhr.responseText);
+                console.log('Message:', response.message);
+                console.log(dataObj);
+            }
+            resolve(response);
+        };
+
+        xhr.open('POST', 'loginUser');
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify(user));
+    });
+}
+
+export function retrieveUser(username, password) {
+    console.log(username)
+    console.log(password);
+
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            let success = false;
+            let message = null;
+            let user = null;
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Registered");
+                const response = JSON.parse(xhr.responseText);
+                success = true;
+                message = response.message;
+                user = response.user;
+                console.log('Message:', response.message);
+            } else if (xhr.readyState === 4 && xhr.status === 403) {
+                console.log("Invalid credentials or user not founds");
+                const response = JSON.parse(xhr.responseText);
+                success = false;
+                message = response.message;
+                console.log('Message:', response.message);
+            } else if (xhr.status !== 200) {
+                console.log("Error occurred");
+                const response = JSON.parse(xhr.responseText);
+                success = false;
+                message = response.message;
+                console.log('Message:', response.message);
+            }
+            resolve({success, message, user});
+        };
+
+        xhr.open('POST', 'retrieveUser');
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify({
+            "username": username,
+            "password": password
+        }));
+    });
 }
 
 export function checkForDuplicate(attribute, value) {

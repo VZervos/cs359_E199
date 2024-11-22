@@ -3,9 +3,7 @@ import verifyFiremanAge from "../evaluation/evaluateFiremanAge.js";
 import verifyAddress, {getAddress} from "../evaluation/evaluateAddress.js";
 import {registerUser} from "../ajax/ajax.js";
 import {isEmailAvailable, isTelephoneAvailable, isUsernameAvailable} from "../evaluation/checkForDuplicates.js";
-
-const scrollAtComponent = (component_id) =>
-    $('html, body').animate({scrollTop: $('#' + component_id).offset().top}, 500);
+import {scrollAtComponent} from "../utility/utility.js";
 
 function extractFormValues() {
     const formData = {};
