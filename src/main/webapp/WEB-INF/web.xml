@@ -33,6 +33,10 @@
         <servlet-name>RegisterUser</servlet-name>
         <servlet-class>servlets.RegisterUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RetrieveUser</servlet-name>
+        <servlet-class>servlets.RetrieveUser</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/NewServlet</url-pattern>
@@ -64,6 +68,10 @@
     <servlet-mapping>
         <servlet-name>RegisterUser</servlet-name>
         <url-pattern>/RegisterUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RetrieveUser</servlet-name>
+        <url-pattern>/RetrieveUser</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

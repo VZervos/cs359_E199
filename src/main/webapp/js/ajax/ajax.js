@@ -86,7 +86,7 @@ export function retrieveUser(username, password) {
             resolve({success, message, user});
         };
 
-        xhr.open('POST', 'retrieveUser');
+        xhr.open('POST', 'RetrieveUser');
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
             "username": username,
