@@ -19,8 +19,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.sql.SQLException;
 
-import static utility.Utility.getBodyString;
-import static utility.Utility.getSessionUserData;
+import static utility.Utility.*;
 
 /**
  * @author micha
@@ -73,20 +72,22 @@ public class LoginUser extends HttpServlet {
         EditUsersTable eut = new EditUsersTable();
 
         HttpSession session = request.getSession();
-        String sessionUserData = getSessionUserData(request);
+        User sessionUser = eut.jsonToUser(getSessionUserData(request));
         JSONObject responseBody = new JSONObject();
-        if (sessionUserData != null) {
+        if (sessionUser != null) {
             responseBody.put("activeSession", true);
-            responseBody.put("user", sessionUserData);
-            responseBody.put("message", "Session found for user " + eut.jsonToUser(sessionUserData).getUsername());
+            responseBody.put("user", eut.userToJSON(sessionUser));
+            responseBody.put("message", "Session found for user " + sessionUser.getUsername());
         } else {
             session = request.getSession(true);
             responseBody.put("activeSession", false);
 
-            String userData = getBodyString(request);
+            String body = getBodyString(request);
+            User user = eut.jsonToUser(body);
+            String userData = eut.userToJSON(user);
             session.setAttribute("user", userData);
             responseBody.put("user", userData);
-            responseBody.put("message", "Initiated new session for user " + eut.jsonToUser(userData).getUsername());
+            responseBody.put("message", "Initiated new session for user " + user.getUsername());
         }
         responseBody.put("session", session.toString());
 

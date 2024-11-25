@@ -33,23 +33,22 @@ export function loginUser(user) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
+            let response;
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log("Login success");
                 const response = JSON.parse(xhr.responseText);
                 console.log('Message:', response.message);
-                console.log(JSON.stringify(dataObj));
             } else if (xhr.status !== 200) {
                 console.log("Error occurred");
                 const response = JSON.parse(xhr.responseText);
                 console.log('Message:', response.message);
-                console.log(dataObj);
             }
             resolve(response);
         };
 
-        xhr.open('POST', '../loginUser');
+        xhr.open('POST', '../LoginUser');
         xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.send(JSON.stringify(user));
+        xhr.send(user);
     });
 }
 
