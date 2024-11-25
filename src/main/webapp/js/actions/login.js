@@ -1,10 +1,10 @@
 import {loginUser, retrieveUser} from "../ajax/ajax.js";
 
 $(document).ready(() => {
-    $('#loginButton').on('click', async (event) => {
+    $('#loginButton').click( async (event) => {
         const username = $('#login-username');
         const password = $('#login-password');
-        const credentialsCorrectnessCheckResult = await retrieveUser(username, password);
+        const credentialsCorrectnessCheckResult = await retrieveUser(username.val(), password.val());
         if (credentialsCorrectnessCheckResult["success"]) {
             console.log("Logged in successfully!");
             await loginUser(credentialsCorrectnessCheckResult["user"]);

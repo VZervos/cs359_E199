@@ -17,16 +17,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import mainClasses.User;
 import org.json.JSONObject;
 
-import static utility.Utility.getBodyJson;
+import static utility.Utility.*;
 
 /**
  *
  * @author micha
  */
-public class RetrieveUser extends HttpServlet {
+public class GetActiveSession extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,6 +55,32 @@ public class RetrieveUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        EditUsersTable eut = new EditUsersTable();
+
+        JSONObject responseBody = new JSONObject();
+        String sessionUserData = getSessionUserData(request);
+        if (sessionUserData != null) {
+            responseBody.put("activeSession", true);
+            responseBody.put("user", sessionUserData);
+            responseBody.put("message", "Session found for user " + eut.jsonToUser(sessionUserData).getUsername());
+        } else {
+            responseBody.put("activeSession", false);
+            responseBody.put("message", "No active session found");
+        }
+        responseBody.put("sessionUser", sessionUserData);
+
+        Writer writer = response.getWriter();
+        try {
+            writer.write(responseBody.toString());
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            assert writer != null;
+            writer.write(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -67,34 +94,6 @@ public class RetrieveUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        Writer writer = response.getWriter();
-        try {
-            writer = response.getWriter();
-            JSONObject userCredentials = getBodyJson(request);
-
-            String username = userCredentials.getString("username");
-            String password = userCredentials.getString("password");
-            EditUsersTable eut = new EditUsersTable();
-            User user = eut.databaseToUsers(username, password);
-            JSONObject responseBody = new JSONObject();
-            if (user != null) {
-                responseBody.put("user", eut.userToJSON(user));
-                responseBody.put("message", "User successfully retrieved");
-            } else {
-                responseBody.put("message", "User not found");
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            }
-
-            writer.write(responseBody.toString());
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            assert writer != null;
-            writer.write(e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     /**

@@ -22,7 +22,7 @@ export function registerUser(userData) {
         }
     };
 
-    xhr.open('POST', 'RegisterUser');
+    xhr.open('POST', '../RegisterUser');
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(JSON.stringify(dataObj));
 }
@@ -47,7 +47,7 @@ export function loginUser(user) {
             resolve(response);
         };
 
-        xhr.open('POST', 'loginUser');
+        xhr.open('POST', '../loginUser');
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify(user));
     });
@@ -86,7 +86,7 @@ export function retrieveUser(username, password) {
             resolve({success, message, user});
         };
 
-        xhr.open('POST', 'RetrieveUser');
+        xhr.open('POST', '../RetrieveUser');
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
             "username": username,
@@ -128,21 +128,21 @@ export function checkForDuplicate(attribute, value) {
         switch (attribute) {
             case "username":
                 console.log("username");
-                xhr.open('GET', 'IsUsernameAvailable?username=' + value);
+                xhr.open('GET', '../IsUsernameAvailable?username=' + value);
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");
                 break;
             case "email":
                 console.log("email");
-                xhr.open('GET', 'IsEmailAvailable?email=' + value);
+                xhr.open('GET', '../IsEmailAvailable?email=' + value);
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");
                 break;
             case "telephone":
                 console.log("telephone");
-                xhr.open('GET', 'IsTelephoneAvailable?telephone=' + value);
+                xhr.open('GET', '../IsTelephoneAvailable?telephone=' + value);
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");

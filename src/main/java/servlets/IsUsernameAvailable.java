@@ -20,13 +20,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mainClasses.Resources;
 import mainClasses.User;
 import mainClasses.Volunteer;
-import org.json.JSONObject;
 
-import static mainClasses.User.checkCredentialsUniqueness;
-import static utility.Utility.getBody;
 
 /**
  * @author micha

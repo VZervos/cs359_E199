@@ -25,7 +25,7 @@ import mainClasses.User;
 import mainClasses.Volunteer;
 import org.json.JSONObject;
 
-import static utility.Utility.getBody;
+import static utility.Utility.*;
 
 /**
  * @author micha
@@ -74,14 +74,14 @@ public class RegisterUser extends HttpServlet {
         String body;
         try {
             writer = response.getWriter();
-            body = getBody(request);
-            JSONObject userData = new JSONObject(body);
+            JSONObject userData = getBodyJson(request);
+            String userDataString = getBodyString(request);
 
             String type = userData.getString("type");
             switch (type) {
-                case Resources.TYPE_USER -> registerUser(body, userData);
+                case Resources.TYPE_USER -> registerUser(userDataString, userData);
                 case Resources.TYPE_ADMIN -> registerAdmin(request);
-                case Resources.TYPE_VOLUNTEER -> registerVolunteer(body, userData);
+                case Resources.TYPE_VOLUNTEER -> registerVolunteer(userDataString, userData);
                 default -> {
                     assert false;
                 }

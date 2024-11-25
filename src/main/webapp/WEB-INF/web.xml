@@ -37,6 +37,15 @@
         <servlet-name>RetrieveUser</servlet-name>
         <servlet-class>servlets.RetrieveUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GetActiveSession</servlet-name>
+        <servlet-class>servlets.GetActiveSession</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginUser</servlet-name>
+        <servlet-class>servlets.LoginUser</servlet-class>
+    </servlet>
+    
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/NewServlet</url-pattern>
@@ -73,6 +82,15 @@
         <servlet-name>RetrieveUser</servlet-name>
         <url-pattern>/RetrieveUser</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetActiveSession</servlet-name>
+        <url-pattern>/GetActiveSession</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginUser</servlet-name>
+        <url-pattern>/LoginUser</url-pattern>
+    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30
