@@ -3,10 +3,14 @@ export const scrollAtComponent = (component_id) =>
 
 export const getBaseURL = () => {
     const basePath = window.location.pathname.split('/')[1];
-    const baseURL = `${window.location.origin}/${basePath}`;
+    const baseURL = `${window.location.origin}/${basePath}/`;
     return baseURL;
 }
 
 export const openDashboard = () => {
-    window.location.href = `${getBaseURL()}/html/dashboard.html`;
+    openPage("html/dashboard.html");
+}
+
+export const openPage = (page) => {
+    window.location.href = `${getBaseURL()}` + page;
 }

@@ -33,14 +33,15 @@ public class Utility {
     }
 
     public static boolean isActiveSession(HttpServletRequest request) {
-        String sessionUser = getSessionUserData(request);
-        return sessionUser != null;
+        HttpSession session = request.getSession(false);
+
+        return session != null && getSessionUserData(request) != null;
     }
 
     public static String getSessionUserData(HttpServletRequest request) {
         EditUsersTable eut = new EditUsersTable();
 
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         String sessionUser = (String) session.getAttribute("user");
         return sessionUser;
     }

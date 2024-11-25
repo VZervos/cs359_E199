@@ -13,6 +13,8 @@
 
   <link rel="stylesheet" href="../css/default.css">
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 </head>
 <body class="bg-body-secondary">
 
@@ -21,7 +23,10 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-auto">
-          <a href="../index.html" class="main-button">Logout</a>
+          <button
+                  class="main-button"
+                  id="logoutButton"
+          >Logout</button>
         </div>
       </div>
     </div>
@@ -44,6 +49,8 @@
     </div>
   </div>
 </footer>
+
+<script type="module" src="../js/session/logout.js"></script>
 
 </body>
 </html>

@@ -71,10 +71,11 @@ public class LoginUser extends HttpServlet {
 
         EditUsersTable eut = new EditUsersTable();
 
-        HttpSession session = request.getSession();
-        User sessionUser = eut.jsonToUser(getSessionUserData(request));
+        HttpSession session;
         JSONObject responseBody = new JSONObject();
-        if (sessionUser != null) {
+        if (isActiveSession(request)) {
+            session = request.getSession(false);
+            User sessionUser = eut.jsonToUser(getSessionUserData(request));
             responseBody.put("activeSession", true);
             responseBody.put("user", eut.userToJSON(sessionUser));
             responseBody.put("message", "Session found for user " + sessionUser.getUsername());
@@ -90,6 +91,7 @@ public class LoginUser extends HttpServlet {
             responseBody.put("message", "Initiated new session for user " + user.getUsername());
         }
         responseBody.put("session", session.toString());
+
 
         Writer writer = response.getWriter();
         try {
