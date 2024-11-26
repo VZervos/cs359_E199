@@ -5,10 +5,14 @@
  */
 package servlets;
 
+import database.tables.EditUsersTable;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
+import database.tables.EditVolunteersTable;
 import exceptions.EmailAlreadyRegisteredException;
 import exceptions.TelephoneAlreadyRegisteredException;
 import exceptions.UsernameAlreadyRegisteredException;
@@ -16,13 +20,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import mainClasses.Resources;
 import mainClasses.User;
 import mainClasses.Volunteer;
+import org.json.JSONObject;
+
+import static utility.Utility.*;
 
 /**
  * @author micha
  */
-public class IsEmailAvailable extends HttpServlet {
+public class UpdateInfoField extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,29 +58,6 @@ public class IsEmailAvailable extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/plain;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        Writer writer = null;
-        try {
-            writer = response.getWriter();
-
-            String email = request.getParameter("email");
-            User.checkCredentialsUniqueness(null, email, null);
-            Volunteer.checkCredentialsUniqueness(null, email, null);
-
-            writer.write("Email is unique");
-        } catch (UsernameAlreadyRegisteredException | EmailAlreadyRegisteredException |
-                 TelephoneAlreadyRegisteredException e) {
-            response.setStatus(HttpServletResponse.SC_CONFLICT);
-            assert writer != null;
-            writer.write(e.getMessage());
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            assert writer != null;
-            writer.write(e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -82,6 +68,29 @@ public class IsEmailAvailable extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        JSONObject newInfo = getBodyJson(request);
+        String field = newInfo.getString("field");
+        String value = newInfo.getString("value");
+
+        EditUsersTable eut = new EditUsersTable();
+        User sessionUser = eut.jsonToUser(getSessionUserData(request));
+        String username = sessionUser.getUsername();
+
+        JSONObject responseBody = new JSONObject();
+        Writer writer = response.getWriter();
+        try {
+            eut.updateUser(username, field, value);
+            responseBody.put("message", "Updated " + field + " of user " + username + " to " + value);
+            writer.write(responseBody.toString());
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            assert writer != null;
+            writer.write(e.getMessage());
+            e.printStackTrace();
+        }
 
     }
 

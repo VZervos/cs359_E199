@@ -49,6 +49,10 @@
         <servlet-name>LogoutUser</servlet-name>
         <servlet-class>servlets.LogoutUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateInfoField</servlet-name>
+        <servlet-class>servlets.UpdateInfoField</servlet-class>
+    </servlet>
     
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
@@ -97,6 +101,10 @@
     <servlet-mapping>
         <servlet-name>LogoutUser</servlet-name>
         <url-pattern>/LogoutUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateInfoField</servlet-name>
+        <url-pattern>/UpdateInfoField</url-pattern>
     </servlet-mapping>
     
     <session-config>

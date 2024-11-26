@@ -1,9 +1,5 @@
 import {checkForDuplicate} from "../ajax/ajax.js";
-
-const RESULT_STYLE = {
-    [true]: "green",
-    [false]: "red",
-};
+import {RESULT_STYLE} from "../utility/utility.js";
 
 let usernameAvailable = false;
 let emailAvailable = false;

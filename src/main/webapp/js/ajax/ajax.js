@@ -148,9 +148,44 @@ export function checkForDuplicate(attribute, value) {
                 break;
             default:
                 return {
-                    "success": false,
-                    "message": "An unexpected error occurred"
+                    "success": true,
+                    "message": "No duplicates were found for " + attribute
                 };
         }
+    });
+}
+
+export function updateInfoField(field, value) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            let success = false;
+            let message = null;
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Updated" + field);
+                const response = JSON.parse(xhr.responseText);
+                message = response.message;
+                console.log('Message:', message);
+                success = true;
+
+            } else if (xhr.status !== 200) {
+                console.log("Error occurred");
+                const response = JSON.parse(xhr.responseText);
+                message = response.message;
+                console.log('Message:', message);
+                success = false;
+            }
+            console.log("result: ");
+            console.log(success);
+            console.log(message);
+            resolve({success, message});
+        };
+
+        xhr.open('POST', '../UpdateInfoField');
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify({
+            "field": field,
+            "value": value
+        }));
     });
 }
