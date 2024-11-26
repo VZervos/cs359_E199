@@ -147,10 +147,11 @@ export function checkForDuplicate(attribute, value) {
                 console.log("sent");
                 break;
             default:
-                return {
+                console.log(attribute);
+                resolve( {
                     "success": true,
                     "message": "No duplicates were found for " + attribute
-                };
+                });
         }
     });
 }

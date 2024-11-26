@@ -1,9 +1,38 @@
-
 import {checkForDuplicate, updateInfoField} from "../ajax/ajax.js";
 import {RESULT_STYLE} from "../utility/utility.js";
+import verifyAddress from "../evaluation/evaluateAddress.js";
+
+async function checkAddressValidity(invalidField, message) {
+    const country = $('#country').val();
+    const prefecture = $('#prefecture').val();
+    const municipality = $('#municipality').val()
+    const address = $('#address').val();
+    if (!country || !prefecture || !municipality || !address || country === "" || prefecture === "") {
+        invalidField = true;
+        message = "Some address fields are empty."
+    } else {
+        invalidField = await verifyAddress()
+    }
+    return {invalidField, message};
+}
+
+async function updateValueAvailabilityMessage(invalidField, infoField, infoFieldValue, message, valueAvailabilityMessage) {
+    if (!invalidField) {
+        const updateResult = await updateInfoField(infoField, infoFieldValue);
+        console.log(updateResult);
+        const success = updateResult["success"];
+        message = updateResult["message"];
+        valueAvailabilityMessage.css("color", RESULT_STYLE[success]);
+        valueAvailabilityMessage.text(message);
+    } else {
+        const success = false;
+        valueAvailabilityMessage.css("color", RESULT_STYLE[success]);
+        valueAvailabilityMessage.text(message);
+    }
+}
 
 $(document).ready(() => {
-    $('.update-info-button').click( async (event) => {
+    $('.update-info-button').click(async (event) => {
         const buttonClickedId = event.target.id;
         const infoField = buttonClickedId.split('-')[1];
         console.log(infoField);
@@ -15,36 +44,23 @@ $(document).ready(() => {
         await checkForDuplicate(infoField, infoFieldValue).then(async result => {
             console.log("Promise result:", result);
             const isAvailable = result["success"];
-            const message = result["message"];
+            let message = result["message"];
             const valueAvailabilityMessage = $('#' + infoField + '_availability');
 
             if (isAvailable) {
-                const updateResult = await updateInfoField(infoField, infoFieldValue);
-                console.log(updateResult);
-                const success = updateResult["success"];
-                const message = updateResult["message"];
-                valueAvailabilityMessage.css("color", RESULT_STYLE[success]);
-                valueAvailabilityMessage.text(message);
+                message = '';
+                let invalidField = null;
+                if (infoField === "address") {
+                    const __ret = await checkAddressValidity(invalidField, message);
+                    invalidField = __ret.invalidField;
+                    message = __ret.message;
+                }
+                await updateValueAvailabilityMessage(invalidField, infoField, infoFieldValue, message, valueAvailabilityMessage);
             } else {
                 valueAvailabilityMessage.css("color", RESULT_STYLE[isAvailable]);
                 valueAvailabilityMessage.text(message);
             }
         });
-
-
-        // const credentialsCorrectnessCheckResult = await retrieveUser(username.val(), password.val());
-        // console.log(credentialsCorrectnessCheckResult);
-        // if (credentialsCorrectnessCheckResult["success"]) {
-        //     console.log("Logged in successfully!");
-        //     await loginUser(credentialsCorrectnessCheckResult["user"]);
-        //     openDashboard();
-        // } else {
-        //     console.log("Login failed due to validation errors.");
-        //     const loginResultMessage = $('#login_result_message');
-        //     loginResultMessage.show();
-        //     loginResultMessage.text(credentialsCorrectnessCheckResult["message"]);
-        //     loginResultMessage.css("color", "red");
-        // }
     });
 });
 
