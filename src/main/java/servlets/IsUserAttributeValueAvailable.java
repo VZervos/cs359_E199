@@ -5,10 +5,6 @@
  */
 package servlets;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.SQLException;
-
 import exceptions.EmailAlreadyRegisteredException;
 import exceptions.TelephoneAlreadyRegisteredException;
 import exceptions.UsernameAlreadyRegisteredException;
@@ -19,6 +15,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import mainClasses.Resources;
 import mainClasses.User;
 import mainClasses.Volunteer;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.SQLException;
 
 /**
  * @author micha
@@ -75,7 +75,8 @@ public class IsUserAttributeValueAvailable extends HttpServlet {
             }
 
             writer.write("Username is unique");
-        } catch (UsernameAlreadyRegisteredException | EmailAlreadyRegisteredException | TelephoneAlreadyRegisteredException e) {
+        } catch (UsernameAlreadyRegisteredException | EmailAlreadyRegisteredException |
+                 TelephoneAlreadyRegisteredException e) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
             assert writer != null;
             writer.write(e.getMessage());

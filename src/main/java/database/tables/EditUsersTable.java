@@ -5,65 +5,62 @@
  */
 package database.tables;
 
-import mainClasses.User;
 import com.google.gson.Gson;
-import mainClasses.User;
 import database.DB_Connection;
+import mainClasses.User;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mainClasses.Participant;
 
 /**
- *
  * @author Mike
  */
 public class EditUsersTable {
 
- 
-    public void addUserFromJSON(String json) throws ClassNotFoundException{
-         User user=jsonToUser(json);
-         addNewUser(user);
+
+    public void addUserFromJSON(String json) throws ClassNotFoundException {
+        User user = jsonToUser(json);
+        addNewUser(user);
     }
-    
-     public User jsonToUser(String json){
-         Gson gson = new Gson();
+
+    public User jsonToUser(String json) {
+        Gson gson = new Gson();
 
         User user = gson.fromJson(json, User.class);
         return user;
     }
-    
-    public String userToJSON(User user){
-         Gson gson = new Gson();
+
+    public String userToJSON(User user) {
+        Gson gson = new Gson();
 
         String json = gson.toJson(user, User.class);
         return json;
     }
-    
-   
-    
-    public void updateUser(String username,String key,String value) throws SQLException, ClassNotFoundException{
+
+
+    public void updateUser(String username, String key, String value) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        String update="UPDATE users SET "+key+"='"+value+"' WHERE username = '"+username+"'";
+        String update = "UPDATE users SET " + key + "='" + value + "' WHERE username = '" + username + "'";
         stmt.executeUpdate(update);
         stmt.close();
         con.close();
     }
-   
-    
-    public User databaseToUsers(String username, String password) throws SQLException, ClassNotFoundException{
-         Connection con = DB_Connection.getConnection();
+
+
+    public User databaseToUsers(String username, String password) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password='"+password+"'");
+            rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password='" + password + "'");
             rs.next();
-            String json=DB_Connection.getResultsToJSON(rs);
+            String json = DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             User user = gson.fromJson(json, User.class);
             return user;
@@ -73,16 +70,16 @@ public class EditUsersTable {
         }
         return null;
     }
-    
-    public String databaseUserToJSON(String username, String password) throws SQLException, ClassNotFoundException{
-         Connection con = DB_Connection.getConnection();
+
+    public String databaseUserToJSON(String username, String password) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password='"+password+"'");
+            rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password='" + password + "'");
             rs.next();
-            String json=DB_Connection.getResultsToJSON(rs);
+            String json = DB_Connection.getResultsToJSON(rs);
             return json;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
@@ -92,7 +89,7 @@ public class EditUsersTable {
     }
 
 
-     public void createUsersTable() throws SQLException, ClassNotFoundException {
+    public void createUsersTable() throws SQLException, ClassNotFoundException {
 
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -113,14 +110,14 @@ public class EditUsersTable {
                 + "    prefecture VARCHAR(15) not null,"
                 + "    job VARCHAR(200) not null,"
                 + "    telephone VARCHAR(14) not null unique,"
-                  + "    lat DOUBLE,"
+                + "    lat DOUBLE,"
                 + "    lon DOUBLE,"
                 + " PRIMARY KEY (user_id))";
         stmt.execute(query);
         stmt.close();
     }
-    
-    
+
+
     /**
      * Establish a database connection and add in the database.
      *
@@ -166,7 +163,7 @@ public class EditUsersTable {
         }
     }
 
-    public boolean hasUserWithAttributes(String[] keys, String[] values) throws SQLException, ClassNotFoundException{
+    public boolean hasUserWithAttributes(String[] keys, String[] values) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 

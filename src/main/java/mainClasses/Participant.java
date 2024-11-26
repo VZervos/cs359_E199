@@ -7,13 +7,12 @@
 package mainClasses;
 
 /**
- *
  * @author Mike
  */
 public class Participant {
     int participant_id, incident_id;
-    String volunteer_type,volunteer_username;
-    String status, success,comment;
+    String volunteer_type, volunteer_username;
+    String status, success, comment;
 
     public int getParticipant_id() {
         return participant_id;
@@ -70,5 +69,5 @@ public class Participant {
     public void setComment(String comment) {
         this.comment = comment;
     }
-    
+
 }

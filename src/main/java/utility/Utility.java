@@ -1,16 +1,12 @@
 package utility;
 
 import database.tables.EditUsersTable;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import mainClasses.User;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Writer;
 
 public class Utility {
     public static JSONObject getBodyJson(HttpServletRequest request) throws IOException {
@@ -26,7 +22,7 @@ public class Utility {
             }
         }
 
-        System.out.println("Request Body: " + body.toString());
+        System.out.println("Request Body: " + body);
         String jsonString = body.toString();
         System.out.println("Request Body: " + jsonString);
         return jsonString;

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- *
  * @author mountant
  */
 public class Message {
@@ -48,7 +47,7 @@ public class Message {
     public void setDate_time() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        date_time=dtf.format(now);
+        date_time = dtf.format(now);
 
     }
 

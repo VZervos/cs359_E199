@@ -6,8 +6,9 @@
 package database.tables;
 
 import com.google.gson.Gson;
-import mainClasses.Participant;
 import database.DB_Connection;
+import mainClasses.Participant;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Mike
  */
 public class EditParticipantsTable {
@@ -66,12 +66,12 @@ public class EditParticipantsTable {
         stmt.close();
         con.close();
     }
-    
-       public void finalStatusParticipant(int participantID, String success, String comment) throws SQLException, ClassNotFoundException {
+
+    public void finalStatusParticipant(int participantID, String success, String comment) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        String updateQuery = "UPDATE participants SET status='finished', success='" + success + "', comment='"+
-                comment+"' WHERE participant_id= '" + participantID + "'";
+        String updateQuery = "UPDATE participants SET status='finished', success='" + success + "', comment='" +
+                comment + "' WHERE participant_id= '" + participantID + "'";
         stmt.executeUpdate(updateQuery);
         stmt.close();
         con.close();
@@ -112,7 +112,7 @@ public class EditParticipantsTable {
                     + "volunteer_type,status,success,comment)"
                     + " VALUES ("
                     + "'" + par.getIncident_id() + "',"
-                    + "'" + par.getVolunteer_username()+ "',"
+                    + "'" + par.getVolunteer_username() + "',"
                     + "'" + par.getVolunteer_type() + "',"
                     + "'" + par.getStatus() + "',"
                     + "'" + par.getSuccess() + "',"

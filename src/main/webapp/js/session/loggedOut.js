@@ -1,4 +1,4 @@
-import {getBaseURL, openIndex, openPage} from "../utility/utility.js";
+import {getBaseURL, openIndex} from "../utility/utility.js";
 import {hasActiveSession} from "./hasActiveSession.js";
 
 export function invalidateSession() {

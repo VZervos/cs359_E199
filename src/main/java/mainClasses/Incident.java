@@ -9,14 +9,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- *
  * @author mountant
  */
 public class Incident {
     int incident_id;
-    String incident_type, description, user_phone, user_type,address,
-     prefecture, municipality,start_datetime,end_datetime,danger,status,
-    finalResult;
+    String incident_type, description, user_phone, user_type, address,
+            prefecture, municipality, start_datetime, end_datetime, danger, status,
+            finalResult;
     double lat, lon;
     int vehicles, firemen;
 
@@ -91,7 +90,7 @@ public class Incident {
     public void setStart_datetime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        this.start_datetime =dtf.format(now);
+        this.start_datetime = dtf.format(now);
     }
 
     public String getEnd_datetime() {
@@ -101,7 +100,7 @@ public class Incident {
     public void setEnd_datetime(String end_datetime) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        this.end_datetime =dtf.format(now);
+        this.end_datetime = dtf.format(now);
     }
 
     public String getDanger() {
@@ -159,5 +158,5 @@ public class Incident {
     public void setFiremen(int firemen) {
         this.firemen = firemen;
     }
-  
+
 }

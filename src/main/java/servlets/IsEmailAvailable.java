@@ -5,10 +5,6 @@
  */
 package servlets;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.SQLException;
-
 import exceptions.EmailAlreadyRegisteredException;
 import exceptions.TelephoneAlreadyRegisteredException;
 import exceptions.UsernameAlreadyRegisteredException;
@@ -18,6 +14,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mainClasses.User;
 import mainClasses.Volunteer;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.SQLException;
 
 /**
  * @author micha

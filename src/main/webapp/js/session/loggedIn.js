@@ -1,4 +1,4 @@
-import {openDashboard, openPage} from "../utility/utility.js";
+import {openDashboard} from "../utility/utility.js";
 import {hasActiveSession} from "./hasActiveSession.js";
 
 $(document).ready(async () => {

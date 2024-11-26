@@ -7,6 +7,8 @@ package database.tables;
 
 import com.google.gson.Gson;
 import database.DB_Connection;
+import mainClasses.Message;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,11 +16,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mainClasses.Message;
-import mainClasses.Incident;
 
 /**
- *
  * @author mountant
  */
 public class EditMessagesTable {
@@ -75,7 +74,7 @@ public class EditMessagesTable {
                 + "date_time DATETIME  not NULL,"
                 + "FOREIGN KEY (incident_id) REFERENCES incidents(incident_id), "
                 + "PRIMARY KEY ( message_id ))";
-        
+
         stmt.execute(sql);
         stmt.close();
         con.close();

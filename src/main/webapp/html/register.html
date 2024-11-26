@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="Author" content="Valantis Zervos">
-    <meta name="Description" content="E199 Platform">
-    <meta name="keywords" lang="en-us" content="valantis, zervos, csd4878">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="Valantis Zervos" name="Author">
+    <meta content="E199 Platform" name="Description">
+    <meta content="valantis, zervos, csd4878" lang="en-us" name="keywords">
 
     <title>Register</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/default.css">
+    <link href="../css/default.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 
-    <script type="module" src="../js/evaluation/evaluateAddress.js"></script>
+    <script src="../js/evaluation/evaluateAddress.js" type="module"></script>
 </head>
 <body class="bg-body-secondary">
 
@@ -28,7 +28,7 @@
                     <h4 class="note mb-0">Already have an account?</h4>
                 </div>
                 <div class="col-auto">
-                    <a href="login.html" class="main-button">Login</a>
+                    <a class="main-button" href="login.html">Login</a>
                 </div>
             </div>
         </div>
@@ -43,39 +43,39 @@
             <form id="registrationForm">
                 <div class="section-content">
                     <label class="field-title" for="username">*Username:</label>
-                    <input type="text"
-                           id="username"
+                    <input id="username"
+                           minlength="8"
                            name="username"
                            pattern="[A-Za-z][A-Za-z]{7,}"
-                           title="Username must start with a latin character and be at least 8 characters long."
-                           minlength="8"
                            required
+                           title="Username must start with a latin character and be at least 8 characters long."
+                           type="text"
                     >
                     <p id="username_availability"></p>
                 </div>
 
                 <div class="section-content">
                     <label class="field-title" for="email">*Email:</label>
-                    <input type="email"
-                           id="email"
+                    <input id="email"
                            name="email"
                            pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-                           title="Email must be a valid email address."
                            required
+                           title="Email must be a valid email address."
+                           type="email"
                     >
                     <p id="email_availability"></p>
                 </div>
 
                 <div class="section-content">
                     <label class="field-title" for="password">*Password:</label>
-                    <input type="password"
-                           id="password"
+                    <input id="password"
+                           maxlength="18"
+                           minlength="8"
                            name="password"
                            pattern="(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,18}"
-                           title="Password must be 8-18 characters long and contain at least 1 uppercase letter, 1 number and 1 symbol."
-                           minlength="8"
-                           maxlength="18"
                            required
+                           title="Password must be 8-18 characters long and contain at least 1 uppercase letter, 1 number and 1 symbol."
+                           type="password"
                     >
                     <button
                             onmousedown="showPassword('password')"
@@ -89,13 +89,13 @@
 
                 <div class="section-content">
                     <label class="field-title" for="password_verification">*Confirm password:</label>
-                    <input type="password"
-                           id="password_verification"
-                           name="password_verification"
-                           title="This password is not the same as the one entered above."
-                           minlength="8"
+                    <input id="password_verification"
                            maxlength="18"
+                           minlength="8"
+                           name="password_verification"
                            required
+                           title="This password is not the same as the one entered above."
+                           type="password"
                     >
                     <button
                             onmousedown="showPassword('password_verification')"
@@ -103,68 +103,68 @@
                     >
                         Show
                     </button>
-                    <p id="password_verification_error" class="errorMessage"></p>
+                    <p class="errorMessage" id="password_verification_error"></p>
                 </div>
 
                 <div class="section-content">
                     <label class="field-title" for="firstname">*First Name:</label>
-                    <input type="text"
-                           id="firstname"
+                    <input id="firstname"
+                           maxlength="30"
+                           minlength="3"
                            name="firstname"
                            pattern="[A-Za-z]{3,30}"
-                           title="Firstname must contain only latin characters and be 3-30 characters long."
-                           minlength="3"
-                           maxlength="30"
                            required
+                           title="Firstname must contain only latin characters and be 3-30 characters long."
+                           type="text"
                     >
                 </div>
 
                 <div class="section-content">
                     <label class="field-title" for="lastname">*Last Name:</label>
-                    <input type="text"
-                           id="lastname"
+                    <input id="lastname"
+                           maxlength="30"
+                           minlength="3"
                            name="lastname"
                            pattern="[A-Za-z]{3,30}"
-                           title="Lastname must contain only latin characters and be 3-30 characters long."
-                           minlength="3"
-                           maxlength="30"
                            required
+                           title="Lastname must contain only latin characters and be 3-30 characters long."
+                           type="text"
                     >
                 </div>
 
                 <div class="section-content">
                     <label class="field-title" for="birthdate">*Birthdate:</label>
-                    <input type="date"
-                           id="birthdate"
-                           name="birthdate"
-                           value="1980-01-01"
-                           min="1920-01-01"
+                    <input id="birthdate"
                            max="2011-12-31"
-                           title="birthdate in US calendar."
+                           min="1920-01-01"
+                           name="birthdate"
                            required
+                           title="birthdate in US calendar."
+                           type="date"
+                           value="1980-01-01"
                     >
-                    <p id="age_fireman_error" class="errorMessage"></p>
+                    <p class="errorMessage" id="age_fireman_error"></p>
                 </div>
 
                 <div class="section-content">
                     <p class="field-title">*Gender</p>
                     <input
-                            type="radio"
                             id="gender_male"
                             name="gender"
-                            value="Male"
                             required
+                            type="radio"
+                            value="Male"
                     >
                     <label for="gender_male">Male</label><br>
-                    <input type="radio"
-                           id="gender_female"
+                    <input id="gender_female"
                            name="gender"
+                           type="radio"
                            value="Female"
                     >
                     <label for="gender_female">Female</label><br>
-                    <input type="radio"
-                           id="gender_other"
+                    <input id="gender_other"
                            name="gender"
+                           type="radio"
                            value="Other"
                     >
                     <label for="gender_other">Other</label><br>
@@ -172,33 +172,33 @@
 
                 <div class="section-content">
                     <label class="field-title" for="username">*AFM:</label>
-                    <input type="text"
-                           id="afm"
+                    <input id="afm"
+                           maxlength="10"
+                           minlength="10"
                            name="afm"
                            pattern="[0-9]{10}"
-                           title="Tax Identification Number (TIN) must be 10 digits long."
-                           minlength="10"
-                           maxlength="10"
                            required
+                           title="Tax Identification Number (TIN) must be 10 digits long."
+                           type="text"
                     >
                 </div>
 
                 <div class="section-content">
                     <p class="field-title">*User type</p>
                     <input
-                            type="radio"
+                            class="type-selector"
                             id="type_simple"
                             name="type"
-                            value="User"
-                            class="type-selector"
                             required
+                            type="radio"
+                            value="User"
                     >
                     <label for="type_simple">Simple User</label><br>
-                    <input type="radio"
+                    <input class="type-selector"
                            id="type_fireman"
                            name="type"
+                           type="radio"
                            value="Volunteer"
-                           class="type-selector"
                     >
                     <label for="type_fireman">Volunteer Fireman</label><br>
                 </div>
@@ -206,61 +206,61 @@
                 <div class="section-content fireman-field">
                     <p class="field-title">*Fireman type</p>
                     <input
-                            type="radio"
+                            class="fireman-field"
                             id="simple"
                             name="volunteer_type"
-                            value="simple"
-                            class="fireman-field"
                             required
+                            type="radio"
+                            value="simple"
                     >
                     <label for="simple">Combat Volunteer Firefighters</label><br>
-                    <input type="radio"
+                    <input class="fireman-field"
                            id="driver"
                            name="volunteer_type"
+                           type="radio"
                            value="driver"
-                           class="fireman-field"
                     >
                     <label for="driver">Drivers-Operators of Fire-fighting vehicles</label><br>
                 </div>
 
                 <div class="section-content fireman-field">
-                    <div><label for="height" class="field-title">*Height (meters)</label></div>
+                    <div><label class="field-title" for="height">*Height (meters)</label></div>
                     <input
-                            type="range"
-                            id="height"
-                            name="height"
-                            min="1.45"
-                            max="2.20"
-                            step="0.01"
                             class="fireman-field"
+                            id="height"
+                            max="2.20"
+                            min="1.45"
+                            name="height"
                             required
+                            step="0.01"
+                            type="range"
                     >
                     <p id="height_value"></p>
                 </div>
 
                 <div class="section-content fireman-field">
-                    <div><label for="weight" class="field-title">*Weight (kg)</label></div>
+                    <div><label class="field-title" for="weight">*Weight (kg)</label></div>
                     <input
-                            type="range"
-                            id="weight"
-                            name="weight"
-                            min="40"
-                            max="160"
                             class="fireman-field"
+                            id="weight"
+                            max="160"
+                            min="40"
+                            name="weight"
                             required
+                            type="range"
                     >
                     <p id="weight_value"></p>
                 </div>
 
                 <div class="section-content">
                     <label class="field-title" for="country">*Country:</label>
-                    <select class="form-select"
-                            autocomplete="country"
+                    <select autocomplete="country"
+                            class="form-select"
                             id="country"
                             name="country"
                             required
                     >
-                        <option value="" disabled>Select an option</option>
+                        <option disabled value="">Select an option</option>
                         <option value="AF">Afghanistan</option>
                         <option value="AX">Åland Islands</option>
                         <option value="AL">Albania</option>
@@ -347,7 +347,7 @@
                         <option value="DE">Germany</option>
                         <option value="GH">Ghana</option>
                         <option value="GI">Gibraltar</option>
-                        <option value="GR" selected>Greece</option>
+                        <option selected value="GR">Greece</option>
                         <option value="GL">Greenland</option>
                         <option value="GD">Grenada</option>
                         <option value="GP">Guadeloupe</option>
@@ -519,13 +519,13 @@
                 <div class="section-content">
                     <label class="field-title" for="prefecture">*Prefecture:</label>
                     <select
-                            class="form-select"
                             autocomplete="address-level1"
+                            class="form-select"
                             id="prefecture"
                             name="prefecture"
                             required
                     >
-                        <option value="" selected disabled>Select a prefecture</option>
+                        <option disabled selected value="">Select a prefecture</option>
                         <option value="CH">Chania</option>
                         <option value="RE">Rethymno</option>
                         <option value="IR">Heraklion</option>
@@ -535,59 +535,59 @@
 
                 <div class="section-content">
                     <label class="field-title" for="municipality">*Municipality:</label>
-                    <input type="text"
-                           id="municipality"
+                    <input id="municipality"
+                           maxlength="30"
+                           minlength="3"
                            name="municipality"
                            pattern="[A-Za-z]{3,30}"
-                           title="Municipality name must contain only latin characters and be 3-30 characters long."
-                           minlength="3"
-                           maxlength="30"
                            required
+                           title="Municipality name must contain only latin characters and be 3-30 characters long."
+                           type="text"
                     >
                 </div>
 
                 <div class="section-content">
                     <span>
                         <label class="field-title" for="address">*Address:</label>
-                        <input type="text"
-                               id="address"
+                        <input id="address"
+                               maxlength="150"
+                               minlength="10"
                                name="address"
                                pattern="[A-Za-z][A-Za-z0-9\-\,\. ]{9,149}"
-                               title="Address must begin with a latin character and be 10-150 characters long."
-                               minlength="10"
-                               maxlength="150"
                                required
+                               title="Address must begin with a latin character and be 10-150 characters long."
+                               type="text"
                         >
                         <button id="showAddressOnMap" type="button"></button>
                     </span>
-                    <p id="address_error" class="errorMessage"></p>
+                    <p class="errorMessage" id="address_error"></p>
                     <div id="map"></div>
                 </div>
 
 
                 <div class="section-content">
                     <label class="field-title" for="job">*Job:</label>
-                    <input type="text"
-                           id="job"
+                    <input id="job"
+                           maxlength="30"
+                           minlength="3"
                            name="job"
                            pattern="[A-Za-z]{3,30}"
-                           title="Job name must contain only latin characters and be 3-30 characters long."
-                           minlength="3"
-                           maxlength="30"
                            required
+                           title="Job name must contain only latin characters and be 3-30 characters long."
+                           type="text"
                     >
                 </div>
 
                 <div class="section-content">
                     <label class="field-title" for="telephone">*Mobile Number:</label>
-                    <input type="tel"
-                           id="telephone"
+                    <input id="telephone"
+                           maxlength="14"
+                           minlength="10"
                            name="telephone"
                            pattern="[0-9]{10,14}"
-                           title="Mobile number must contain only digits and be 10-14 characters long."
-                           minlength="10"
-                           maxlength="14"
                            required
+                           title="Mobile number must contain only digits and be 10-14 characters long."
+                           type="tel"
                     >
                     <p id="telephone_availability"></p>
                 </div>
@@ -596,20 +596,20 @@
                     <p class="field-title">*Agree with terms of service</p>
                     <p id="termsofservice_message"></p>
                     <input
-                            type="checkbox"
                             id="termsofservice"
                             name="termsofservice"
-                            value="Confirm"
                             required
+                            type="checkbox"
+                            value="Confirm"
                     >
                     <label for="termsofservice">Confirm</label><br>
                 </div>
 
                 <input
+                        class="main-button"
                         id="registerButton"
                         type="submit"
                         value="Register"
-                        class="main-button"
                 >
             </form>
         </div>
@@ -626,14 +626,14 @@
     </div>
 </footer>
 
-<script type="module" src="../js/actions/register.js"></script>
-<script type="module" src="../js/maps/map.js"></script>
-<script type="module" src="../js/evaluation/checkForDuplicates.js"></script>
+<script src="../js/actions/register.js" type="module"></script>
+<script src="../js/maps/map.js" type="module"></script>
+<script src="../js/evaluation/checkForDuplicates.js" type="module"></script>
 
 <script src="../js/actions/viewPassword.js"></script>
 <script src="../js/actions/activateFiremanFields.js"></script>
 
-<script type=module src="../js/session/loggedIn.js"></script>
+<script src="../js/session/loggedIn.js" type=module></script>
 
 </body>
 </html>

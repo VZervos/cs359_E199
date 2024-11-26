@@ -7,22 +7,18 @@ package database.init;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import database.tables.EditIncidentsTable;
-import static database.DB_Connection.getInitialConnection;
-import database.tables.CheckForDuplicatesExample;
-import database.tables.EditMessagesTable;
-import database.tables.EditParticipantsTable;
+import database.tables.*;
+import mainClasses.Incident;
+import mainClasses.Message;
+import mainClasses.User;
 
-import database.tables.EditUsersTable;
-import database.tables.EditVolunteersTable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import mainClasses.Incident;
-import mainClasses.Message;
-import mainClasses.User;
+
+import static database.DB_Connection.getInitialConnection;
 
 
 /*
@@ -132,8 +128,8 @@ public class InitDatabase {
         allIncidents2 = editIncidents.databaseToIncidentsSearch("all", "running", "Hersonissos");
         JsonArray incidentsJSON2 = gson2.toJsonTree(allIncidents2).getAsJsonArray();
         System.out.println("All Running Incidents in Hersonissos\n" + incidentsJSON2);
-        
-        
+
+
         //       all messages of an incident
         EditMessagesTable editmessages = new EditMessagesTable();
         ArrayList<Message> messagesOfIncident = new ArrayList<Message>();

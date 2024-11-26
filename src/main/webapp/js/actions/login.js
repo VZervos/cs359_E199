@@ -1,8 +1,8 @@
 import {loginUser, retrieveUser} from "../ajax/ajax.js";
-import {getBaseURL, openDashboard} from "../utility/utility.js";
+import {openDashboard} from "../utility/utility.js";
 
 $(document).ready(() => {
-    $('#loginButton').click( async (event) => {
+    $('#loginButton').click(async (event) => {
         const username = $('#login-username');
         const password = $('#login-password');
         const credentialsCorrectnessCheckResult = await retrieveUser(username.val(), password.val());

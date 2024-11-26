@@ -112,7 +112,7 @@ function verifyPassword() {
 
     errorMessage.hideError();
     return null;
-};
+}
 
 $(document).ready(() => {
     password.on('input', () => {

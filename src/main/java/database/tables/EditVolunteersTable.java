@@ -6,8 +6,9 @@
 package database.tables;
 
 import com.google.gson.Gson;
-import mainClasses.Volunteer;
 import database.DB_Connection;
+import mainClasses.Volunteer;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,42 +18,40 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Mike
  */
 public class EditVolunteersTable {
 
- 
-    public void addVolunteerFromJSON(String json) throws ClassNotFoundException{
-         Volunteer user=jsonToVolunteer(json);
-         addNewVolunteer(user);
+
+    public void addVolunteerFromJSON(String json) throws ClassNotFoundException {
+        Volunteer user = jsonToVolunteer(json);
+        addNewVolunteer(user);
     }
-    
-     public Volunteer jsonToVolunteer(String json){
-         Gson gson = new Gson();
+
+    public Volunteer jsonToVolunteer(String json) {
+        Gson gson = new Gson();
 
         Volunteer user = gson.fromJson(json, Volunteer.class);
         return user;
     }
-    
-    public String volunteerToJSON(Volunteer user){
-         Gson gson = new Gson();
+
+    public String volunteerToJSON(Volunteer user) {
+        Gson gson = new Gson();
 
         String json = gson.toJson(user, Volunteer.class);
         return json;
     }
-    
-   
-    
-    public void updateVolunteer(String username,String personalpage) throws SQLException, ClassNotFoundException{
+
+
+    public void updateVolunteer(String username, String personalpage) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        String update="UPDATE volunteers SET personalpage='"+personalpage+"' WHERE username = '"+username+"'";
+        String update = "UPDATE volunteers SET personalpage='" + personalpage + "' WHERE username = '" + username + "'";
         stmt.executeUpdate(update);
     }
-    
-    public void printVolunteerDetails(String username) throws SQLException, ClassNotFoundException{
-         Connection con = DB_Connection.getConnection();
+
+    public void printVolunteerDetails(String username) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         ResultSet rs;
@@ -68,16 +67,16 @@ public class EditVolunteersTable {
             System.err.println(e.getMessage());
         }
     }
-    
-    public Volunteer databaseToVolunteer(String username, String password) throws SQLException, ClassNotFoundException{
-         Connection con = DB_Connection.getConnection();
+
+    public Volunteer databaseToVolunteer(String username, String password) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM volunteers WHERE username = '" + username + "' AND password='"+password+"'");
+            rs = stmt.executeQuery("SELECT * FROM volunteers WHERE username = '" + username + "' AND password='" + password + "'");
             rs.next();
-            String json=DB_Connection.getResultsToJSON(rs);
+            String json = DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             Volunteer user = gson.fromJson(json, Volunteer.class);
             return user;
@@ -87,22 +86,20 @@ public class EditVolunteersTable {
         }
         return null;
     }
-    
 
-    
-    
+
     public ArrayList<Volunteer> getVolunteers(String type) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Volunteer> volunteers = new ArrayList<Volunteer>();
         ResultSet rs = null;
         try {
-            if("simple".equals(type))
-                 rs = stmt.executeQuery("SELECT * FROM volunteers WHERE volunteer_type= '" + "simple" + "'");
+            if ("simple".equals(type))
+                rs = stmt.executeQuery("SELECT * FROM volunteers WHERE volunteer_type= '" + "simple" + "'");
             else if ("driver".equals(type))
-                 rs = stmt.executeQuery("SELECT * FROM volunteers WHERE volunteer_type= '" + "driver" + "'");
+                rs = stmt.executeQuery("SELECT * FROM volunteers WHERE volunteer_type= '" + "driver" + "'");
 
-           
+
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();
@@ -116,17 +113,17 @@ public class EditVolunteersTable {
         }
         return null;
     }
-    
-    
-    public String databaseVolunteerToJSON(String username, String password) throws SQLException, ClassNotFoundException{
-         Connection con = DB_Connection.getConnection();
+
+
+    public String databaseVolunteerToJSON(String username, String password) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM volunteers WHERE username = '" + username + "' AND password='"+password+"'");
+            rs = stmt.executeQuery("SELECT * FROM volunteers WHERE username = '" + username + "' AND password='" + password + "'");
             rs.next();
-            String json=DB_Connection.getResultsToJSON(rs);
+            String json = DB_Connection.getResultsToJSON(rs);
             return json;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
@@ -136,13 +133,13 @@ public class EditVolunteersTable {
     }
 
 
-     public void createVolunteersTable() throws SQLException, ClassNotFoundException {
+    public void createVolunteersTable() throws SQLException, ClassNotFoundException {
 
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         String query = "CREATE TABLE volunteers "
-                  + "(volunteer_id INTEGER not NULL AUTO_INCREMENT, "
+                + "(volunteer_id INTEGER not NULL AUTO_INCREMENT, "
                 + "    username VARCHAR(30) not null unique,"
                 + "    email VARCHAR(50) not null unique,	"
                 + "    password VARCHAR(32) not null,"
@@ -157,7 +154,7 @@ public class EditVolunteersTable {
                 + "    prefecture VARCHAR(15) not null,"
                 + "    job VARCHAR(200) not null,"
                 + "    telephone VARCHAR(14) not null unique,"
-                  + "    lat DOUBLE,"
+                + "    lat DOUBLE,"
                 + "    lon DOUBLE,"
                 + "    volunteer_type VARCHAR(10) not null,"
                 + "    height DOUBLE,"
@@ -166,8 +163,8 @@ public class EditVolunteersTable {
         stmt.execute(query);
         stmt.close();
     }
-    
-    
+
+
     /**
      * Establish a database connection and add in the database.
      *
@@ -193,14 +190,14 @@ public class EditVolunteersTable {
                     + "'" + user.getAfm() + "',"
                     + "'" + user.getCountry() + "',"
                     + "'" + user.getAddress() + "',"
-                    + "'" + user.getMunicipality() + "',"                    
+                    + "'" + user.getMunicipality() + "',"
                     + "'" + user.getPrefecture() + "',"
-                     + "'" + user.getJob() + "',"
+                    + "'" + user.getJob() + "',"
                     + "'" + user.getTelephone() + "',"
                     + "'" + user.getLat() + "',"
                     + "'" + user.getLon() + "',"
                     + "'" + user.getVolunteer_type() + "',"
-                    + "'" + user.getHeight()+ "',"
+                    + "'" + user.getHeight() + "',"
                     + "'" + user.getWeight() + "'"
                     + ")";
             //stmt.execute(table);
@@ -216,7 +213,7 @@ public class EditVolunteersTable {
         }
     }
 
-    public boolean hasVolunteerWithAttributes(String[] keys, String[] values) throws SQLException, ClassNotFoundException{
+    public boolean hasVolunteerWithAttributes(String[] keys, String[] values) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
@@ -239,6 +236,6 @@ public class EditVolunteersTable {
         }
         return false;
     }
-   
+
 
 }

@@ -6,12 +6,6 @@
 package servlets;
 
 import database.tables.EditUsersTable;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.SQLException;
-
 import database.tables.EditVolunteersTable;
 import exceptions.EmailAlreadyRegisteredException;
 import exceptions.TelephoneAlreadyRegisteredException;
@@ -25,7 +19,11 @@ import mainClasses.User;
 import mainClasses.Volunteer;
 import org.json.JSONObject;
 
-import static utility.Utility.*;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.SQLException;
+
+import static utility.Utility.getBodyString;
 
 /**
  * @author micha

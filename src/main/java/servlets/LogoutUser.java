@@ -5,21 +5,16 @@
  */
 package servlets;
 
-import database.tables.EditUsersTable;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import mainClasses.User;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.sql.SQLException;
-
-import static utility.Utility.*;
 
 /**
  * @author micha

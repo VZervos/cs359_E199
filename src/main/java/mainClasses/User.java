@@ -16,19 +16,50 @@ import org.json.JSONObject;
 import java.sql.SQLException;
 
 /**
- *
  * @author Mike
  */
 public class User {
     int user_id;
-    String username,email,password,firstname,lastname,birthdate;
-    String gender,job,afm;
-    String country,address;
-    Double lat,lon;
+    String username, email, password, firstname, lastname, birthdate;
+    String gender, job, afm;
+    String country, address;
+    Double lat, lon;
     String telephone;
-    String municipality,prefecture;
+    String municipality, prefecture;
 
-    
+    public static void checkCredentialsUniqueness(JSONObject userData) throws SQLException, ClassNotFoundException {
+        String username = userData.getString(Resources.ATTR_USERNAME);
+        String email = userData.getString(Resources.ATTR_EMAIL);
+        String telephone = userData.getString(Resources.ATTR_TELEPHONE);
+        checkCredentialsUniqueness(username, email, telephone);
+    }
+
+    public static void checkCredentialsUniqueness(String username, String email, String telephone) throws SQLException, ClassNotFoundException {
+        EditUsersTable eut = new EditUsersTable();
+
+        boolean usernameExists = false;
+        if (username != null)
+            usernameExists = eut.hasUserWithAttributes(new String[]
+                    {Resources.ATTR_USERNAME}, new String[]{username}
+            );
+        boolean emailExists = false;
+        if (email != null)
+            emailExists = eut.hasUserWithAttributes(new String[]
+                    {Resources.ATTR_EMAIL}, new String[]{email}
+            );
+        boolean telephoneExists = false;
+        if (telephone != null)
+            telephoneExists = eut.hasUserWithAttributes(new String[]
+                    {Resources.ATTR_TELEPHONE}, new String[]{telephone}
+            );
+
+        if (usernameExists)
+            throw new UsernameAlreadyRegisteredException(Resources.ERR_USERNAME_ALREADY_EXISTS + Resources.TABLE_USERS);
+        else if (emailExists)
+            throw new EmailAlreadyRegisteredException(Resources.ERR_EMAIL_ALREADY_EXISTS + Resources.TABLE_USERS);
+        else if (telephoneExists)
+            throw new TelephoneAlreadyRegisteredException(Resources.ERR_TELEPHONE_ALREADY_EXISTS + Resources.TABLE_USERS);
+    }
 
     public String getJob() {
         return job;
@@ -70,9 +101,6 @@ public class User {
         this.prefecture = prefecture;
     }
 
-   
-   
-    
     public String getAddress() {
         return address;
     }
@@ -96,9 +124,7 @@ public class User {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-    
-    
-    
+
     public String getTelephone() {
         return telephone;
     }
@@ -106,7 +132,6 @@ public class User {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-    
 
     public String getUsername() {
         return username;
@@ -132,8 +157,6 @@ public class User {
         this.password = password;
     }
 
-   
-    
     public String getBirthdate() {
         return birthdate;
     }
@@ -142,7 +165,6 @@ public class User {
         this.birthdate = birthDate;
     }
 
-   
     public String getCountry() {
         return country;
     }
@@ -150,6 +172,7 @@ public class User {
     public void setCountry(String country) {
         this.country = country;
     }
+
     public Double getLat() {
         return lat;
     }
@@ -166,8 +189,6 @@ public class User {
         this.lon = lon;
     }
 
- 
-
     public String getGender() {
         return gender;
     }
@@ -176,35 +197,4 @@ public class User {
         this.gender = gender;
     }
 
-    public static void checkCredentialsUniqueness(JSONObject userData) throws SQLException, ClassNotFoundException {
-        String username = userData.getString(Resources.ATTR_USERNAME);
-        String email = userData.getString(Resources.ATTR_EMAIL);
-        String telephone = userData.getString(Resources.ATTR_TELEPHONE);
-        checkCredentialsUniqueness(username, email, telephone);
-    }
-
-    public static void checkCredentialsUniqueness(String username, String email, String telephone) throws SQLException, ClassNotFoundException {
-        EditUsersTable eut = new EditUsersTable();
-
-        boolean usernameExists = false;
-        if (username != null)
-            usernameExists = eut.hasUserWithAttributes(new String[]
-                {Resources.ATTR_USERNAME}, new String[]{username}
-        );
-        boolean emailExists = false;
-        if (email != null)
-            emailExists = eut.hasUserWithAttributes(new String[]
-                {Resources.ATTR_EMAIL}, new String[]{email}
-        );
-        boolean telephoneExists = false;
-        if (telephone != null)
-            telephoneExists = eut.hasUserWithAttributes(new String[]
-                {Resources.ATTR_TELEPHONE}, new String[]{telephone}
-        );
-
-        if (usernameExists) throw new UsernameAlreadyRegisteredException(Resources.ERR_USERNAME_ALREADY_EXISTS + Resources.TABLE_USERS); else
-        if (emailExists) throw new EmailAlreadyRegisteredException(Resources.ERR_EMAIL_ALREADY_EXISTS + Resources.TABLE_USERS); else
-        if (telephoneExists) throw new TelephoneAlreadyRegisteredException(Resources.ERR_TELEPHONE_ALREADY_EXISTS + Resources.TABLE_USERS);
-    }
-    
 }

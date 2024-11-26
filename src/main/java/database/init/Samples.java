@@ -6,7 +6,6 @@
 package database.init;
 
 /**
- *
  * @author mountant
  */
 public class Samples {
@@ -36,14 +35,14 @@ public class Samples {
             + "\"country\":\"Greece\",\"address\":\"Limenas Chersonisou\",\"municipality\":\"Hersonissos\",\"prefecture\":\"Heraklion\",\"lat\":\"35.318761\","
             + "\"lon\":\"25.3715371\",\"telephone\":\"6977889900\","
             + "\"job\":\"compilers project manager\"}";
-    
+
     static String user4JSON = "{\"username\":\"tympaki\",\"email\":\"tympakianos@uoc.gr\",\"password\":\"ab$A12cde\","
             + "\"firstname\":\"Georgos\",\"lastname\":\"Niktaris\",\"birthdate\":\"2003-07-12\",\"gender\":\"Male\",\"afm\":\"1179991110\","
             + "\"country\":\"Greece\",\"address\":\"I. Koriotaki\",\"municipality\":\"Faistos\",\"prefecture\":\"Heraklion\",\"lat\":\"35.0722851\","
             + "\"lon\":\"24.7588403\",\"telephone\":\"6977880000\","
             + "\"job\":\"farmer\"}";
-    
-    
+
+
     static String volunteer1JSON = "{\"username\":\"raphael\",\"email\":\"raphael@gmail.gr\",\"password\":\"ab$A12cde\","
             + "\"firstname\":\"Raphael\",\"lastname\":\"Papadopoulos\",\"birthdate\":\"1992-08-12\",\"gender\":\"Male\",\"afm\":\"1234567891\","
             + "\"country\":\"Greece\",\"address\":\"El. Venizelou 160, Malia\",\"municipality\":\"Hersonissos\",\"prefecture\":\"Heraklion\",\"lat\":\"35.2836391\","
@@ -68,7 +67,7 @@ public class Samples {
             + "\"lon\":\"25.1185202\",\"telephone\":\"6991234567\","
             + "\"job\":\"dikigoros\",\"volunteer_type\":\"driver\",\"height\":\"1.69\",\"weight\":\"78.5\"}";
 
-    
+
     static String incident1 = "{\"incident_type\":\"fire\","
             + "\"description\":\"Fotia konta stis voutes\","
             + "\"user_phone\":\"2813407000\","
@@ -99,7 +98,7 @@ public class Samples {
             + "\"status\":\"submitted\","
             + "\"danger\":\"unknown\"}";
 
-    
+
     static String incident4 = "{\"incident_type\":\"accident\","
             + "\"description\":\"Atuxima me fortigo\","
             + "\"user_phone\":\"6978912345\","
@@ -109,7 +108,7 @@ public class Samples {
             + "\"status\":\"submitted\","
             + "\"danger\":\"unknown\"}";
 
-     static String incident5 = "{\"incident_type\":\"accident\","
+    static String incident5 = "{\"incident_type\":\"accident\","
             + "\"description\":\"Atuxima me autokinita\","
             + "\"user_phone\":\"2813407000\","
             + "\"user_type\":\"admin\","
@@ -120,8 +119,8 @@ public class Samples {
             + "\"prefecture\":\"Heraklion\","
             + "\"status\":\"running\","
             + "\"danger\":\"low\"}";
-    
-    
+
+
     static String participant1 = "{\"incident_id\":\"1\","
             + "\"volunteer_type\":\"simple\","
             + "\"status\":\"requested\"}";
@@ -134,7 +133,7 @@ public class Samples {
             + "\"volunteer_type\":\"driver\","
             + "\"status\":\"requested\"}";
 
-    
+
     static String message1 = "{\"incident_id\":\"1\","
             + "\"message\":\"Min plisiazetai tin perioxi, dromos kleistos\","
             + "\"sender\":\"admin\"," + "\"recipient\":\"public\"}";

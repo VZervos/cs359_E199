@@ -1,14 +1,11 @@
 package database;
 
 import com.google.gson.JsonObject;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+
+import java.sql.*;
 
 public class DB_Connection {
-    
+
     private static final String url = "jdbc:mysql://localhost";
     private static final String databaseName = "HY359_2024";
     private static final int port = 3306;
@@ -26,16 +23,16 @@ public class DB_Connection {
         Class.forName("com.mysql.jdbc.Driver");
         return DriverManager.getConnection(url + ":" + port + "/" + databaseName, username, password);
     }
-    
+
     public static Connection getInitialConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
         return DriverManager.getConnection(url + ":" + port, username, password);
     }
-    
-      public static void printResults(ResultSet rs) throws SQLException {
+
+    public static void printResults(ResultSet rs) throws SQLException {
         ResultSetMetaData metadata = rs.getMetaData();
         int columnCount = metadata.getColumnCount();
-        
+
         String row = "";
         for (int i = 1; i <= columnCount; i++) {
             String name = metadata.getColumnName(i);
@@ -43,35 +40,34 @@ public class DB_Connection {
             System.out.println(name + " " + value);
         }
     }
-      
-     public static String getResultsToJSON(ResultSet rs) throws SQLException {
-       ResultSetMetaData metadata = rs.getMetaData();
+
+    public static String getResultsToJSON(ResultSet rs) throws SQLException {
+        ResultSetMetaData metadata = rs.getMetaData();
         int columnCount = metadata.getColumnCount();
-          JsonObject object = new JsonObject();
-        
-        
+        JsonObject object = new JsonObject();
+
+
         String row = "";
         for (int i = 1; i <= columnCount; i++) {
             String name = metadata.getColumnName(i);
             String value = rs.getString(i);
-            object.addProperty(name,value);
+            object.addProperty(name, value);
         }
         return object.toString();
     }
-     
-     
-        
-     public static JsonObject getResultsToJSONObject(ResultSet rs) throws SQLException {
-       ResultSetMetaData metadata = rs.getMetaData();
+
+
+    public static JsonObject getResultsToJSONObject(ResultSet rs) throws SQLException {
+        ResultSetMetaData metadata = rs.getMetaData();
         int columnCount = metadata.getColumnCount();
-          JsonObject object = new JsonObject();
-        
-        
+        JsonObject object = new JsonObject();
+
+
         String row = "";
         for (int i = 1; i <= columnCount; i++) {
             String name = metadata.getColumnName(i);
             String value = rs.getString(i);
-            object.addProperty(name,value);
+            object.addProperty(name, value);
         }
         return object;
     }

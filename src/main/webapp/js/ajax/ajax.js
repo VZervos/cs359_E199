@@ -148,7 +148,7 @@ export function checkForDuplicate(attribute, value) {
                 break;
             default:
                 console.log(attribute);
-                resolve( {
+                resolve({
                     "success": true,
                     "message": "No duplicates were found for " + attribute
                 });

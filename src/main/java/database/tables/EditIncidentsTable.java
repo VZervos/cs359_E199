@@ -5,9 +5,10 @@
  */
 package database.tables;
 
-import mainClasses.Incident;
 import com.google.gson.Gson;
 import database.DB_Connection;
+import mainClasses.Incident;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,14 +19,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Mike
  */
 public class EditIncidentsTable {
 
     public void addIncidentFromJSON(String json) throws ClassNotFoundException {
         Incident bt = jsonToIncident(json);
-        if (bt.getStart_datetime()==null){
+        if (bt.getStart_datetime() == null) {
             bt.setStart_datetime();
         }
         createNewIncident(bt);
@@ -66,34 +66,32 @@ public class EditIncidentsTable {
         return null;
     }
 
-    public ArrayList<Incident> databaseToIncidentsSearch(String type,String status,String municipality) throws SQLException, ClassNotFoundException {
+    public ArrayList<Incident> databaseToIncidentsSearch(String type, String status, String municipality) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Incident> incidents = new ArrayList<Incident>();
         ResultSet rs;
-        String where="WHERE";
-        if(!type.equals("all"))
-            where+=" incident_type='" + type + "'";
-        if(!status.equals("all")){
-            if(!where.equals("WHERE")){
-                where+=" and status='" + status + "'";
-            }
-            else{
-                where+=" status='" + status + "'";
+        String where = "WHERE";
+        if (!type.equals("all"))
+            where += " incident_type='" + type + "'";
+        if (!status.equals("all")) {
+            if (!where.equals("WHERE")) {
+                where += " and status='" + status + "'";
+            } else {
+                where += " status='" + status + "'";
             }
         }
-        if(!municipality.equals("all") && !municipality.equals("")){
-            if(!where.equals("WHERE")){
-                where+=" and municipality='" + municipality + "'";
-            }
-            else{
-                where+=" municipality='" + municipality + "'";
+        if (!municipality.equals("all") && !municipality.equals("")) {
+            if (!where.equals("WHERE")) {
+                where += " and municipality='" + municipality + "'";
+            } else {
+                where += " municipality='" + municipality + "'";
             }
         }
         try {
-            String query="SELECT * FROM incidents ";
-            if(!where.equals("WHERE"))
-                query+=where;
+            String query = "SELECT * FROM incidents ";
+            if (!where.equals("WHERE"))
+                query += where;
             System.out.println(query);
             rs = stmt.executeQuery(query);
 
@@ -165,7 +163,7 @@ public class EditIncidentsTable {
      * @throws ClassNotFoundException
      */
     public void createNewIncident(Incident bt) throws ClassNotFoundException {
-        
+
         try {
             Connection con = DB_Connection.getConnection();
 
