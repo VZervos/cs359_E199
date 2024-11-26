@@ -64,45 +64,45 @@
                 <button id="change-email-button" class="update-info-button">Update</button>
             </div>
 
-            <!--        <div class="section-content">-->
-            <!--          <label class="field-title" for="password">*Password:</label>-->
-            <!--          <input type="password"-->
-            <!--                 id="password"-->
-            <!--                 name="password"-->
-            <!--                 pattern="(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,18}"-->
-            <!--                 title="Password must be 8-18 characters long and contain at least 1 uppercase letter, 1 number and 1 symbol."-->
-            <!--                 minlength="8"-->
-            <!--                 maxlength="18"-->
-            <!--                 required-->
-            <!--          >-->
-            <!--          <button-->
-            <!--                  onmousedown="showPassword('password')"-->
-            <!--                  onmouseup="hidePassword('password')"-->
-            <!--                  type="button"-->
-            <!--          >-->
-            <!--            Show-->
-            <!--          </button>-->
-            <!--          <p id="password_strength"></p>-->
-            <!--        </div>-->
+            <div class="section-content">
+                <label class="field-title" for="password">*Password:</label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       pattern="(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,18}"
+                       title="Password must be 8-18 characters long and contain at least 1 uppercase letter, 1 number and 1 symbol."
+                       minlength="8"
+                       maxlength="18"
+                       required
+                >
+                <button
+                        onmousedown="showPassword('password')"
+                        onmouseup="hidePassword('password')"
+                        type="button"
+                >
+                    Show
+                </button>
+                <p id="password_strength"></p>
 
-            <!--        <div class="section-content">-->
-            <!--          <label class="field-title" for="password_verification">*Confirm password:</label>-->
-            <!--          <input type="password"-->
-            <!--                 id="password_verification"-->
-            <!--                 name="password_verification"-->
-            <!--                 title="This password is not the same as the one entered above."-->
-            <!--                 minlength="8"-->
-            <!--                 maxlength="18"-->
-            <!--                 required-->
-            <!--          >-->
-            <!--          <button-->
-            <!--                  onmousedown="showPassword('password_verification')"-->
-            <!--                  onmouseup="hidePassword('password_verification')" type="button"-->
-            <!--          >-->
-            <!--            Show-->
-            <!--          </button>-->
-            <!--          <p id="password_verification_error" class="errorMessage"></p>-->
-            <!--        </div>-->
+                <label class="field-title" for="password_verification">*Confirm password:</label>
+                <input type="password"
+                       id="password_verification"
+                       name="password_verification"
+                       title="This password is not the same as the one entered above."
+                       minlength="8"
+                       maxlength="18"
+                       required
+                >
+                <button
+                        onmousedown="showPassword('password_verification')"
+                        onmouseup="hidePassword('password_verification')" type="button"
+                >
+                    Show
+                </button>
+                <p id="password_verification_error" class="errorMessage"></p>
+                <p id="password_availability"></p>
+                <button id="change-password-button" class="update-info-button">Update</button>
+            </div>
 
             <div class="section-content">
                 <label class="field-title" for="firstname">*First Name:</label>
@@ -502,20 +502,6 @@
                 <button id="change-job-button" class="update-info-button">Update</button>
             </div>
 
-            <!--        <div class="section-content">-->
-            <!--          <label class="field-title" for="telephone">*Mobile Number:</label>-->
-            <!--          <input type="tel"-->
-            <!--                 id="telephone"-->
-            <!--                 name="telephone"-->
-            <!--                 pattern="[0-9]{10,14}"-->
-            <!--                 title="Mobile number must contain only digits and be 10-14 characters long."-->
-            <!--                 minlength="10"-->
-            <!--                 maxlength="14"-->
-            <!--                 required-->
-            <!--          >-->
-            <!--          <p id="telephone_availability"></p>-->
-            <!--        </div>-->
-
         </div>
     </section>
 </main>
@@ -530,11 +516,13 @@
     </div>
 </footer>
 
-<!--TODO Uncomment-->
-<!--<script type="module" src="../js/session/loggedOut.js"></script>-->
+<script type="module" src="../js/session/loggedOut.js"></script>
+
+<script src="../js/actions/viewPassword.js"></script>
 
 <script type="module" src="../js/maps/map.js"></script>
 <script type="module" src="../js/actions/updateInfoField.js"></script>
+<script type="module" src="../js/evaluation/evaluatePassword.js"></script>
 
 </body>
 </html>

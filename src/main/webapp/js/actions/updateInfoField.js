@@ -1,6 +1,7 @@
 import {checkForDuplicate, updateInfoField} from "../ajax/ajax.js";
 import {RESULT_STYLE} from "../utility/utility.js";
 import verifyAddress from "../evaluation/evaluateAddress.js";
+import verifyPassword from "../evaluation/evaluatePassword.js";
 
 async function checkAddressValidity(invalidField, message) {
     const country = $('#country').val();
@@ -16,7 +17,7 @@ async function checkAddressValidity(invalidField, message) {
     return {invalidField, message};
 }
 
-async function updateValueAvailabilityMessage(invalidField, infoField, infoFieldValue, message, valueAvailabilityMessage) {
+async function updateInfo(invalidField, infoField, infoFieldValue, message, valueAvailabilityMessage) {
     if (!invalidField) {
         const updateResult = await updateInfoField(infoField, infoFieldValue);
         console.log(updateResult);
@@ -54,8 +55,10 @@ $(document).ready(() => {
                     const __ret = await checkAddressValidity(invalidField, message);
                     invalidField = __ret.invalidField;
                     message = __ret.message;
+                } else if (infoField === "password") {
+                    invalidField = verifyPassword();
                 }
-                await updateValueAvailabilityMessage(invalidField, infoField, infoFieldValue, message, valueAvailabilityMessage);
+                await updateInfo(invalidField, infoField, infoFieldValue, message, valueAvailabilityMessage);
             } else {
                 valueAvailabilityMessage.css("color", RESULT_STYLE[isAvailable]);
                 valueAvailabilityMessage.text(message);
