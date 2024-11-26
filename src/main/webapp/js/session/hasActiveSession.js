@@ -1,15 +1,15 @@
-import {getBaseURL, openPage} from "../utility/utility.js";
+import {getBaseURL} from "../utility/utility.js";
 
-export function invalidateSession() {
+export function hasActiveSession() {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
             let activeSession = false;
             if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log("Logout success");
+                console.log("Session check complete");
                 const response = JSON.parse(xhr.responseText);
-                console.log(response["message"]);
-                openPage("index.html")
+                console.log("Result: " + response["activeSession"]);
+                activeSession = response["activeSession"];
             } else if (xhr.status !== 200) {
                 console.log("Error occurred");
                 const response = JSON.parse(xhr.responseText);
@@ -18,16 +18,8 @@ export function invalidateSession() {
             resolve(activeSession);
         };
 
-        xhr.open('POST', getBaseURL() + 'LogoutUser');
+        xhr.open('GET', getBaseURL() + 'GetActiveSession');
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send();
     });
 }
-
-$(document).ready(async () => {
-    $('#logoutButton').click(async event => {
-        console.log("logout");
-        await invalidateSession();
-        openPage("index.html")
-    })
-})

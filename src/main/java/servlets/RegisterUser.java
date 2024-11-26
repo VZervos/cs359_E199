@@ -74,8 +74,9 @@ public class RegisterUser extends HttpServlet {
         String body;
         try {
             writer = response.getWriter();
-            JSONObject userData = getBodyJson(request);
+//            JSONObject userData = getBodyJson(request);
             String userDataString = getBodyString(request);
+            JSONObject userData = new JSONObject(userDataString);
 
             String type = userData.getString("type");
             switch (type) {
