@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -109,7 +109,7 @@ public class EditIncidentsTable {
         return null;
     }
 
-    public void updateIncident(String id, HashMap<String, String> updates) throws SQLException, ClassNotFoundException {
+    public void updateIncident(String id, Map<String, String> updates) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         Incident bt = new Incident();

@@ -97,7 +97,7 @@ public class Incident {
         return end_datetime;
     }
 
-    public void setEnd_datetime(String end_datetime) {
+    public void setEnd_datetime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         this.end_datetime = dtf.format(now);

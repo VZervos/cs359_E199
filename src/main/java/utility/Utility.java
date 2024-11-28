@@ -7,6 +7,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Utility {
     public static JSONObject getBodyJson(HttpServletRequest request) throws IOException {
@@ -40,6 +42,12 @@ public class Utility {
         HttpSession session = request.getSession(false);
         String sessionUser = (String) session.getAttribute("user");
         return sessionUser;
+    }
+
+    public static String getCurrentDatetime() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now);
     }
 
 }
