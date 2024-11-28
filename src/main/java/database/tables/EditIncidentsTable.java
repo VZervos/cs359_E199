@@ -124,7 +124,7 @@ public class EditIncidentsTable {
     public void deleteIncident(String id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        String deleteQuery = "DELETE * FROM incidents WHERE incident_id='" + id + "'";
+        String deleteQuery = "DELETE FROM incidents WHERE incident_id='" + id + "'";
         stmt.executeUpdate(deleteQuery);
         stmt.close();
         con.close();
