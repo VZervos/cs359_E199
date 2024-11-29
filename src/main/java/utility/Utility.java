@@ -37,8 +37,6 @@ public class Utility {
     }
 
     public static String getSessionUserData(HttpServletRequest request) {
-        EditUsersTable eut = new EditUsersTable();
-
         HttpSession session = request.getSession(false);
         String sessionUser = (String) session.getAttribute("user");
         return sessionUser;

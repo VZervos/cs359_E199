@@ -45,14 +45,94 @@
         </div>
     </section>
 
-    <section id="change-information">
+    <section id="view-information">
         <div>
-            <h2>Change your information</h2>
-            <p class="note">Update the current information of your account.</p>
+            <h2>Your information</h2>
+            <p class="note">You may edit your information by activating Edit Mode</p>
+            <button id="activate-edit-mode-button">Edit</button>
         </div>
         <div>
             <div class="section-content">
-                <label class="field-title" for="email">*Email:</label>
+                <label class="field-title" id="view_label_username">Username:</label>
+                <p class="show-user-info-field" id="view_username"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_email">Email:</label>
+                <p class="show-user-info-field" id="view_email"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_password">Password:</label>
+                <p class="show-user-info-field" id="view_password"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_firstname">First Name:</label>
+                <p class="show-user-info-field" id="view_firstname"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_lastname">Last Name:</label>
+                <p class="show-user-info-field" id="view_lastname"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_birthdate">Birthdate:</label>
+                <p class="show-user-info-field" id="view_birthdate"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_gender">Gender</label>
+                <p class="show-user-info-field" id="view_gender"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_afm">AFM:</label>
+                <p class="show-user-info-field" id="view_afm"></p>
+            </div>
+
+            <div class="section-content">
+                <p class="field-title" id="view_label_type">User type</p>
+                <p class="show-user-info-field" id="view_type"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_country">Country:</label>
+                <p class="show-user-info-field" id="view_country"></p>
+
+                <label class="field-title" id="view_label_prefecture">Prefecture:</label>
+                <p class="show-user-info-field" id="view_prefecture"></p>
+
+                <label class="field-title" id="view_label_municipality">Municipality:</label>
+                <p class="show-user-info-field" id="view_municipality"></p>
+
+                <label class="field-title" id="view_label_address">Address:</label>
+                <p class="show-user-info-field" id="view_address"></p>
+            </div>
+
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_job">Job:</label>
+                <p class="show-user-info-field" id="view_job"></p>
+            </div>
+
+            <div class="section-content">
+                <label class="field-title" id="view_label_telephone">Mobile Number:</label>
+                <p class="show-user-info-field" id="view_telephone"></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="edit-information">
+        <div>
+            <h2>Edit your information</h2>
+            <p class="note">Update the current information of your account.</p>
+            <button id="deactivate-edit-mode-button">Deactivate Edit Mode</button>
+        </div>
+        <div>
+            <div class="section-content">
+                <label class="field-title" for="email">Email:</label>
                 <input id="email"
                        name="email"
                        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
@@ -65,7 +145,7 @@
             </div>
 
             <div class="section-content">
-                <label class="field-title" for="password">*Password:</label>
+                <label class="field-title" for="password">Password:</label>
                 <input id="password"
                        maxlength="18"
                        minlength="8"
@@ -84,7 +164,7 @@
                 </button>
                 <p id="password_strength"></p>
 
-                <label class="field-title" for="password_verification">*Confirm password:</label>
+                <label class="field-title" for="password_verification">Confirm password:</label>
                 <input id="password_verification"
                        maxlength="18"
                        minlength="8"
@@ -105,7 +185,7 @@
             </div>
 
             <div class="section-content">
-                <label class="field-title" for="firstname">*First Name:</label>
+                <label class="field-title" for="firstname">First Name:</label>
                 <input id="firstname"
                        maxlength="30"
                        minlength="3"
@@ -120,7 +200,7 @@
             </div>
 
             <div class="section-content">
-                <label class="field-title" for="lastname">*Last Name:</label>
+                <label class="field-title" for="lastname">Last Name:</label>
                 <input id="lastname"
                        maxlength="30"
                        minlength="3"
@@ -135,7 +215,7 @@
             </div>
 
             <div class="section-content">
-                <label class="field-title" for="birthdate">*Birthdate:</label>
+                <label class="field-title" for="birthdate">Birthdate:</label>
                 <input id="birthdate"
                        max="2011-12-31"
                        min="1920-01-01"
@@ -150,7 +230,7 @@
             </div>
 
             <div class="section-content">
-                <p class="field-title">*Gender</p>
+                <p class="field-title">Gender</p>
                 <input
                         id="gender_male"
                         name="gender"
@@ -176,7 +256,7 @@
             </div>
 
             <div class="section-content">
-                <label class="field-title" for="country">*Country:</label>
+                <label class="field-title" for="country">Country:</label>
                 <select autocomplete="country"
                         class="form-select"
                         id="country"
@@ -439,7 +519,7 @@
                 </select>
                 <p id="country_availability"></p>
 
-                <label class="field-title" for="prefecture">*Prefecture:</label>
+                <label class="field-title" for="prefecture">Prefecture:</label>
                 <select
                         autocomplete="address-level1"
                         class="form-select"
@@ -455,7 +535,7 @@
                 </select>
                 <p id="prefecture_availability"></p>
 
-                <label class="field-title" for="municipality">*Municipality:</label>
+                <label class="field-title" for="municipality">Municipality:</label>
                 <input id="municipality"
                        maxlength="30"
                        minlength="3"
@@ -468,7 +548,7 @@
                 <p id="municipality_availability"></p>
 
                 <span>
-                        <label class="field-title" for="address">*Address:</label>
+                        <label class="field-title" for="address">Address:</label>
                         <input id="address"
                                maxlength="150"
                                minlength="10"
@@ -488,7 +568,7 @@
 
 
             <div class="section-content">
-                <label class="field-title" for="job">*Job:</label>
+                <label class="field-title" for="job">Job:</label>
                 <input id="job"
                        maxlength="30"
                        minlength="3"
@@ -519,6 +599,8 @@
 <script src="../js/session/loggedOut.js" type="module"></script>
 
 <script src="../js/actions/viewPassword.js"></script>
+<script src="../js/actions/toggleEditMode.js"></script>
+<script src="../js/actions/showUserInformation.js" type="module"></script>
 
 <script src="../js/maps/map.js" type="module"></script>
 <script src="../js/actions/updateInfoField.js" type="module"></script>
