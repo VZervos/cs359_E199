@@ -18,6 +18,7 @@ public class Resources {
     public static final String INCIDENT_STATUS_FINISHED = "finished";
     public static final String INCIDENT_STATUS_FAKE = "fake";
     public static final String INCIDENT_DANGER_UNKNOWN = "unknown";
+    public static final String[] INCIDENT_STATUSES = new String[] {INCIDENT_STATUS_FINISHED, INCIDENT_STATUS_RUNNING, INCIDENT_STATUS_SUBMITTED, INCIDENT_STATUS_FAKE};
 
     public static final int MIN_PHONE_LENGTH = 10;
     public static final int MAX_PHONE_LENGTH = 14;

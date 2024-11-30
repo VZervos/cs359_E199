@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import database.tables.EditIncidentsTable;
 import mainClasses.Incident;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +67,9 @@ public class RESTAPI {
             if (incidentTypeParam == null || incidentStatusParam == null)
                 return ErrorResponse(response, 406, "Error: Incident type or status not provided.");
 
+            if (Arrays.stream(INCIDENT_STATUSES).noneMatch(inc -> inc.equals(incidentStatusParam)))
+                return ErrorResponse(response, 406, "Error: Invalid incident status provided.");
+
             EditIncidentsTable eit = new EditIncidentsTable();
             List<Incident> incidentsList = eit.databaseToIncidentsSearch(incidentTypeParam, incidentStatusParam, municipalityParam);
 
@@ -94,12 +98,9 @@ public class RESTAPI {
                 return ErrorResponse(response, 406, "Error: Incident Id provided is not a valid Id.");
             }
 
-            if (!incidentStatusParam.equals(INCIDENT_STATUS_SUBMITTED) &&
-                    !incidentStatusParam.equals(INCIDENT_STATUS_RUNNING) &&
-                    !incidentStatusParam.equals(INCIDENT_STATUS_FAKE) &&
-                    !incidentStatusParam.equals(INCIDENT_STATUS_FINISHED)) {
-                return ErrorResponse(response, 406, "Error: Incident status provided is invalid.");
-            }
+            if (Arrays.stream(INCIDENT_STATUSES).noneMatch(inc -> inc.equals(incidentStatusParam)))
+                return ErrorResponse(response, 406, "Error: Invalid incident status provided.");
+
 
             EditIncidentsTable eit = new EditIncidentsTable();
             List<Incident> incidentList = eit.databaseToIncidents();
