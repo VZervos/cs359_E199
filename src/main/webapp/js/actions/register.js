@@ -4,40 +4,7 @@ import verifyAddress, {getAddress} from "../evaluation/evaluateAddress.js";
 import {registerUser} from "../ajax/ajax.js";
 import {isEmailAvailable, isTelephoneAvailable, isUsernameAvailable} from "../evaluation/checkForDuplicates.js";
 import {openPage, scrollAtComponent} from "../utility/utility.js";
-
-function extractFormValues() {
-    const formData = {};
-    const userType = $('input[name="type"]:checked').val();
-
-    $('#registrationForm input, #registrationForm select, #registrationForm textarea').each(function () {
-        const inputName = $(this).attr('name');
-        const inputValue = $(this).val();
-
-        if ($(this).is(':radio') || $(this).is(':checkbox')) {
-            if ($(this).is(':checked')) {
-                if (userType === "Simple User" && $(this).closest('.fireman-field').length) {
-                    return;
-                }
-                formData[inputName] = inputValue;
-            }
-        } else if (inputName && inputValue) {
-            if (userType === "Simple User" && $(this).closest('.fireman-field').length) {
-                return;
-            }
-            formData[inputName] = inputValue;
-        }
-    });
-
-    const address = getAddress();
-    formData["lat"] = address["lat"];
-    formData["lon"] = address["lon"];
-    const jsonData = JSON.stringify(formData);
-    $('#result').show();
-    $('#json_result').text(jsonData);
-    console.log(jsonData);
-    return jsonData;
-}
-
+import {extractFormValues} from "./extractFormValues.js";
 
 $(document).ready(() => {
     const registrationForm = $('#registrationForm');
@@ -47,7 +14,7 @@ $(document).ready(() => {
 
         event.preventDefault();
 
-        const isFormValid = form.checkValidity();
+        const isFormValid = form.checkValidity()
         const invalidFieldId =
             verifyPassword()
             || verifyFiremanAge()
@@ -57,7 +24,7 @@ $(document).ready(() => {
             || isTelephoneAvailable();
 
         if (isFormValid && !invalidFieldId) {
-            const userData = extractFormValues();
+            const userData = extractFormValues("registrationForm");
             console.log("Form submitted successfully!");
             registerUser(userData);
             openPage("html/registrationSuccess.html");

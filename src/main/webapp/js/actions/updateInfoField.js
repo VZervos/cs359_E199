@@ -2,6 +2,7 @@ import {checkForDuplicate, updateInfoField} from "../ajax/ajax.js";
 import {RESULT_STYLE} from "../utility/utility.js";
 import verifyAddress from "../evaluation/evaluateAddress.js";
 import verifyPassword from "../evaluation/evaluatePassword.js";
+import {extractFormValues} from "./extractFormValues.js";
 
 async function checkAddressValidity(invalidField, message) {
     const country = $('#country').val();
@@ -18,27 +19,39 @@ async function checkAddressValidity(invalidField, message) {
 }
 
 async function updateInfo(invalidField, infoField, infoFieldValue, message, valueAvailabilityMessage) {
+    let success = false;
     if (!invalidField) {
         const updateResult = await updateInfoField(infoField, infoFieldValue);
         console.log(updateResult);
-        const success = updateResult["success"];
+        success = updateResult["success"];
         message = updateResult["message"];
         valueAvailabilityMessage.css("color", RESULT_STYLE[success]);
         valueAvailabilityMessage.text(message);
     } else {
-        const success = false;
         valueAvailabilityMessage.css("color", RESULT_STYLE[success]);
         valueAvailabilityMessage.text(message);
     }
+    return {success, message};
 }
 
 $(document).ready(() => {
-    $('.update-info-button').click(async (event) => {
-        const buttonClickedId = event.target.id;
-        const infoField = buttonClickedId.split('-')[1];
+    const updateForm = $('form');
+
+    updateForm.on('submit', async (event) => {
+        const form = updateForm[0];
+
+        event.preventDefault();
+
+        const isFormValid = form.checkValidity();
+        console.log(isFormValid);
+        console.log(event);
+        console.log(event.target[1].id)
+        const infoField = event.target.id.split('-')[1];
         console.log(infoField);
 
-        const infoFieldValue = $('#' + infoField).val();
+        const formValues = JSON.parse(extractFormValues("form-" + infoField));
+
+        const infoFieldValue = formValues[infoField];
         console.log(infoFieldValue);
 
 
@@ -55,6 +68,15 @@ $(document).ready(() => {
                     const __ret = await checkAddressValidity(invalidField, message);
                     invalidField = __ret.invalidField;
                     message = __ret.message;
+                    if (!invalidField) {
+                        for (const [field, value] of Object.entries(formValues)) {
+                            const updateResult = await updateInfo(invalidField, field, value, message, valueAvailabilityMessage);
+                            if (updateResult["success"])
+                                valueAvailabilityMessage.text("All address fields have been successfully updated");
+                            else break;
+                        }
+                    }
+                    return
                 } else if (infoField === "password") {
                     invalidField = verifyPassword();
                 }
