@@ -23,6 +23,11 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-auto">
+                    <a class="main-button" href="../../index.html">E199 Home</a>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-auto">
                     <h4 class="note mb-0">Don't have an account?</h4>
                 </div>
                 <div class="col-auto">
@@ -38,6 +43,36 @@
             <p class="note">Enter your credentials to login</p>
         </div>
         <div>
+            <div class="section-content">
+                <p class="field-title">User type</p>
+                <input
+                        class="type-selector"
+                        id="type_simple"
+                        name="type"
+                        required
+                        type="radio"
+                        value="User"
+                        checked="checked"
+                >
+                <label for="type_simple">Simple User</label><br>
+                <input
+                        class="type-selector"
+                        id="type_fireman"
+                        name="type"
+                        type="radio"
+                        value="Volunteer"
+                >
+                <label for="type_fireman">Volunteer Fireman</label><br>
+                <input
+                        class="type-selector"
+                        id="type_admin"
+                        name="type"
+                        type="radio"
+                        value="Admin"
+                >
+                <label for="type_admin">System Admin</label><br>
+            </div>
+
             <div class="section-content">
                 <label class="field-title" for="login-username">Username:</label>
                 <input id="login-username"

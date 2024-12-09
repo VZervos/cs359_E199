@@ -42,6 +42,10 @@ section {
     margin-bottom: 0.8em;
 }
 
+.button-section {
+    margin-top: 2em;
+}
+
 .header-content {
     display: flex;
     align-items: center;
