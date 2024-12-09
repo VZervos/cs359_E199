@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets.premade;
 
-import database.init.InitDatabase;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,14 +12,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * @author mountant
+ * @author micha
  */
-public class InitDB extends HttpServlet {
+public class NewServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,15 +35,14 @@ public class InitDB extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet InitDB</title>");
+            out.println("<title>Servlet NewServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet InitDB at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
@@ -62,21 +57,7 @@ public class InitDB extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            response.setContentType("text/html;charset=UTF-8");
-            InitDatabase init = new InitDatabase();
-            init.initDatabase();
-            init.initTables();
-            init.addToDatabaseExamples();
-            init.updateRecords();
-            init.databaseToJSON();
-        } catch (SQLException ex) {
-            response.sendError(500);
-            Logger.getLogger(InitDB.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(InitDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        processRequest(request, response);
     }
 
     /**

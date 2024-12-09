@@ -34,7 +34,7 @@ export function registerUser(userData) {
     xhr.send(JSON.stringify(dataObj));
 }
 
-export function loginUser(user) {
+export function loginUser(usertype, user) {
     console.log(user)
 
     return new Promise((resolve, reject) => {
@@ -55,11 +55,14 @@ export function loginUser(user) {
 
         xhr.open('POST', getServiceURL('LoginUser'));
         xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.send(user);
+        xhr.send(JSON.stringify({
+            "usertype": usertype,
+            "user": user
+        }));
     });
 }
 
-export function retrieveUser(username, password) {
+export function retrieveUser(usertype, username, password) {
     console.log(username)
     console.log(password);
 
@@ -95,6 +98,7 @@ export function retrieveUser(username, password) {
         xhr.open('POST', getServiceURL('RetrieveUser'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
+            "usertype": usertype,
             "username": username,
             "password": password
         }));

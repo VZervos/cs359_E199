@@ -3,21 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets.session;
 
 import database.tables.EditUsersTable;
+import database.tables.EditVolunteersTable;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import mainClasses.User;
+import mainClasses.Volunteer;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
+import static utility.Resources.*;
 import static utility.Utility.*;
 
 /**
@@ -68,29 +71,17 @@ public class LoginUser extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        EditUsersTable eut = new EditUsersTable();
-
         HttpSession session;
         JSONObject responseBody = new JSONObject();
         if (isActiveSession(request)) {
-            session = request.getSession(false);
-            User sessionUser = eut.jsonToUser(getSessionUserData(request));
+            session = getActiveSession(request, responseBody);
             responseBody.put("activeSession", true);
-            responseBody.put("user", eut.userToJSON(sessionUser));
-            responseBody.put("message", "Session found for user " + sessionUser.getUsername());
         } else {
             session = request.getSession(true);
             responseBody.put("activeSession", false);
-
-            String body = getBodyString(request);
-            User user = eut.jsonToUser(body);
-            String userData = eut.userToJSON(user);
-            session.setAttribute("user", userData);
-            responseBody.put("user", userData);
-            responseBody.put("message", "Initiated new session for user " + user.getUsername());
+            startNewSession(request, session, responseBody);
         }
         responseBody.put("session", session.toString());
-
 
         Writer writer = response.getWriter();
         try {
@@ -101,6 +92,65 @@ public class LoginUser extends HttpServlet {
             writer.write(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private static HttpSession getActiveSession(HttpServletRequest request, JSONObject responseBody) {
+        String usertype;
+        HttpSession session;
+        session = request.getSession(false);
+        usertype = (String) session.getAttribute("usertype");
+        switch (usertype) {
+            case USERTYPE_USER -> {
+                EditUsersTable eut = new EditUsersTable();
+                User sessionUser = eut.jsonToUser(getSessionUserData(request));
+                responseBody.put("user", eut.userToJSON(sessionUser));
+                responseBody.put("message", "Session found for user " + sessionUser.getUsername());
+            }
+            case USERTYPE_VOLUNTEER -> {
+                EditVolunteersTable evt = new EditVolunteersTable();
+                Volunteer sessionVolunteer = evt.jsonToVolunteer(getSessionUserData(request));
+                responseBody.put("user", evt.volunteerToJSON(sessionVolunteer));
+                responseBody.put("message", "Session found for volunteer " + sessionVolunteer.getUsername());
+            }
+            case USERTYPE_ADMIN -> {
+                // TODO
+            }
+            default -> {assert false;}
+        }
+        return session;
+    }
+
+    private static void startNewSession(HttpServletRequest request, HttpSession session, JSONObject responseBody) throws IOException {
+        JSONObject bodyJson = getBodyJson(request);
+        String body = bodyJson.getString("user");
+        String usertype = bodyJson.getString("usertype");
+
+        String username = null;
+        switch (usertype) {
+            case USERTYPE_USER -> {
+                EditUsersTable eut = new EditUsersTable();
+                User user = eut.jsonToUser(body);
+                String userData = eut.userToJSON(user);
+                session.setAttribute("user", userData);
+                session.setAttribute("usertype", usertype);
+                responseBody.put("user", userData);
+                username = user.getUsername();
+            }
+            case USERTYPE_VOLUNTEER -> {
+                EditVolunteersTable evt = new EditVolunteersTable();
+                Volunteer volunteer = evt.jsonToVolunteer(body);
+                String userData = evt.volunteerToJSON(volunteer);
+                session.setAttribute("user", userData);
+                session.setAttribute("usertype", usertype);
+                responseBody.put("user", userData);
+                username = volunteer.getUsername();
+            }
+            case USERTYPE_ADMIN -> {
+                // TODO
+            }
+            default -> {assert false;}
+        }
+        responseBody.put("message", "Initiated new session for user " + username);
     }
 
     /**

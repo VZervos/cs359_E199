@@ -3,56 +3,56 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
     <servlet>
         <servlet-name>GetUser</servlet-name>
-        <servlet-class>servlets.GetUser</servlet-class>
+        <servlet-class>servlets.premade.GetUser</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InitDB</servlet-name>
-        <servlet-class>servlets.InitDB</servlet-class>
+        <servlet-class>servlets.premade.InitDB</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteDB</servlet-name>
-        <servlet-class>servlets.DeleteDB</servlet-class>
+        <servlet-class>servlets.premade.DeleteDB</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>NewServlet</servlet-name>
-        <servlet-class>servlets.NewServlet</servlet-class>
+        <servlet-class>servlets.premade.NewServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>IsUsernameAvailable</servlet-name>
-        <servlet-class>servlets.IsUsernameAvailable</servlet-class>
+        <servlet-class>servlets.validation.IsUsernameAvailable</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>IsEmailAvailable</servlet-name>
-        <servlet-class>servlets.IsEmailAvailable</servlet-class>
+        <servlet-class>servlets.validation.IsEmailAvailable</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>IsTelephoneAvailable</servlet-name>
-        <servlet-class>servlets.IsTelephoneAvailable</servlet-class>
+        <servlet-class>servlets.validation.IsTelephoneAvailable</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegisterUser</servlet-name>
-        <servlet-class>servlets.RegisterUser</servlet-class>
+        <servlet-class>servlets.session.RegisterUser</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RetrieveUser</servlet-name>
-        <servlet-class>servlets.RetrieveUser</servlet-class>
+        <servlet-class>servlets.retrieval.RetrieveUser</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GetActiveSession</servlet-name>
-        <servlet-class>servlets.GetActiveSession</servlet-class>
+        <servlet-class>servlets.session.GetActiveSession</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginUser</servlet-name>
-        <servlet-class>servlets.LoginUser</servlet-class>
+        <servlet-class>servlets.session.LoginUser</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutUser</servlet-name>
-        <servlet-class>servlets.LogoutUser</servlet-class>
+        <servlet-class>servlets.session.LogoutUser</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateInfoField</servlet-name>
-        <servlet-class>servlets.UpdateInfoField</servlet-class>
+        <servlet-class>servlets.modification.UpdateInfoField</servlet-class>
     </servlet>
 
     <servlet-mapping>

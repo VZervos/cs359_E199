@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets.validation;
 
-import database.tables.EditUsersTable;
-import database.tables.EditVolunteersTable;
 import exceptions.EmailAlreadyRegisteredException;
 import exceptions.TelephoneAlreadyRegisteredException;
 import exceptions.UsernameAlreadyRegisteredException;
@@ -14,21 +12,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mainClasses.Resources;
 import mainClasses.User;
 import mainClasses.Volunteer;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
-import static utility.Utility.getBodyString;
-
 /**
  * @author micha
  */
-public class RegisterUser extends HttpServlet {
+public class IsEmailAvailable extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,37 +49,18 @@ public class RegisterUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/plain;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
         Writer writer = null;
-        String body;
         try {
             writer = response.getWriter();
-//            JSONObject userData = getBodyJson(request);
-            String userDataString = getBodyString(request);
-            JSONObject userData = new JSONObject(userDataString);
 
-            String type = userData.getString("type");
-            switch (type) {
-                case Resources.TYPE_USER -> registerUser(userDataString, userData);
-                case Resources.TYPE_ADMIN -> registerAdmin(request);
-                case Resources.TYPE_VOLUNTEER -> registerVolunteer(userDataString, userData);
-                default -> {
-                    assert false;
-                }
-            }
-            writer.write(type + " has been successfully registered: " + userData.getString("username"));
+            String email = request.getParameter("email");
+            User.checkCredentialsUniqueness(null, email, null);
+            Volunteer.checkCredentialsUniqueness(null, email, null);
+
+            writer.write("Email is unique");
         } catch (UsernameAlreadyRegisteredException | EmailAlreadyRegisteredException |
                  TelephoneAlreadyRegisteredException e) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
@@ -97,29 +72,17 @@ public class RegisterUser extends HttpServlet {
             writer.write(e.getMessage());
             e.printStackTrace();
         }
-
     }
 
-    private void registerUser(String body, JSONObject userData)
-            throws ClassNotFoundException, UsernameAlreadyRegisteredException, TelephoneAlreadyRegisteredException, EmailAlreadyRegisteredException, SQLException {
-        User.checkCredentialsUniqueness(userData);
-        Volunteer.checkCredentialsUniqueness(userData);
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request  servlet request
+     * @param response servlet response
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        EditUsersTable eut = new EditUsersTable();
-        eut.addUserFromJSON(body);
-    }
-
-    private void registerAdmin(HttpServletRequest request) {
-        // TODO
-    }
-
-    private void registerVolunteer(String body, JSONObject volunteerData)
-            throws ClassNotFoundException, UsernameAlreadyRegisteredException, TelephoneAlreadyRegisteredException, EmailAlreadyRegisteredException, SQLException {
-        User.checkCredentialsUniqueness(volunteerData);
-        Volunteer.checkCredentialsUniqueness(volunteerData);
-
-        EditVolunteersTable evt = new EditVolunteersTable();
-        evt.addVolunteerFromJSON(body);
     }
 
     /**

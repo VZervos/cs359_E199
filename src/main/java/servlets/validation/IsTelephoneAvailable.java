@@ -3,25 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets.validation;
 
-import database.tables.EditUsersTable;
+import exceptions.UsernameAlreadyRegisteredException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mainClasses.User;
+import mainClasses.Volunteer;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.Writer;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author micha
  */
-public class GetUser extends HttpServlet {
+public class IsTelephoneAvailable extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,8 +36,6 @@ public class GetUser extends HttpServlet {
         //
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -50,24 +47,27 @@ public class GetUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            EditUsersTable eut = new EditUsersTable();
-            User su = eut.databaseToUsers(username, password);
-            if (su == null) {
-                response.setStatus(403);
-            } else {
-                String json = eut.userToJSON(su);
-                out.println(json);
-                response.setStatus(200);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
+        response.setContentType("text/plain;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        Writer writer = null;
+        try {
+            writer = response.getWriter();
+
+            String telephone = request.getParameter("telephone");
+            User.checkCredentialsUniqueness(null, null, telephone);
+            Volunteer.checkCredentialsUniqueness(null, null, telephone);
+
+            writer.write("Telephone is unique");
+        } catch (UsernameAlreadyRegisteredException e) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+            assert writer != null;
+            writer.write(e.getMessage());
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            assert writer != null;
+            writer.write(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -76,13 +76,10 @@ public class GetUser extends HttpServlet {
      *
      * @param request  servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-//        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     }
 
     /**

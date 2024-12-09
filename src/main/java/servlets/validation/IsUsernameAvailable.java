@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets.validation;
 
 import exceptions.UsernameAlreadyRegisteredException;
 import jakarta.servlet.ServletException;
@@ -17,10 +17,11 @@ import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
+
 /**
  * @author micha
  */
-public class IsTelephoneAvailable extends HttpServlet {
+public class IsUsernameAvailable extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,11 +55,11 @@ public class IsTelephoneAvailable extends HttpServlet {
         try {
             writer = response.getWriter();
 
-            String telephone = request.getParameter("telephone");
-            User.checkCredentialsUniqueness(null, null, telephone);
-            Volunteer.checkCredentialsUniqueness(null, null, telephone);
+            String username = request.getParameter("username");
+            User.checkCredentialsUniqueness(username, null, null);
+            Volunteer.checkCredentialsUniqueness(username, null, null);
 
-            writer.write("Telephone is unique");
+            writer.write("Username is unique");
         } catch (UsernameAlreadyRegisteredException e) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
             assert writer != null;

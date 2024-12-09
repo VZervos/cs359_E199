@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets.validation;
 
+import exceptions.EmailAlreadyRegisteredException;
+import exceptions.TelephoneAlreadyRegisteredException;
 import exceptions.UsernameAlreadyRegisteredException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mainClasses.Resources;
 import mainClasses.User;
 import mainClasses.Volunteer;
 
@@ -17,11 +20,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
-
 /**
  * @author micha
  */
-public class IsUsernameAvailable extends HttpServlet {
+public class IsUserAttributeValueAvailable extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,12 +57,26 @@ public class IsUsernameAvailable extends HttpServlet {
         try {
             writer = response.getWriter();
 
-            String username = request.getParameter("username");
-            User.checkCredentialsUniqueness(username, null, null);
-            Volunteer.checkCredentialsUniqueness(username, null, null);
+            String attribute = request.getParameter("attribute");
+            String value = request.getParameter("value");
+            switch (attribute) {
+                case Resources.ATTR_USERNAME -> {
+                    User.checkCredentialsUniqueness(value, null, null);
+                    Volunteer.checkCredentialsUniqueness(value, null, null);
+                }
+                case Resources.ATTR_EMAIL -> {
+                    User.checkCredentialsUniqueness(null, value, null);
+                    Volunteer.checkCredentialsUniqueness(null, value, null);
+                }
+                case Resources.ATTR_TELEPHONE -> {
+                    User.checkCredentialsUniqueness(null, null, value);
+                    Volunteer.checkCredentialsUniqueness(null, null, value);
+                }
+            }
 
             writer.write("Username is unique");
-        } catch (UsernameAlreadyRegisteredException e) {
+        } catch (UsernameAlreadyRegisteredException | EmailAlreadyRegisteredException |
+                 TelephoneAlreadyRegisteredException e) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
             assert writer != null;
             writer.write(e.getMessage());

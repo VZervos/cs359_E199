@@ -3,27 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets.session;
 
 import database.tables.EditUsersTable;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mainClasses.User;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
-import static utility.Utility.getBodyJson;
 import static utility.Utility.getSessionUserData;
+import static utility.Utility.isActiveSession;
 
 /**
  * @author micha
  */
-public class UpdateInfoField extends HttpServlet {
+public class GetActiveSession extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,6 +38,8 @@ public class UpdateInfoField extends HttpServlet {
         //
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -50,32 +51,24 @@ public class UpdateInfoField extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        JSONObject newInfo = getBodyJson(request);
-        String field = newInfo.getString("field");
-        String value = newInfo.getString("value");
-
         EditUsersTable eut = new EditUsersTable();
-        User sessionUser = eut.jsonToUser(getSessionUserData(request));
-        String username = sessionUser.getUsername();
 
         JSONObject responseBody = new JSONObject();
+        if (isActiveSession(request)) {
+            String sessionUserData = getSessionUserData(request);
+            responseBody.put("activeSession", true);
+            responseBody.put("user", sessionUserData);
+            responseBody.put("message", "Session found for user " + eut.jsonToUser(sessionUserData).getUsername());
+        } else {
+            responseBody.put("activeSession", false);
+            responseBody.put("message", "No active session found");
+        }
+
         Writer writer = response.getWriter();
         try {
-            eut.updateUser(username, field, value);
-            responseBody.put("message", "Updated " + field + " of user " + username + " to " + value);
             writer.write(responseBody.toString());
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -83,7 +76,19 @@ public class UpdateInfoField extends HttpServlet {
             writer.write(e.getMessage());
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request  servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
     }
 
     /**

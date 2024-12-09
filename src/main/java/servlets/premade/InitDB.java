@@ -3,23 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets.premade;
 
+import database.init.InitDatabase;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * @author micha
+ * @author mountant
  */
-public class LogoutUser extends HttpServlet {
+public class InitDB extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,9 +32,22 @@ public class LogoutUser extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, ClassNotFoundException {
-        //
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet InitDB</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet InitDB at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
@@ -48,6 +62,21 @@ public class LogoutUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            InitDatabase init = new InitDatabase();
+            init.initDatabase();
+            init.initTables();
+            init.addToDatabaseExamples();
+            init.updateRecords();
+            init.databaseToJSON();
+        } catch (SQLException ex) {
+            response.sendError(500);
+            Logger.getLogger(InitDB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(InitDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
@@ -61,25 +90,7 @@ public class LogoutUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        HttpSession session = request.getSession(false);
-        session.setMaxInactiveInterval(0);
-        session.invalidate();
-
-        JSONObject responseBody = new JSONObject();
-        responseBody.put("success", true);
-        responseBody.put("message", "User successfully logged out");
-        Writer writer = response.getWriter();
-        try {
-            writer.write(responseBody.toString());
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            assert writer != null;
-            writer.write(e.getMessage());
-            e.printStackTrace();
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -91,4 +102,5 @@ public class LogoutUser extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }
