@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import mainClasses.Admin;
 import mainClasses.User;
 import mainClasses.Volunteer;
 import org.json.JSONObject;
@@ -99,24 +100,33 @@ public class LoginUser extends HttpServlet {
         HttpSession session;
         session = request.getSession(false);
         usertype = (String) session.getAttribute("usertype");
+
+        String userdata = null;
+        String username = null;
         switch (usertype) {
             case USERTYPE_USER -> {
                 EditUsersTable eut = new EditUsersTable();
                 User sessionUser = eut.jsonToUser(getSessionUserData(request));
-                responseBody.put("user", eut.userToJSON(sessionUser));
-                responseBody.put("message", "Session found for user " + sessionUser.getUsername());
+                userdata = eut.userToJSON(sessionUser);
+                username = sessionUser.getUsername();
             }
             case USERTYPE_VOLUNTEER -> {
                 EditVolunteersTable evt = new EditVolunteersTable();
                 Volunteer sessionVolunteer = evt.jsonToVolunteer(getSessionUserData(request));
-                responseBody.put("user", evt.volunteerToJSON(sessionVolunteer));
-                responseBody.put("message", "Session found for volunteer " + sessionVolunteer.getUsername());
+                userdata = evt.volunteerToJSON(sessionVolunteer);
+                username = sessionVolunteer.getUsername();
             }
             case USERTYPE_ADMIN -> {
-                // TODO
+                Admin sessionAdmin = new Admin(getSessionUserData(request));
+                userdata = sessionAdmin.toJson();
+                username = sessionAdmin.getUsername();
             }
-            default -> {assert false;}
+            default -> {
+                assert false;
+            }
         }
+        responseBody.put("user", userdata);
+        responseBody.put("message", "Session found for user " + username);
         return session;
     }
 
@@ -126,30 +136,32 @@ public class LoginUser extends HttpServlet {
         String usertype = bodyJson.getString("usertype");
 
         String username = null;
+        String userData = null;
         switch (usertype) {
             case USERTYPE_USER -> {
                 EditUsersTable eut = new EditUsersTable();
                 User user = eut.jsonToUser(body);
-                String userData = eut.userToJSON(user);
-                session.setAttribute("user", userData);
-                session.setAttribute("usertype", usertype);
-                responseBody.put("user", userData);
+                userData = eut.userToJSON(user);
                 username = user.getUsername();
             }
             case USERTYPE_VOLUNTEER -> {
                 EditVolunteersTable evt = new EditVolunteersTable();
                 Volunteer volunteer = evt.jsonToVolunteer(body);
-                String userData = evt.volunteerToJSON(volunteer);
-                session.setAttribute("user", userData);
-                session.setAttribute("usertype", usertype);
-                responseBody.put("user", userData);
+                userData = evt.volunteerToJSON(volunteer);
                 username = volunteer.getUsername();
             }
             case USERTYPE_ADMIN -> {
-                // TODO
+                Admin admin = new Admin(body);
+                userData = admin.toJson();
+                username = admin.getUsername();
             }
-            default -> {assert false;}
+            default -> {
+                assert false;
+            }
         }
+        session.setAttribute("user", userData);
+        session.setAttribute("usertype", usertype);
+        responseBody.put("user", userData);
         responseBody.put("message", "Initiated new session for user " + username);
     }
 

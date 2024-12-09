@@ -1,7 +1,9 @@
 package utility;
 
+import com.google.gson.Gson;
+
 public class Resources {
-    public static final String USERTYPE_USER = "user";
+        public static final String USERTYPE_USER = "user";
     public static final String USERTYPE_ADMIN = "admin";
     public static final String USERTYPE_GUEST = "guest";
     public static final String USERTYPE_VOLUNTEER = "volunteer";

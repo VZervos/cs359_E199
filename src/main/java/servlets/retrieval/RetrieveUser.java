@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mainClasses.Admin;
 import mainClasses.User;
 import mainClasses.Volunteer;
 import org.json.JSONObject;
@@ -114,7 +115,14 @@ public class RetrieveUser extends HttpServlet {
                 }
             }
             case USERTYPE_ADMIN -> {
-
+                Admin admin = new Admin(username, password);
+                if (admin.isUsernameCorrect() && admin.isPasswordCorrect()) {
+                    responseBody.put("user", admin.toJson());
+                    responseBody.put("message", "Admin successfully retrieved");
+                } else {
+                    responseBody.put("message", "Admin not found");
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                }
             }
             default -> {
                 assert false;
