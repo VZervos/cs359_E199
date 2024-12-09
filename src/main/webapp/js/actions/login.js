@@ -1,5 +1,6 @@
 import {loginUser, retrieveUser} from "../ajax/ajax.js";
-import {openDashboard} from "../utility/utility.js";
+
+import {openDashboard} from "../pages/pageManagement.js";
 
 $(document).ready(() => {
     $('#loginButton').click(async (event) => {
@@ -10,7 +11,7 @@ $(document).ready(() => {
         if (credentialsCorrectnessCheckResult["success"]) {
             console.log("Logged in successfully!");
             await loginUser(credentialsCorrectnessCheckResult["user"]);
-            openDashboard();
+            openDashboard("user");
         } else {
             console.log("Login failed due to validation errors.");
             const loginResultMessage = $('#login_result_message');

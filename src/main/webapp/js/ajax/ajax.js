@@ -2,6 +2,13 @@
 //     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(dataObj[key]))
 //     .join('&');
 
+
+import {getBaseURL} from "../pages/pageManagement.js";
+
+const getServiceURL = (service) => {
+    return getBaseURL() + service;
+}
+
 export function registerUser(userData) {
     const dataObj = typeof userData === "string" ? JSON.parse(userData) : userData;
 
@@ -22,7 +29,7 @@ export function registerUser(userData) {
         }
     };
 
-    xhr.open('POST', '../RegisterUser');
+    xhr.open('POST', getServiceURL('RegisterUser'));
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(JSON.stringify(dataObj));
 }
@@ -46,7 +53,7 @@ export function loginUser(user) {
             resolve(response);
         };
 
-        xhr.open('POST', '../LoginUser');
+        xhr.open('POST', getServiceURL('LoginUser'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(user);
     });
@@ -85,7 +92,7 @@ export function retrieveUser(username, password) {
             resolve({success, message, user});
         };
 
-        xhr.open('POST', '../RetrieveUser');
+        xhr.open('POST', getServiceURL('RetrieveUser'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
             "username": username,
@@ -127,21 +134,21 @@ export function checkForDuplicate(attribute, value) {
         switch (attribute) {
             case "username":
                 console.log("username");
-                xhr.open('GET', '../IsUsernameAvailable?username=' + value);
+                xhr.open('GET', getServiceURL('IsUsernameAvailable?username=' + value));
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");
                 break;
             case "email":
                 console.log("email");
-                xhr.open('GET', '../IsEmailAvailable?email=' + value);
+                xhr.open('GET', getServiceURL('IsEmailAvailable?email=' + value));
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");
                 break;
             case "telephone":
                 console.log("telephone");
-                xhr.open('GET', '../IsTelephoneAvailable?telephone=' + value);
+                xhr.open('GET', getServiceURL('IsTelephoneAvailable?telephone=' + value));
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");
@@ -182,7 +189,7 @@ export function updateInfoField(field, value) {
             resolve({success, message});
         };
 
-        xhr.open('POST', '../UpdateInfoField');
+        xhr.open('POST', getServiceURL('UpdateInfoField'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
             "field": field,

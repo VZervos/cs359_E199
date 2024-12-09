@@ -1,4 +1,4 @@
-import {getBaseURL} from "../utility/utility.js";
+import {getBaseURL} from "../pages/pageManagement.js";
 
 export function getSessionUser() {
     return new Promise((resolve, reject) => {
