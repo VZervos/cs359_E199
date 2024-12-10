@@ -8,8 +8,6 @@ export async function reloadIncidents() {
     const createIncidentInfo = (incident) => {
         const {
             incident_id,
-            incident_type,
-            status,
             danger,
             address,
             municipality,
@@ -27,17 +25,26 @@ export async function reloadIncidents() {
         } = incident;
 
         return `
-        <div class="col-sm-6 col">
-            <h4>${incident_id}. ${incident_type}</h4>
-            <label>Status: ${status}</label>
-            <label>Danger: ${danger}</label>
-            <label>Location: ${address}, ${municipality}, ${prefecture}, ${country}</label>
-            <label>Lat/Lon: ${lat}, ${lon}</label>
-            <label>User: ${user_type} (${user_phone})</label>
-            <label>Vehicles/Firemen: ${vehicles}/${firemen}</label>
-            <label>Started: ${start_datetime}</label>
-            <label>Result: ${finalResult}</label>
-            <p>${description}</p>
+        <div>
+            <div>
+                    Danger: 
+                    <select class="incident-value-selector" id=${incident_id + "-danger-value"}>
+                        <option value="low" ${danger === 'low' ? 'selected' : ''}>low</option>
+                        <option value="medium" ${danger === 'medium' ? 'selected' : ''}>medium</option>
+                        <option value="high" ${danger === 'high' ? 'selected' : ''}>high</option>
+                        <option value="unknown" ${danger === 'unknown' ? 'selected' : ''}>unknown</option>
+                    </select>
+                </div>
+            <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</d>
+            <div>Lat/Lon: ${lat}, ${lon}</d>
+            <div>User: ${user_type} (${user_phone})</d>
+            <div>Vehicles/Firemen: ${vehicles}/${firemen}</d>
+            <div>Started: ${start_datetime}</d>
+            <div>Result: ${finalResult}</d>
+                        <div>
+                    Description: 
+            <textarea style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
+            </div>
         </div>
     `;
     };
@@ -55,11 +62,9 @@ export async function reloadIncidents() {
                 break;
             case "running":
                 statusOptions = `
-                <div>
-                    <div class="col-auto">
+                <span>
                         <button class="status-option-button" id=${incident_id + "-mark_as-finished"}>Mark as Finished</button>
-                    </div>
-                </div>
+                </span>
             `;
                 break;
             default:
@@ -71,13 +76,9 @@ export async function reloadIncidents() {
 
     const createIncidentOptions = (incident) => {
         const {incident_id, status} = incident;
-        const buttonId = incident_id + "activate-edit-mode-button";
 
         return `
-        <div class="col-sm-auto col">
-            <div class="row">
-                <button id="${buttonId}">Edit</button>
-            </div>
+        <div>
             <div class="row">
                 ${createStatusOptions(incident_id, status)}
             </div>
@@ -90,14 +91,27 @@ export async function reloadIncidents() {
     loadIncidentsButton.text("Reload incidents")
 
     const incidents = await getIncidentsList();
-    incidents.data.forEach(incident => {
-        const {incident_id} = incident;
+    incidents.data.reverse().forEach(incident => {
+        const {incident_id, incident_type, status} = incident;
         const component = $(`
-                <div class=" section-content list-incidents-admin-item row align-items-center" id=${incident_id}>
-                    ${createIncidentInfo(incident)}
-                    ${createIncidentOptions(incident)}
-                    <p id=${incident_id + '-message'}></p>
+            <div class="accordion" id=${"accordion-" + incident_id}>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-${incident_id}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${incident_id}" aria-expanded="false" aria-controls="collapse-${incident_id}">
+                            ${status}: Incident #${incident_id} (${incident_type})
+                        </button>
+                    </h2>
+                    <div id="collapse-${incident_id}" class="accordion-collapse collapse" aria-labelledby="heading-${incident_id}" data-bs-parent=${"accordion-" + incident_id}>
+                        <div class="accordion-body">
+                            <div class="section-content list-incidents-admin-item row align-items-center" id="${incident_id}">
+                                ${createIncidentInfo(incident)}
+                                ${createIncidentOptions(incident)}
+                                <p id="${incident_id}-message"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
             `);
 
         incidentsList.append(component);
