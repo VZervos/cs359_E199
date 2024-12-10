@@ -8,3 +8,6 @@ export const scrollAtComponent = (component_id) =>
 
 export const getRadioValue = (radioName) =>
     $('input[name=' + radioName + ']:checked').val();
+
+export const clearHtml = (component) =>
+    component.html("");

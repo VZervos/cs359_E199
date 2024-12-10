@@ -5,8 +5,13 @@
 
 import {getBaseURL} from "../pages/pageManagement.js";
 
+const getServletURL = (servlet) => {
+    return getBaseURL() + servlet;
+}
+
 const getServiceURL = (service) => {
-    return getBaseURL() + service;
+    const RESTAPI_URL = "http://localhost:4567/E199API/"
+    return RESTAPI_URL + service;
 }
 
 export function registerUser(userData) {
@@ -29,7 +34,7 @@ export function registerUser(userData) {
         }
     };
 
-    xhr.open('POST', getServiceURL('RegisterUser'));
+    xhr.open('POST', getServletURL('RegisterUser'));
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(JSON.stringify(dataObj));
 }
@@ -53,7 +58,7 @@ export function loginUser(usertype, user) {
             resolve(response);
         };
 
-        xhr.open('POST', getServiceURL('LoginUser'));
+        xhr.open('POST', getServletURL('LoginUser'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
             "usertype": usertype,
@@ -95,7 +100,7 @@ export function retrieveUser(usertype, username, password) {
             resolve({success, message, user});
         };
 
-        xhr.open('POST', getServiceURL('RetrieveUser'));
+        xhr.open('POST', getServletURL('RetrieveUser'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
             "usertype": usertype,
@@ -138,21 +143,21 @@ export function checkForDuplicate(attribute, value) {
         switch (attribute) {
             case "username":
                 console.log("username");
-                xhr.open('GET', getServiceURL('IsUsernameAvailable?username=' + value));
+                xhr.open('GET', getServletURL('IsUsernameAvailable?username=' + value));
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");
                 break;
             case "email":
                 console.log("email");
-                xhr.open('GET', getServiceURL('IsEmailAvailable?email=' + value));
+                xhr.open('GET', getServletURL('IsEmailAvailable?email=' + value));
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");
                 break;
             case "telephone":
                 console.log("telephone");
-                xhr.open('GET', getServiceURL('IsTelephoneAvailable?telephone=' + value));
+                xhr.open('GET', getServletURL('IsTelephoneAvailable?telephone=' + value));
                 xhr.setRequestHeader('Content-type', 'x-www-form-urlencoded');
                 xhr.send();
                 console.log("sent");
@@ -193,11 +198,48 @@ export function updateInfoField(field, value) {
             resolve({success, message});
         };
 
-        xhr.open('POST', getServiceURL('UpdateInfoField'));
+        xhr.open('POST', getServletURL('UpdateInfoField'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
             "field": field,
             "value": value
         }));
+    });
+}
+
+export function getIncidentsList() {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            let success = false;
+            let message = null;
+            let data = null;
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                message = response.message;
+                if (message) {
+                    console.log('Message:', message);
+                } else {
+                    message = "Service execution success";
+                    success = true;
+                    data = response.data;
+                    console.log(data);
+                }
+            } else if (xhr.status !== 200) {
+                console.log("Error occurred");
+                const response = JSON.parse(xhr.responseText);
+                message = response.message;
+                console.log('Message:', message);
+                success = false;
+            }
+            console.log("result: ");
+            console.log(success);
+            console.log(message);
+            resolve({success, message, data});
+        };
+
+        xhr.open('GET', getServiceURL('incidents/all/all'));
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send();
     });
 }

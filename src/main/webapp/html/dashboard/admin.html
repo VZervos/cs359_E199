@@ -47,10 +47,12 @@
 
     <section id="view-information">
         <div>
-            <h2>Your information</h2>
-            <p class="note">You may edit your information by activating Edit Mode</p>
-            <button id="activate-edit-mode-button">Edit</button>
+            <h2>Manage incidents</h2>
+            <p class="note">Load, list and manage incidents' information.</p>
+            <button id="load-incidents-button">Load incidents</button>
         </div>
+
+        <div class="container" id="incident-list"></div>
     </section>
 </main>
 
@@ -63,6 +65,8 @@
         </div>
     </div>
 </footer>
+
+<script src="../../js/actions/loadAdminIncidents.js" type="module"></script>
 
 <script src="../../js/session/loggedOut.js" type="module"></script>
 

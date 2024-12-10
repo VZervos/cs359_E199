@@ -67,7 +67,7 @@ public class RESTAPI {
             if (incidentTypeParam == null || incidentStatusParam == null)
                 return ErrorResponse(response, 406, "Error: Incident type or status not provided.");
 
-            if (Arrays.stream(INCIDENT_STATUSES).noneMatch(inc -> inc.equals(incidentStatusParam)))
+            if (!incidentStatusParam.equals("all") && Arrays.stream(INCIDENT_STATUSES).noneMatch(inc -> inc.equals(incidentStatusParam)))
                 return ErrorResponse(response, 406, "Error: Invalid incident status provided.");
 
             EditIncidentsTable eit = new EditIncidentsTable();
