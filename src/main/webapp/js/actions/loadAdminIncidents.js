@@ -1,11 +1,17 @@
 import {getIncidentsList} from "../ajax/ajax.js";
 import {clearHtml} from "../utility/utility.js";
+import {increaseValue, decreaseValue} from "../utility_actions/increaseDecreaseValue.js";
 
 let loadIncidentsButton;
 let incidentsList;
 
 export async function reloadIncidents() {
     const createIncidentInfo = (incident) => {
+        const changeValueOfField = (field, newValue) => {
+            const value = Math.max(0, newValue);
+            $(document).on('click', '#' + field, (event) => event.target.value  = value)
+        }
+
         const {
             incident_id,
             danger,
@@ -38,7 +44,18 @@ export async function reloadIncidents() {
             <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</d>
             <div>Lat/Lon: ${lat}, ${lon}</d>
             <div>User: ${user_type} (${user_phone})</d>
-            <div>Vehicles/Firemen: ${vehicles}/${firemen}</d>
+            <div>
+                Vehicles: 
+                <button type="button" class="incrdecr-button decr-button" id=${incident_id + "-vehicles-decrease"}>-</button>
+                <span id=${incident_id + "-vehicles-value"}>${vehicles}</span>
+                <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-vehicles-increase"}>+</button>
+            </div>
+            <div>
+                Firemen: 
+                <button type="button" class="incrdecr-button decr-button" id=${incident_id + "-firemen-decrease"}>-</button>
+                <span id=${incident_id + "-firemen-value"}>${firemen}</span>
+                <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-firemen-increase"}>+</button>
+            </div>
             <div>Started: ${start_datetime}</d>
             <div>Result: ${finalResult}</d>
                         <div>
