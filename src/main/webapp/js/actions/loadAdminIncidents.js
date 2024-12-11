@@ -40,6 +40,7 @@ export async function reloadIncidents() {
                         <option value="high" ${danger === 'high' ? 'selected' : ''}>high</option>
                         <option value="unknown" ${danger === 'unknown' ? 'selected' : ''}>unknown</option>
                     </select>
+                    <button class="save-info-button" id=${incident_id + "-change-danger-button"}>Save Changes</button>
                 </div>
             <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</d>
             <div>Lat/Lon: ${lat}, ${lon}</d>
@@ -49,18 +50,21 @@ export async function reloadIncidents() {
                 <button type="button" class="incrdecr-button decr-button" id=${incident_id + "-vehicles-decrease"}>-</button>
                 <span id=${incident_id + "-vehicles-value"}>${vehicles}</span>
                 <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-vehicles-increase"}>+</button>
+                <button class="save-info-button" id=${incident_id + "-change-vehicles-button"}>Save Changes</button>
             </div>
             <div>
                 Firemen: 
                 <button type="button" class="incrdecr-button decr-button" id=${incident_id + "-firemen-decrease"}>-</button>
                 <span id=${incident_id + "-firemen-value"}>${firemen}</span>
                 <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-firemen-increase"}>+</button>
+                <button class="save-info-button" id=${incident_id + "-change-firemen-button"}>Save Changes</button>
             </div>
             <div>Started: ${start_datetime}</d>
             <div>Result: ${finalResult}</d>
-                        <div>
-                    Description: 
-            <textarea style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
+            <div>
+                Description:
+                <button class="save-info-button" id=${incident_id + "-change-description-button"}>Save Changes</button>
+                <textarea style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
             </div>
         </div>
     `;
