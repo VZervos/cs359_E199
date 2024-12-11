@@ -43,11 +43,20 @@ public class EditVolunteersTable {
     }
 
 
-    public void updateVolunteer(String username, String personalpage) throws SQLException, ClassNotFoundException {
+//    public void updateVolunteer(String username, String personalpage) throws SQLException, ClassNotFoundException {
+//        Connection con = DB_Connection.getConnection();
+//        Statement stmt = con.createStatement();
+//        String update = "UPDATE volunteers SET personalpage='" + personalpage + "' WHERE username = '" + username + "'";
+//        stmt.executeUpdate(update);
+//    }
+
+    public void updateVolunteer(String username, String key, String value) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        String update = "UPDATE volunteers SET personalpage='" + personalpage + "' WHERE username = '" + username + "'";
+        String update = "UPDATE volunteers SET " + key + "='" + value + "' WHERE username = '" + username + "'";
         stmt.executeUpdate(update);
+        stmt.close();
+        con.close();
     }
 
     public void printVolunteerDetails(String username) throws SQLException, ClassNotFoundException {

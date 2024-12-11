@@ -6,17 +6,21 @@
 package servlets.modification;
 
 import database.tables.EditUsersTable;
+import database.tables.EditVolunteersTable;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mainClasses.User;
+import mainClasses.Volunteer;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
+import static utility.Resources.USERTYPE_USER;
+import static utility.Resources.USERTYPE_VOLUNTEER;
 import static utility.Utility.getBodyJson;
 import static utility.Utility.getSessionUserData;
 
@@ -64,17 +68,31 @@ public class UpdateInfoField extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
 
         JSONObject newInfo = getBodyJson(request);
+        String usertype = newInfo.getString("usertype");
         String field = newInfo.getString("field");
         String value = newInfo.getString("value");
-
-        EditUsersTable eut = new EditUsersTable();
-        User sessionUser = eut.jsonToUser(getSessionUserData(request));
-        String username = sessionUser.getUsername();
 
         JSONObject responseBody = new JSONObject();
         Writer writer = response.getWriter();
         try {
-            eut.updateUser(username, field, value);
+            String username = null;
+            switch (usertype) {
+                case USERTYPE_USER -> {
+                    EditUsersTable eut = new EditUsersTable();
+                    User sessionUser = eut.jsonToUser(getSessionUserData(request));
+                    username = sessionUser.getUsername();
+                    eut.updateUser(username, field, value);
+                }
+                case USERTYPE_VOLUNTEER -> {
+                    EditVolunteersTable evt = new EditVolunteersTable();
+                    Volunteer sessionVolunteer = evt.jsonToVolunteer(getSessionUserData(request));
+                    username = sessionVolunteer.getUsername();
+                    evt.updateVolunteer(username, field, value);
+                }
+                default -> {
+                    assert false;
+                }
+            }
             responseBody.put("message", "Updated " + field + " of user " + username + " to " + value);
             writer.write(responseBody.toString());
         } catch (Exception e) {

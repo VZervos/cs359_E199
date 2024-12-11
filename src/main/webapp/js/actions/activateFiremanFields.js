@@ -1,13 +1,6 @@
+import {updateFiremanHeight, updateFiremanWeight} from "../utility_actions/heightWeightChange.js";
+
 $(document).ready(() => {
-
-    $('#height').on('input', () => {
-        updateFiremanHeight();
-    });
-
-    $('#weight').on('input', () => {
-        updateFiremanWeight();
-    });
-
     function enableFiremanFields() {
         const firemanField = $('.fireman-field');
         firemanField.attr("disabled", false);
@@ -30,10 +23,6 @@ $(document).ready(() => {
 
         $('#termsofservice_message').html("<u><b>Unnecessary use of the application is prohibited. I agree that any unnecessary use of the application will be prosecuted.</b></u>")
     }
-
-    const updateFiremanHeight = () => $('#height_value').text('Selected: ' + $('#height').val() + 'm');
-
-    const updateFiremanWeight = () => $('#weight_value').text('Selected: ' + $('#weight').val() + 'kg');
 
     $('.type-selector').on('change', () => {
         if ($('#type_fireman').is(':checked')) {

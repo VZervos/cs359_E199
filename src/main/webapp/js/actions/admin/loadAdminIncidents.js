@@ -1,6 +1,6 @@
-import {getIncidentsList} from "../ajax/ajax.js";
-import {clearHtml} from "../utility/utility.js";
-import {increaseValue, decreaseValue} from "../utility_actions/increaseDecreaseValue.js";
+import {getIncidentsList} from "../../ajax/ajax.js";
+import {clearHtml} from "../../utility/utility.js";
+import {increaseValue, decreaseValue} from "../../utility_actions/increaseDecreaseValue.js";
 
 let loadIncidentsButton;
 let incidentsList;

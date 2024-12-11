@@ -172,7 +172,7 @@ export function checkForDuplicate(attribute, value) {
     });
 }
 
-export function updateInfoField(field, value) {
+export function updateInfoField(usertype, field, value) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -201,6 +201,7 @@ export function updateInfoField(field, value) {
         xhr.open('POST', getServletURL('UpdateInfoField'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
+            "usertype": usertype,
             "field": field,
             "value": value
         }));
