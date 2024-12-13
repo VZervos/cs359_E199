@@ -107,6 +107,8 @@ public class EditVolunteersTable {
                 rs = stmt.executeQuery("SELECT * FROM volunteers WHERE volunteer_type= '" + "simple" + "'");
             else if ("driver".equals(type))
                 rs = stmt.executeQuery("SELECT * FROM volunteers WHERE volunteer_type= '" + "driver" + "'");
+            else if ("all".equals(type))
+                rs = stmt.executeQuery("SELECT * FROM volunteers");
 
 
             while (rs.next()) {

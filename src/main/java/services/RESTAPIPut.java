@@ -2,17 +2,22 @@ package services;
 
 import com.google.gson.Gson;
 import database.tables.EditIncidentsTable;
+import database.tables.EditParticipantsTable;
+import database.tables.EditVolunteersTable;
 import mainClasses.Incident;
+import mainClasses.Participant;
+import mainClasses.Volunteer;
 import org.json.JSONObject;
+import utility.Utility;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static services.StandardResponse.ErrorResponse;
-import static services.StandardResponse.MessageResponse;
+import static services.StandardResponse.*;
 import static spark.Spark.*;
 import static utility.Resources.*;
+import static utility.Utility.isInTable;
 
 public class RESTAPIPut {
     static final String API_PATH = "E199API/";
@@ -85,6 +90,68 @@ public class RESTAPIPut {
             eit.updateIncident(incidentIdParam, Map.of(field, value));
 
             return MessageResponse("Updated " + field + " to \"" + value + "\" of incident " + incidentId + ".");
+        });
+
+        put(API_PATH + "/participantAccept/:participant_id/:volunteer_username", (request, response) -> {
+            response.status(200);
+            response.type("application/json");
+
+            String participantIdParam = request.params(":participant_id");
+            String volunteerUsernameParam = request.params(":volunteer_username");
+
+            if (participantIdParam == null || volunteerUsernameParam == null)
+                return ErrorResponse(response, 406, "Error: Participant Id or volunteer username not provided.");
+
+            int participantId;
+            try {
+                participantId = Integer.parseInt(participantIdParam);
+            } catch (NumberFormatException e) {
+                return ErrorResponse(response, 406, "Error: Participant Id provided is not a valid Id.");
+            }
+
+            EditParticipantsTable ept = new EditParticipantsTable();
+            Participant participant = ept.databaseToParticipant(participantId);
+            if (participant == null)
+                return ErrorResponse(response, 404, "Error: Participant not found.");
+
+            EditVolunteersTable evt = new EditVolunteersTable();
+            List<Volunteer> volunteersList = evt.getVolunteers("all");
+            Volunteer volunteer = volunteersList.stream().filter(inc -> inc.getUsername().equals(volunteerUsernameParam)).findFirst().orElse(null);
+            if (volunteer == null)
+                return ErrorResponse(response, 404, "Error: Volunteer not found.");
+            ept.acceptParticipant(participantId, volunteerUsernameParam);
+
+            return MessageResponse("Accepted participant " + participantId + "(" + volunteerUsernameParam + ").");
+        });
+
+        put(API_PATH + "/participantRelease/:participant_id/:success", (request, response) -> {
+            response.status(200);
+            response.type("application/json");
+
+            String participantIdParam = request.params(":participant_id");
+            String successParam = request.params(":success");
+            String commentParam = request.raw().getParameter("municipality") == null ? "all" : request.raw().getParameter("municipality");
+
+            if (participantIdParam == null || successParam == null)
+                return ErrorResponse(response, 406, "Error: Participant Id or volunteer username not provided.");
+
+            int participantId;
+            try {
+                participantId = Integer.parseInt(participantIdParam);
+            } catch (NumberFormatException e) {
+                return ErrorResponse(response, 406, "Error: Participant Id provided is not a valid Id.");
+            }
+
+            EditParticipantsTable ept = new EditParticipantsTable();
+            Participant participant = ept.databaseToParticipant(participantId);
+            if (participant == null)
+                return ErrorResponse(response, 404, "Error: Participant not found.");
+
+            if (!isInTable(successParam, PARTICIPANT_SUCCESSOUTCOMES))
+                return ErrorResponse(response, 404, "Error: Invalid success outcome provided.");
+            ept.finalStatusParticipant(participantId, successParam, commentParam);
+
+            return MessageResponse("Released participant " + participantId + " with " + successParam + " outcome with comment \"" + commentParam + "\".");
         });
     }
 }

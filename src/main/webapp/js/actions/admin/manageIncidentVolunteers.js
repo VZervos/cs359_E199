@@ -1,6 +1,6 @@
 import {clearHtml} from "../../utility/utility.js";
 
-import {getIncidentsList, getParticipantsList, getVolunteersList} from "../../ajax/lists.js";
+import {getIncidentsList, getParticipantsList, getVolunteersList} from "../../ajax/ajaxLists.js";
 
 let loadIncidentsButton;
 let volunteersList;
@@ -180,6 +180,7 @@ async function createParticipants(incidentId) {
                 <div>Gender: ${gender}</div>
                 <div>Height/Weight: ${height}cm/${weight}kg</div>
                 <div>Birthdate: ${birthdate}</div>
+                <div>Status: ${status}</div>
             </div>
         `;
 
@@ -206,7 +207,7 @@ async function createParticipants(incidentId) {
                             Success: 
                             <select class="participant-success-selector" id=${incident_id + "-" + participant_id + "-success-value"}>
                                 <option value="yes" ${success === 'yes' ? 'selected' : ''}>yes</option>
-                                <option value="medium" ${success === 'no' ? 'selected' : ''}>no</option>
+                                <option value="no" ${success === 'no' ? 'selected' : ''}>no</option>
                             </select>
                         </div>
                         <div>
@@ -244,20 +245,16 @@ async function createParticipants(incidentId) {
     return simpleParticipants;
 }
 
-$(document).ready(function () {
-    $(document).on('click', '.manage_volunteers-option-button', async function (event) {
-        const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
+export async function reloadVolunteerRequests(incidentId) {
+    volunteersList = $("#" + incidentId + "-volunteers-list");
+    clearHtml(volunteersList);
+    console.log(event);
+    console.log(incidentId);
+    console.log(volunteersList);
 
-        const incidentId = getIncidentIdFromEvent(event);
-        volunteersList = $("#" + incidentId + "-volunteers-list");
-        clearHtml(volunteersList);
-        console.log(event);
-        console.log(incidentId);
-        console.log(volunteersList);
-
-        const participantsComponent = await createParticipants(incidentId);
-        let component = $(`<div> No volunteer requests where found </div>`);
-        if (participantsComponent.children().length > 0) component = $(`
+    const participantsComponent = await createParticipants(incidentId);
+    let component = $(`<div> No volunteer requests where found </div>`);
+    if (participantsComponent.children().length > 0) component = $(`
             <div class="accordion" id=${"accordion-volunteers-" + incidentId}>
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading-vol-${incidentId}">
@@ -277,9 +274,17 @@ $(document).ready(function () {
             </div>
             `);
 
-        volunteersList.append(component);
+    volunteersList.append(component);
 
-        console.log(volunteersList);
-        $('#' + incidentId + "-manage_volunteers").text("Reload volunteers");
+    console.log(volunteersList);
+    $('#' + incidentId + "-manage_volunteers").text("Reload volunteers");
+}
+
+$(document).ready(function () {
+    $(document).on('click', '.manage_volunteers-option-button', async function (event) {
+        const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
+
+        const incidentId = getIncidentIdFromEvent(event);
+        await reloadVolunteerRequests(incidentId);
     });
 });

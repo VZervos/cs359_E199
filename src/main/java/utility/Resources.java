@@ -28,6 +28,10 @@ public class Resources {
     public static final String VOLUNTEER_TYPE_DRIVER = "driver";
     public static final String[] VOLUNTEER_TYPES = new String[] {VOLUNTEER_TYPE_SIMPLE, VOLUNTEER_TYPE_DRIVER};
 
+    public static final String PARTICIPANT_SUCCESS_YES = "yes";
+    public static final String PARTICIPANT_SUCCESS_NO = "no";
+    public static final String[] PARTICIPANT_SUCCESSOUTCOMES = new String[] {PARTICIPANT_SUCCESS_YES, PARTICIPANT_SUCCESS_NO};
+
     public static final int MIN_PHONE_LENGTH = 10;
     public static final int MAX_PHONE_LENGTH = 14;
 }

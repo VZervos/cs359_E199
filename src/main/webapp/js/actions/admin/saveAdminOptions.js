@@ -1,5 +1,5 @@
-import {updateIncidentFieldValue, updateIncidentStatus} from "../../ajax/ajax.js";
 import {reloadIncidents} from "./loadAdminIncidents.js";
+import {updateIncidentFieldValue, updateIncidentStatus} from "../../ajax/ajaxIncident.js";
 
 $(document).ready(function () {
     $(document).on('click', '.save-info-button', async function (event) {
