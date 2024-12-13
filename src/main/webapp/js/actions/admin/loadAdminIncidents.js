@@ -1,7 +1,7 @@
 import {clearHtml} from "../../utility/utility.js";
 import {increaseValue, decreaseValue} from "../../utility_actions/increaseDecreaseValue.js";
 
-import {getIncidentsList} from "../../ajax/lists";
+import {getIncidentsList} from "../../ajax/lists.js";
 
 let loadIncidentsButton;
 let incidentsList;
@@ -104,7 +104,7 @@ export async function reloadIncidents() {
             <div class="row">
                 ${createStatusOptions(incident_id, status)}
                 <span>
-                        <button class="manage_volunteers-option-button" id=${incident_id + "-manage_volunteers"}>Manage volunteers</button>
+                    <button class="manage_volunteers-option-button" id=${incident_id + "-manage_volunteers"}>Manage volunteers</button>
                 </span>
             </div>
         </div>
@@ -132,6 +132,7 @@ export async function reloadIncidents() {
                                 ${createIncidentInfo(incident)}
                                 ${createIncidentOptions(incident)}
                                 <p id="${incident_id}-message"></p>
+                                <div class="container" id="${incident_id}-volunteers-list"></div>
                             </div>
                         </div>
                     </div>

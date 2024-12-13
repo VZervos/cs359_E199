@@ -37,7 +37,7 @@ export function getIncidentsList() {
     });
 }
 
-export function getVolunteersList() {
+export function getVolunteersList(type) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -68,13 +68,13 @@ export function getVolunteersList() {
             resolve({success, message, data});
         };
 
-        xhr.open('GET', getServiceURL('volunteers'));
+        xhr.open('GET', getServiceURL('volunteers/' + type));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send();
     });
 }
 
-export function getParticipantsList() {
+export function getParticipantsList(incidentId) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -105,7 +105,7 @@ export function getParticipantsList() {
             resolve({success, message, data});
         };
 
-        xhr.open('GET', getServiceURL('participants'));
+        xhr.open('GET', getServiceURL('participants/' + incidentId));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send();
     });

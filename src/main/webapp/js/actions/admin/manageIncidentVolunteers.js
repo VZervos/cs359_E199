@@ -1,11 +1,10 @@
 import {updateIncidentFieldValue} from "../../ajax/ajax.js";
 import {clearHtml} from "../../utility/utility.js";
-import {increaseValue, decreaseValue} from "../../utility_actions/increaseDecreaseValue.js";
 
-import {getIncidentsList} from "../../ajax/lists";
+import {getIncidentsList, getParticipantsList, getVolunteersList} from "../../ajax/lists.js";
 
 let loadIncidentsButton;
-let incidentsList;
+let volunteersList;
 
 export async function reloadIncidents() {
     const createIncidentInfo = (incident) => {
@@ -97,7 +96,7 @@ export async function reloadIncidents() {
         return statusOptions;
     };
 
-    const createIncidentOptions = (incident) => {
+    const createSimpleParticipants = (incident) => {
         const {incident_id, status} = incident;
 
         return `
@@ -113,7 +112,7 @@ export async function reloadIncidents() {
     };
 
 
-    clearHtml(incidentsList);
+    clearHtml(volunteersList);
     loadIncidentsButton.text("Reload incidents")
 
     const incidents = await getIncidentsList();
@@ -140,24 +139,111 @@ export async function reloadIncidents() {
             </div>
             `);
 
-        incidentsList.append(component);
+        volunteersList.append(component);
     });
 }
 
-$(document).ready(function () {
-    loadIncidentsButton = $('#load-incidents-button');
-    incidentsList = $('#incident-list');
+async function createParticipants(incidentId) {
+    const participantsList = (await getParticipantsList(incidentId))["data"];
 
-    $('.manage_volunteers-options-button').on('click', async function () {
+    let simpleParticipants = $(`
+        <div>
+    `);
+    let driverParticipants = $(`
+        <div>
+    `);
+
+
+    console.log(participantsList);
+    for (const participant of participantsList) {
+        const {participant_id, incident_id, volunteer_username, volunteer_type, status, success, comment} = participant;
+        let participantComp = null;
+
+        console.log(volunteer_username);
+        console.log(volunteer_type);
+        const volunteer = await getVolunteersList(volunteer_type).then(volunters => {
+            console.log(volunters);
+            console.log(volunteer_username);
+            return volunters["data"].find(v => v.username === volunteer_username);
+        });
+
+        console.log(volunteer);
+        const {volunteer_id, email, firstname, lastname, birthdate, gender, country, prefecture, municipality, address, telephone, height, weight} = volunteer;
+
+
+        console.log(status);
+        if (status === "requested") {
+            participantComp = `
+                <div  class="section-content">
+                    <div>
+                            <div>Volunteer: ${lastname} ${firstname} (${volunteer_username})</d>
+                            <div>Email: ${email}</d>
+                            <div>Telephone: ${telephone}</d>
+                            <div>Full address: ${address}, ${municipality}, ${prefecture}, ${country}</d>
+                            <div>Gender: ${gender}</d>
+                            <div>Height/Weight: ${height}cm/${weight}kg</d>
+                            <div>Birthdate: ${birthdate}</d>     
+                    </div>
+                    <span>
+                            <button class="status-option-button" id=${incident_id + "-mark_as-running"}>Mark as Running</button>
+                            <button class="status-option-button" id=${incident_id + "-mark_as-fake"}>Mark as Fake</button>
+                    </span>
+                </div>
+            `;
+        } else if (status === "accepted") {
+
+        } else if (status === "finished") {
+
+        }
+        if (participantComp) simpleParticipants.append(participantComp);
+    }
+
+    simpleParticipants.append($(`
+        </div>
+    `));
+    driverParticipants.append($(`
+        </div>
+    `));
+
+    console.log(simpleParticipants);
+    return simpleParticipants;
+}
+
+$(document).ready(function () {
+    $(document).on('click', '.manage_volunteers-option-button', async function (event) {
         const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
 
         const incidentId = getIncidentIdFromEvent(event);
+        volunteersList = $("#" + incidentId + "-volunteers-list");
+        console.log(event);
+        console.log(incidentId);
+        console.log(volunteersList);
 
-        const incident = await getIncidentsList().then(incidents => incidents.filter(incident.incident_id === incidentId));
-        const volunteers = await getVolunteersList();
+        const participantsComponent = await createParticipants(incidentId);
+        let component = $(`<div> No requests where found </div>`);
+        if (participantsComponent.children().length > 0) component = $(`
+            <div class="accordion" id=${"accordion-volunteers-" + incidentId}>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-vol-${incidentId}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-vol-${incidentId}" aria-expanded="false" aria-controls="collapse-vol-${incidentId}">
+                            Incident volunteers
+                        </button>
+                    </h2>
+                    <div id="collapse-vol-${incidentId}" class="accordion-collapse collapse" aria-labelledby="heading-vol-${incidentId}" data-bs-parent=${"accordion-volunteers-" + incidentId}>
+                        <div class="accordion-body">
+                            <div class="list-incident_volunteers-admin-item row align-items-center" id="vol-${incidentId}">
+                                ${participantsComponent.prop("outerHTML")}
+                                <p id="${incidentId}_vol-message"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `);
 
+        volunteersList.append(component);
 
-        const result = await updateIncidentFieldValue(incidentId, fieldId, newValue);
-        $('#' + incidentId + '-message').text(result.message);
+        console.log(volunteersList);
+        $(incidentId + "-manage_volunteers").text("Reload volunteers"); // TODO Fix
     });
 });
