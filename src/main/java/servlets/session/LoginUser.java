@@ -104,19 +104,19 @@ public class LoginUser extends HttpServlet {
         String userdata = null;
         String username = null;
         switch (usertype) {
-            case USERTYPE_USER -> {
+            case USER_TYPE_USER -> {
                 EditUsersTable eut = new EditUsersTable();
                 User sessionUser = eut.jsonToUser(getSessionUserData(request));
                 userdata = eut.userToJSON(sessionUser);
                 username = sessionUser.getUsername();
             }
-            case USERTYPE_VOLUNTEER -> {
+            case USER_TYPE_VOLUNTEER -> {
                 EditVolunteersTable evt = new EditVolunteersTable();
                 Volunteer sessionVolunteer = evt.jsonToVolunteer(getSessionUserData(request));
                 userdata = evt.volunteerToJSON(sessionVolunteer);
                 username = sessionVolunteer.getUsername();
             }
-            case USERTYPE_ADMIN -> {
+            case USER_TYPE_ADMIN -> {
                 Admin sessionAdmin = new Admin(getSessionUserData(request));
                 userdata = sessionAdmin.toJson();
                 username = sessionAdmin.getUsername();
@@ -138,19 +138,19 @@ public class LoginUser extends HttpServlet {
         String username = null;
         String userData = null;
         switch (usertype) {
-            case USERTYPE_USER -> {
+            case USER_TYPE_USER -> {
                 EditUsersTable eut = new EditUsersTable();
                 User user = eut.jsonToUser(body);
                 userData = eut.userToJSON(user);
                 username = user.getUsername();
             }
-            case USERTYPE_VOLUNTEER -> {
+            case USER_TYPE_VOLUNTEER -> {
                 EditVolunteersTable evt = new EditVolunteersTable();
                 Volunteer volunteer = evt.jsonToVolunteer(body);
                 userData = evt.volunteerToJSON(volunteer);
                 username = volunteer.getUsername();
             }
-            case USERTYPE_ADMIN -> {
+            case USER_TYPE_ADMIN -> {
                 Admin admin = new Admin(body);
                 userData = admin.toJson();
                 username = admin.getUsername();

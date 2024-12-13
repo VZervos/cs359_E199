@@ -1,3 +1,4 @@
+import {updateIncidentFieldValue} from "../../ajax/ajax.js";
 import {clearHtml} from "../../utility/utility.js";
 import {increaseValue, decreaseValue} from "../../utility_actions/increaseDecreaseValue.js";
 
@@ -147,7 +148,16 @@ $(document).ready(function () {
     loadIncidentsButton = $('#load-incidents-button');
     incidentsList = $('#incident-list');
 
-    loadIncidentsButton.on('click', async function () {
-        await reloadIncidents();
+    $('.manage_volunteers-options-button').on('click', async function () {
+        const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
+
+        const incidentId = getIncidentIdFromEvent(event);
+
+        const incident = await getIncidentsList().then(incidents => incidents.filter(incident.incident_id === incidentId));
+        const volunteers = await getVolunteersList();
+
+
+        const result = await updateIncidentFieldValue(incidentId, fieldId, newValue);
+        $('#' + incidentId + '-message').text(result.message);
     });
 });

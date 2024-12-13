@@ -9,6 +9,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+
+import static utility.Resources.INCIDENT_STATUSES;
 
 public class Utility {
     public static JSONObject getBodyJson(HttpServletRequest request) throws IOException {
@@ -46,6 +49,10 @@ public class Utility {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
+    }
+
+    public static boolean isInTable(String item, String[] table) {
+        return Arrays.asList(table).contains(item);
     }
 
 }

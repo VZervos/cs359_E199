@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
-import static utility.Resources.USERTYPE_USER;
-import static utility.Resources.USERTYPE_VOLUNTEER;
+import static utility.Resources.USER_TYPE_USER;
+import static utility.Resources.USER_TYPE_VOLUNTEER;
 import static utility.Utility.getBodyJson;
 import static utility.Utility.getSessionUserData;
 
@@ -77,13 +77,13 @@ public class UpdateInfoField extends HttpServlet {
         try {
             String username = null;
             switch (usertype) {
-                case USERTYPE_USER -> {
+                case USER_TYPE_USER -> {
                     EditUsersTable eut = new EditUsersTable();
                     User sessionUser = eut.jsonToUser(getSessionUserData(request));
                     username = sessionUser.getUsername();
                     eut.updateUser(username, field, value);
                 }
-                case USERTYPE_VOLUNTEER -> {
+                case USER_TYPE_VOLUNTEER -> {
                     EditVolunteersTable evt = new EditVolunteersTable();
                     Volunteer sessionVolunteer = evt.jsonToVolunteer(getSessionUserData(request));
                     username = sessionVolunteer.getUsername();

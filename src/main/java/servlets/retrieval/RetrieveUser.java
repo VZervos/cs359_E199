@@ -92,7 +92,7 @@ public class RetrieveUser extends HttpServlet {
         String password = userCredentials.getString("password");
         JSONObject responseBody = new JSONObject();
         switch (usertype) {
-            case USERTYPE_USER -> {
+            case USER_TYPE_USER -> {
                 EditUsersTable eut = new EditUsersTable();
                 User user = eut.databaseToUsers(username, password);
                 if (user != null) {
@@ -103,7 +103,7 @@ public class RetrieveUser extends HttpServlet {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 }
             }
-            case USERTYPE_VOLUNTEER -> {
+            case USER_TYPE_VOLUNTEER -> {
                 EditVolunteersTable evt = new EditVolunteersTable();
                 Volunteer volunteer = evt.databaseToVolunteer(username, password);
                 if (volunteer != null) {
@@ -114,7 +114,7 @@ public class RetrieveUser extends HttpServlet {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 }
             }
-            case USERTYPE_ADMIN -> {
+            case USER_TYPE_ADMIN -> {
                 Admin admin = new Admin(username, password);
                 if (admin.isUsernameCorrect() && admin.isPasswordCorrect()) {
                     responseBody.put("user", admin.toJson());

@@ -8,11 +8,13 @@ package database.tables;
 import com.google.gson.Gson;
 import database.DB_Connection;
 import mainClasses.Participant;
+import mainClasses.Volunteer;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,6 +58,29 @@ public class EditParticipantsTable {
 
         String json = gson.toJson(r, Participant.class);
         return json;
+    }
+
+    public ArrayList<Participant> getParticipants(String incidentId) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Participant> participants = new ArrayList<Participant>();
+        ResultSet rs = null;
+        try {
+                rs = stmt.executeQuery("SELECT * FROM participants WHERE incident_id= '" + incidentId + "'");
+
+
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Participant participant = gson.fromJson(json, Participant.class);
+                participants.add(participant);
+            }
+            return participants;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
     public void acceptParticipant(int participantID, String volunteer_username) throws SQLException, ClassNotFoundException {
