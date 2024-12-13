@@ -1,4 +1,3 @@
-import {updateIncidentFieldValue} from "../../ajax/ajax.js";
 import {clearHtml} from "../../utility/utility.js";
 
 import {getIncidentsList, getParticipantsList, getVolunteersList} from "../../ajax/lists.js";
@@ -10,7 +9,7 @@ export async function reloadIncidents() {
     const createIncidentInfo = (incident) => {
         const changeValueOfField = (field, newValue) => {
             const value = Math.max(0, newValue);
-            $(document).on('click', '#' + field, (event) => event.target.value  = value)
+            $(document).on('click', '#' + field, (event) => event.target.value = value)
         }
 
         const {
@@ -145,67 +144,103 @@ export async function reloadIncidents() {
 
 async function createParticipants(incidentId) {
     const participantsList = (await getParticipantsList(incidentId))["data"];
-
     let simpleParticipants = $(`
-        <div>
+        <div> 
     `);
-    let driverParticipants = $(`
-        <div>
-    `);
-
 
     console.log(participantsList);
     for (const participant of participantsList) {
         const {participant_id, incident_id, volunteer_username, volunteer_type, status, success, comment} = participant;
-        let participantComp = null;
-
-        console.log(volunteer_username);
-        console.log(volunteer_type);
-        const volunteer = await getVolunteersList(volunteer_type).then(volunters => {
-            console.log(volunters);
-            console.log(volunteer_username);
-            return volunters["data"].find(v => v.username === volunteer_username);
-        });
-
+        const volunteer = await getVolunteersList(volunteer_type).then(
+            volunteers => volunteers["data"].find(v => v.username === volunteer_username)
+        );
         console.log(volunteer);
-        const {volunteer_id, email, firstname, lastname, birthdate, gender, country, prefecture, municipality, address, telephone, height, weight} = volunteer;
+        const {
+            volunteer_id,
+            email,
+            firstname,
+            lastname,
+            birthdate,
+            gender,
+            country,
+            prefecture,
+            municipality,
+            address,
+            telephone,
+            height,
+            weight
+        } = volunteer;
 
+        const participantInfo = `
+            <div>
+                <div>Volunteer: ${lastname} ${firstname} (${volunteer_username})</div>
+                <div>Email: ${email}<</div>
+                <div>Telephone: ${telephone}</div>
+                <div>Full address: ${address}, ${municipality}, ${prefecture}, ${country}</div>
+                <div>Gender: ${gender}</div>
+                <div>Height/Weight: ${height}cm/${weight}kg</div>
+                <div>Birthdate: ${birthdate}</div>
+            </div>
+        `;
 
         console.log(status);
-        if (status === "requested") {
-            participantComp = `
-                <div  class="section-content">
-                    <div>
-                            <div>Volunteer: ${lastname} ${firstname} (${volunteer_username})</d>
-                            <div>Email: ${email}</d>
-                            <div>Telephone: ${telephone}</d>
-                            <div>Full address: ${address}, ${municipality}, ${prefecture}, ${country}</d>
-                            <div>Gender: ${gender}</d>
-                            <div>Height/Weight: ${height}cm/${weight}kg</d>
-                            <div>Birthdate: ${birthdate}</d>     
-                    </div>
+        let statusButton = "";
+        let finishInfo = "";
+        switch (status) {
+            case "requested":
+                statusButton = `
                     <span>
-                            <button class="status-option-button" id=${incident_id + "-mark_as-running"}>Mark as Running</button>
-                            <button class="status-option-button" id=${incident_id + "-mark_as-fake"}>Mark as Fake</button>
-                    </span>
-                </div>
-            `;
-        } else if (status === "accepted") {
-
-        } else if (status === "finished") {
-
+                        <button class="participant_status-option-button" id=${incident_id + "-" + participant_id + "-" + volunteer_id + "-mark_as-accepted"}>Accept volunteer</button>
+                    <span>
+                `;
+                break;
+            case "accepted":
+                statusButton = `
+                    <span>
+                        <button class="participant_status-option-button" id=${incident_id + "-" + participant_id + "-" + volunteer_id + "-mark_as-finished"}>Release volunteer</button>
+                    <span>
+                `;
+                finishInfo = `
+                    <span>
+                        <div>
+                            Success: 
+                            <select class="participant-success-selector" id=${incident_id + "-" + participant_id + "-success-value"}>
+                                <option value="yes" ${success === 'yes' ? 'selected' : ''}>yes</option>
+                                <option value="medium" ${success === 'no' ? 'selected' : ''}>no</option>
+                            </select>
+                        </div>
+                        <div>
+                            Comment:
+                            <textarea style="width: 100%; height: 5em" class="incident-value-selector" id=${incident_id + "-" + participant_id + "-comment-value"}>${comment}</textarea>
+                        </div>
+                    <span>
+                `;
+                break;
+            case "finished":
+                finishInfo = `
+                    <span>
+                        <div>Success: ${success}</d>
+                        <div>
+                            Comment:
+                            <textarea readonly style="width: 100%; height: 5em" class="incident-value-selector" id=${incident_id + "-" + participant_id + "-comment-value"}>${comment}</textarea>
+                        </div>
+                    <span>
+                `;
         }
-        if (participantComp) simpleParticipants.append(participantComp);
+
+        if (participantInfo || finishInfo || statusButton)
+            simpleParticipants.append($(`
+                <div class="section-content"> 
+                    ${participantInfo}
+                    ${finishInfo}
+                    ${statusButton}
+                </div>
+        `));
     }
 
     simpleParticipants.append($(`
         </div>
     `));
-    driverParticipants.append($(`
-        </div>
-    `));
-
-    console.log(simpleParticipants);
     return simpleParticipants;
 }
 
