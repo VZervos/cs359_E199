@@ -215,12 +215,13 @@ $(document).ready(function () {
 
         const incidentId = getIncidentIdFromEvent(event);
         volunteersList = $("#" + incidentId + "-volunteers-list");
+        clearHtml(volunteersList);
         console.log(event);
         console.log(incidentId);
         console.log(volunteersList);
 
         const participantsComponent = await createParticipants(incidentId);
-        let component = $(`<div> No requests where found </div>`);
+        let component = $(`<div> No volunteer requests where found </div>`);
         if (participantsComponent.children().length > 0) component = $(`
             <div class="accordion" id=${"accordion-volunteers-" + incidentId}>
                 <div class="accordion-item">
@@ -244,6 +245,6 @@ $(document).ready(function () {
         volunteersList.append(component);
 
         console.log(volunteersList);
-        $(incidentId + "-manage_volunteers").text("Reload volunteers"); // TODO Fix
+        $('#' + incidentId + "-manage_volunteers").text("Reload volunteers");
     });
 });
