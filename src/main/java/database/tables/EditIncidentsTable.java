@@ -109,6 +109,25 @@ public class EditIncidentsTable {
         return null;
     }
 
+    public Incident databaseToIncident(int incidentId) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM incidents WHERE incident_id = '" + incidentId + "'");
+            rs.next();
+            String json = DB_Connection.getResultsToJSON(rs);
+            Gson gson = new Gson();
+            Incident incident = gson.fromJson(json, Incident.class);
+            return incident;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     public void updateIncident(String id, Map<String, String> updates) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();

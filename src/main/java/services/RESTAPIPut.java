@@ -121,6 +121,13 @@ public class RESTAPIPut {
                 return ErrorResponse(response, 404, "Error: Volunteer not found.");
             ept.acceptParticipant(participantId, volunteerUsernameParam);
 
+            EditIncidentsTable eit = new EditIncidentsTable();
+            Incident incident = eit.databaseToIncident(participant.getIncident_id());
+            String volunteerType = volunteer.getVolunteer_type();
+            String incidentVolunteerType = volunteerType.equals(VOLUNTEER_TYPE_SIMPLE) ? "firemen" : "vehicles";
+            int newIncidentVolunteerTypeValue = volunteerType.equals(VOLUNTEER_TYPE_SIMPLE) ? incident.getFiremen() + 1 : incident.getVehicles() + 1;
+            eit.updateIncident(String.valueOf(participant.getIncident_id()), Map.of(incidentVolunteerType, String.valueOf(newIncidentVolunteerTypeValue)));
+
             return MessageResponse("Accepted participant " + participantId + "(" + volunteerUsernameParam + ").");
         });
 

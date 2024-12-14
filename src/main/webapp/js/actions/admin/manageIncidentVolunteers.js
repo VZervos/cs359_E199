@@ -1,5 +1,4 @@
 import {clearHtml} from "../../utility/utility.js";
-
 import {getIncidentsList, getParticipantsList, getVolunteersList} from "../../ajax/ajaxLists.js";
 
 let loadIncidentsButton;
@@ -174,7 +173,8 @@ async function createParticipants(incidentId) {
         const participantInfo = `
             <div>
                 <div>Volunteer: ${lastname} ${firstname} (${volunteer_username})</div>
-                <div>Email: ${email}<</div>
+                <div>Type: ${volunteer_type}</div>
+                <div>Email: ${email}</div>
                 <div>Telephone: ${telephone}</div>
                 <div>Full address: ${address}, ${municipality}, ${prefecture}, ${country}</div>
                 <div>Gender: ${gender}</div>
@@ -196,6 +196,9 @@ async function createParticipants(incidentId) {
                 `;
                 break;
             case "accepted":
+                const incidentsList = await getIncidentsList();
+                console.log(incidentsList);
+                const incident = incidentsList["data"].find(inc => inc.incident_id == incidentId);
                 statusButton = `
                     <span>
                         <button class="participant_status-option-button" id=${incident_id + "-" + participant_id + "-" + volunteer_id + "-mark_as-finished"}>Release volunteer</button>
@@ -216,6 +219,9 @@ async function createParticipants(incidentId) {
                         </div>
                     <span>
                 `;
+                console.log(incident);
+                $("#" + incident_id + "-firemen-value").text(incident.firemen)
+                $("#" + incident_id + "-vehicles-value").text(incident.vehicles)
                 break;
             case "finished":
                 finishInfo = `

@@ -48,17 +48,11 @@ export async function reloadIncidents() {
             <div>User: ${user_type} (${user_phone})</d>
             <div>
                 Vehicles: 
-                <button type="button" class="incrdecr-button decr-button" id=${incident_id + "-vehicles-decrease"}>-</button>
                 <span id=${incident_id + "-vehicles-value"}>${vehicles}</span>
-                <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-vehicles-increase"}>+</button>
-                <button class="save-info-button" id=${incident_id + "-change-vehicles-button"}>Save Changes</button>
             </div>
             <div>
                 Firemen: 
-                <button type="button" class="incrdecr-button decr-button" id=${incident_id + "-firemen-decrease"}>-</button>
                 <span id=${incident_id + "-firemen-value"}>${firemen}</span>
-                <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-firemen-increase"}>+</button>
-                <button class="save-info-button" id=${incident_id + "-change-firemen-button"}>Save Changes</button>
             </div>
             <div>Started: ${start_datetime}</d>
             <div>Result: ${finalResult}</d>
