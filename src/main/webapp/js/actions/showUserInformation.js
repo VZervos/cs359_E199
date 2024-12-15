@@ -4,15 +4,13 @@ $(document).ready(async () => {
     const infoFields = $('.show-user-info-field');
 
     const sessionUser = await getSessionUser();
-    console.log(sessionUser)
-    const userData = JSON.parse(sessionUser);
-    console.log(userData);
+    console.log(sessionUser);
 
     infoFields.each((_, infoField) => {
         const id = infoField.id;
         const fieldName = id.split('_').slice(1).join('_');
-        console.log(userData[fieldName]);
-        $(infoField).html(userData[fieldName]);
+        console.log(sessionUser[fieldName]);
+        $(infoField).html(sessionUser[fieldName]);
         console.log(fieldName);
     });
     $('#view_type').html("user");

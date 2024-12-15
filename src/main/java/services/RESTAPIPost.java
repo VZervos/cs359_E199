@@ -2,11 +2,17 @@ package services;
 
 import com.google.gson.Gson;
 import database.tables.EditIncidentsTable;
+import database.tables.EditParticipantsTable;
+import database.tables.EditVolunteersTable;
 import mainClasses.Incident;
+import mainClasses.Participant;
+import mainClasses.Volunteer;
+
+import java.util.List;
+import java.util.Map;
 
 import static services.StandardResponse.*;
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 import static utility.Resources.*;
 import static utility.Resources.INCIDENT_DANGER_UNKNOWN;
 
@@ -53,5 +59,31 @@ public class RESTAPIPost {
 
             return MessageResponse("Incident successfully added.");
         });
+
+//        post(API_PATH + "/participantAddition", (request, response) -> {
+//            response.status(200);
+//            response.type("application/json");
+//            System.out.println(request.body());
+//            Participant participant = new Gson().fromJson(request.body(), Participant.class);
+//
+//            if (participant.getStatus() == null ||
+//                    participant.getVolunteer_type() == null ||
+//                    participant.getVolunteer_username() == null) {
+//                return ErrorResponse(response, 406, "Error: Not all mandatory fields contain information.");
+//            }
+//
+//            EditIncidentsTable eit = new EditIncidentsTable();
+//            List<Incident> incidentList = eit.databaseToIncidents();
+//            Incident incident = incidentList.stream().filter(inc -> inc.getIncident_id() == participant.getIncident_id()).findFirst().orElse(null);
+//
+//            if (incident == null)
+//                return ErrorResponse(response, 404, "Error: Incident not found.");
+//
+//            EditParticipantsTable ept = new EditParticipantsTable();
+//            ept.createNewParticipant(participant);
+//
+//            return MessageResponse("Created participant " + participant.getIncident_id() + "(" + participant.getVolunteer_username() + ").");
+//        });
+
     }
 }

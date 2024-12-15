@@ -54,6 +54,10 @@
         <servlet-name>UpdateInfoField</servlet-name>
         <servlet-class>servlets.modification.UpdateInfoField</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateParticipant</servlet-name>
+        <servlet-class>servlets.creation.CreateParticipant</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
@@ -106,6 +110,10 @@
     <servlet-mapping>
         <servlet-name>UpdateInfoField</servlet-name>
         <url-pattern>/UpdateInfoField</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateParticipant</servlet-name>
+        <url-pattern>/CreateParticipant</url-pattern>
     </servlet-mapping>
 
     <session-config>

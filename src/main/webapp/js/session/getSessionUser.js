@@ -9,7 +9,7 @@ export function getSessionUser() {
                 console.log("Session user retrieval complete");
                 const response = JSON.parse(xhr.responseText);
                 console.log("Result: " + response["user"]);
-                sessionUser = response["user"];
+                sessionUser = JSON.parse(response["user"]);
             } else if (xhr.status !== 200) {
                 console.log("Error occurred");
                 const response = JSON.parse(xhr.responseText);

@@ -1,4 +1,4 @@
-import {getServiceURL} from "./ajax.js";
+import {getServiceURL, getServletURL} from "./ajax.js";
 
 export function acceptParticipant(participant_id, volunteer_username) {
     return new Promise((resolve, reject) => {
@@ -61,6 +61,43 @@ export function releaseParticipant(participant_id, success, comment) {
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
             "comment": comment
+        }));
+    });
+}
+
+export function createParticipant(incident_id, volunteer_username, volunteer_type) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            let success = false;
+            let message = null;
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Released participant " + volunteer_username);
+                const response = JSON.parse(xhr.responseText);
+                message = response.message;
+                console.log('Message:', message);
+                success = true;
+
+            } else if (xhr.status !== 200) {
+                console.log("Error occurred");
+                const response = JSON.parse(xhr.responseText);
+                message = response.message;
+                console.log('Message:', message);
+                success = false;
+            }
+            console.log("result: ");
+            console.log(success);
+            console.log(message);
+            resolve({success, message});
+        };
+
+        xhr.open('POST', getServletURL("CreateParticipant"));
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify({
+            "incident_id": incident_id,
+            "volunteer_username": volunteer_username,
+            "volunteer_type": volunteer_type,
+            "status": "requested"
         }));
     });
 }
