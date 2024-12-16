@@ -7,11 +7,6 @@ let incidentsList;
 
 export async function reloadIncidents() {
     const createIncidentInfo = (incident) => {
-        const changeValueOfField = (field, newValue) => {
-            const value = Math.max(0, newValue);
-            $(document).on('click', '#' + field, (event) => event.target.value = value)
-        }
-
         const {
             incident_id,
             danger,
@@ -48,44 +43,40 @@ export async function reloadIncidents() {
     `;
     };
 
-    const createIncidentOptions = (incident_id, volunteer_id) => {
-        return `
-        <div>
-            <div class="row">
-                <span>
-                    <button class="request_participation-option-button" id=${volunteer_id + "-" + incident_id + "-manage_volunteers"}>Request to participate</button>
-                </span>
-            </div>
-        </div>
-    `;
+    const createIncidentOptions = (incident_id, volunteer_id, status) => {
+        if (!status)
+            return `
+                <div>
+                    <div class="row">
+                        <span>
+                            <button class="request_participation-option-button" id=${volunteer_id + "-" + incident_id + "-manage_volunteers"}>Request to participate</button>
+                        </span>
+                    </div>
+                </div>
+            `;
+        return "";
     };
-
 
     clearHtml(incidentsList);
     loadIncidentsButton.text("Reload incidents")
 
     const incidents = await getIncidentsList();
     const volunteer = await getSessionUser();
+    const participants = await getParticipantsList();
 
-    const filteredIncidents = await Promise.all(
-        incidents.data.reverse().map(async incident => {
-            const participants = await getParticipantsList(incident.incident_id);
-            console.log(participants);
-            console.log(incident);
-            console.log(volunteer);
-            return {
-                include: incident.status === "running" || participants.data.some(participant => participant.volunteer_username === volunteer.username),
-                incident
-            };
-        })
-    );
-
-    for (const {incident} of filteredIncidents
-        .filter(result => result.include)) {
+    incidents.data
+        .filter(
+            incident => incident.status === "running" ||
+                (participants.data.some(participant => participant.volunteer_username === volunteer.username && participant.incident_id === incident.incident_id))
+        )
+        .reverse()
+        .forEach(incident => {
             const {incident_id, incident_type, status} = incident;
-            const participantsList = await getParticipantsList(incident_id);
+            console.log(incident);
+            const participantsList = participants.data.filter(p => p.incident_id === incident_id);
             console.log(participantsList)
-            const participant = participantsList ? participantsList.data.find(p => p.incident_id === incident_id && p.volunteer_username === volunteer.username) : null;
+            const participant = participantsList.length > 0 ? participantsList.find(p => p.incident_id === incident_id && p.volunteer_username === volunteer.username) : null;
+            console.log(participant)
             const component = $(`
                 <div class="accordion" id=${"accordion-" + incident_id}>
                     <div class="accordion-item">
@@ -98,7 +89,7 @@ export async function reloadIncidents() {
                             <div class="accordion-body">
                                 <div class="section-content list-incidents-admin-item row align-items-center" id="${incident_id}">
                                     ${createIncidentInfo(incident, participant ? participant.status : "available")}
-                                    ${createIncidentOptions(incident_id, volunteer.volunteer_id)}
+                                    ${createIncidentOptions(incident_id, volunteer.volunteer_id, participant ? participant.status : null)}
                                     <p id="${incident_id}-message"></p>
                                     <div class="container" id="${incident_id}-volunteers-list"></div>
                                 </div>
@@ -109,7 +100,7 @@ export async function reloadIncidents() {
             `);
 
             incidentsList.append(component);
-        }
+        });
 }
 
 $(document).ready(function () {

@@ -9,6 +9,7 @@ import mainClasses.Volunteer;
 import utility.Utility;
 
 import java.util.List;
+import java.util.Objects;
 
 import static services.StandardResponse.DataResponseAsJson;
 import static services.StandardResponse.ErrorResponse;
@@ -51,11 +52,11 @@ public class RESTAPIGet extends API {
             EditParticipantsTable ept = new EditParticipantsTable();
 
             Incident incident = eit.getIncidentIfExist(incidentIdParam);
-            if (incident == null)
+            if (!incidentIdParam.equals("all") && incident == null)
                 return ErrorResponse(response, 404, "Error: Incident not found.");
 
             StringBuilder participantsJson = new StringBuilder("[");
-            List<Participant> participantList = participantList = ept.getParticipants(incidentIdParam);
+            List<Participant> participantList = ept.getParticipants(incidentIdParam);
             for (Participant volunteer : participantList) {
                 participantsJson.append(ept.participantToJSON(volunteer)).append(',');
             }

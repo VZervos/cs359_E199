@@ -1,6 +1,6 @@
 import {getServiceURL} from "./ajax.js";
 
-export function getIncidentsList() {
+export function getIncidentsList(type = "all", status = "all") {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -31,13 +31,13 @@ export function getIncidentsList() {
             resolve({success, message, data});
         };
 
-        xhr.open('GET', getServiceURL('incidents/all/all'));
+        xhr.open('GET', getServiceURL('incidents/' + type + '/' + status));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send();
     });
 }
 
-export function getVolunteersList(type) {
+export function getVolunteersList(type = "all") {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -74,7 +74,7 @@ export function getVolunteersList(type) {
     });
 }
 
-export function getParticipantsList(incidentId) {
+export function getParticipantsList(incidentId = "all") {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {

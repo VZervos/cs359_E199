@@ -147,12 +147,12 @@ async function createParticipants(incidentId) {
         <div> 
     `);
 
+    const volunteers = await getVolunteersList();
+    const incidentsList = await getIncidentsList();
     console.log(participantsList);
     for (const participant of participantsList) {
         const {participant_id, incident_id, volunteer_username, volunteer_type, status, success, comment} = participant;
-        const volunteer = await getVolunteersList(volunteer_type).then(
-            volunteers => volunteers["data"].find(v => v.username === volunteer_username)
-        );
+        const volunteer = volunteers["data"].find(v => v.username === volunteer_username);
         console.log(volunteer);
         const {
             volunteer_id,
@@ -196,7 +196,6 @@ async function createParticipants(incidentId) {
                 `;
                 break;
             case "accepted":
-                const incidentsList = await getIncidentsList();
                 console.log(incidentsList);
                 const incident = incidentsList["data"].find(inc => inc.incident_id == incidentId);
                 statusButton = `

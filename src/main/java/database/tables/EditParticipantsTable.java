@@ -79,8 +79,10 @@ public class EditParticipantsTable {
         ArrayList<Participant> participants = new ArrayList<Participant>();
         ResultSet rs = null;
         try {
+            if (incidentId.equals("all"))
+                rs = stmt.executeQuery("SELECT * FROM participants");
+            else
                 rs = stmt.executeQuery("SELECT * FROM participants WHERE incident_id= '" + incidentId + "'");
-
 
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);

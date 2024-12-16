@@ -16,12 +16,11 @@ $(document).ready(function () {
         console.log(incidentId, volunteerId);
         incidentsList = $("#incident-list");
         loadIncidentsButton = $('#load-incidents-button');
-        const volunteersList = await getVolunteersList("all");
+        const volunteersList = await getVolunteersList();
         const volunteer = volunteersList["data"].find(v => v.volunteer_id == volunteerId);
         console.log(volunteer);
-        await createParticipant(incidentId, volunteer.username, volunteer.type);
 
-        const result = await reloadIncidents();
+        const result = await createParticipant(incidentId, volunteer.username, volunteer.type);
         if (result.success)
             await reloadIncidents();
         $('#' + incidentId + '-message').text(result.message);
