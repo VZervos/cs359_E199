@@ -6,7 +6,13 @@ export const getBaseURL = () => {
 }
 
 export const openDashboard = (userType) => {
-    openPage("dashboard/" + userType + ".html");
+    const dashboards = {
+        "guest": "submit_incident",
+        "user": "submit_incident",
+        "volunteer": "submit_incident",
+        "admin": "manage_incidents"
+    }
+    openPage("dashboard/" + userType + "/" + dashboards[userType] + ".html");
 }
 
 export const openIndex = () => {
