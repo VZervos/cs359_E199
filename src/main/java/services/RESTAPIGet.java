@@ -21,7 +21,7 @@ public class RESTAPIGet extends API {
             initResponse(response);
             String incidentTypeParam = getRequestParam(request, "type");
             String incidentStatusParam = getRequestParam(request, "status");
-            String municipalityParam = getBodyParamElse(request, "municipality", "all");
+            String municipalityParam = getQueryParamElse(request, "municipality", "all");
 
             Validator validator = new Validator();
             EditIncidentsTable eit = new EditIncidentsTable();

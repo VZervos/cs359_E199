@@ -6,6 +6,7 @@ import database.tables.EditVolunteersTable;
 import mainClasses.Incident;
 import mainClasses.Participant;
 import mainClasses.Volunteer;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,16 +51,17 @@ public class RESTAPIPut extends API {
         put(API_PATH + "incidentFieldValue/:incident_id", (request, response) -> {
             initResponse(response);
             String incidentIdParam = getRequestParam(request, "incident_id");
-            String fieldParam = getBodyParam(request, "field");
-            String valueParam = getBodyParam(request, "value");
+            JSONObject body = getBody(request);
+            String field = body.getString("field");
+            String value = body.getString("value");
 
             EditIncidentsTable eit = new EditIncidentsTable();
             Incident incident = eit.getIncidentIfExist(incidentIdParam);
             if (incident == null)
                 return ErrorResponse(response, 404, "Error: Incident not found.");
             
-            eit.updateIncident(incidentIdParam, Map.of(fieldParam, valueParam));
-            return MessageResponse("Updated " + fieldParam + " to \"" + valueParam + "\" of incident " + incidentIdParam + ".");
+            eit.updateIncident(incidentIdParam, Map.of(field, value));
+            return MessageResponse("Updated " + field + " to \"" + value + "\" of incident " + incidentIdParam + ".");
         });
 
         put(API_PATH + "/participantAccept/:participant_id/:volunteer_username", (request, response) -> {
@@ -98,7 +100,8 @@ public class RESTAPIPut extends API {
             initResponse(response);
             String participantIdParam = getRequestParam(request, "participant_id");
             String successParam = getRequestParam(request, "success");
-            String commentParam = getBodyParamElse(request, "municipality", "all");
+            JSONObject body = getBody(request);
+            String commentParam = body.getString("comment");
 
             Validator validator = new Validator();
             EditParticipantsTable ept = new EditParticipantsTable();

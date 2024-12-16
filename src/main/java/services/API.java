@@ -1,5 +1,6 @@
 package services;
 
+import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 
@@ -19,11 +20,15 @@ public abstract class API {
         return request.params(":" + param) == null ? elseValue : request.params(":" + param);
     }
 
-    public static String getBodyParam(Request request, String param) {
+    public static String getQueryParam(Request request, String param) {
         return request.raw().getParameter(param);
     }
 
-    public static String getBodyParamElse(Request request, String param, String elseValue) {
+    public static String getQueryParamElse(Request request, String param, String elseValue) {
         return request.raw().getParameter(param) == null ? elseValue : request.raw().getParameter(param);
+    }
+
+    public static JSONObject getBody(Request request) {
+        return new JSONObject(request.body());
     }
 }
