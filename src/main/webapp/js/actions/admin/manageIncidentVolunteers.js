@@ -142,15 +142,7 @@ export async function reloadIncidents() {
 }
 
 async function createParticipants(incidentId) {
-    const participantsList = (await getParticipantsList(incidentId))["data"];
-    let simpleParticipants = $(`
-        <div> 
-    `);
-
-    const volunteers = await getVolunteersList();
-    const incidentsList = await getIncidentsList();
-    console.log(participantsList);
-    for (const participant of participantsList) {
+    const createParticipantComponents = (participant) => {
         const {participant_id, incident_id, volunteer_username, volunteer_type, status, success, comment} = participant;
         const volunteer = volunteers["data"].find(v => v.username === volunteer_username);
         console.log(volunteer);
@@ -196,8 +188,8 @@ async function createParticipants(incidentId) {
                 `;
                 break;
             case "accepted":
-                console.log(incidentsList);
-                const incident = incidentsList["data"].find(inc => inc.incident_id == incidentId);
+                console.log(incidents);
+                const incident = incidents["data"].find(inc => inc.incident_id == incidentId);
                 statusButton = `
                     <span>
                         <button class="participant_status-option-button" id=${incident_id + "-" + participant_id + "-" + volunteer_id + "-mark_as-finished"}>Release volunteer</button>
@@ -233,7 +225,19 @@ async function createParticipants(incidentId) {
                     <span>
                 `;
         }
+        return {participantInfo, statusButton, finishInfo};
+    }
 
+    let simpleParticipants = $(`
+        <div> 
+    `);
+
+    const participants = await getParticipantsList(incidentId);
+    const volunteers = await getVolunteersList();
+    const incidents = await getIncidentsList();
+    console.log(participants);
+    participants.data.forEach(participant => {
+        const {participantInfo, statusButton, finishInfo} = createParticipantComponents(participant);
         if (participantInfo || finishInfo || statusButton)
             simpleParticipants.append($(`
                 <div class="section-content"> 
@@ -242,7 +246,7 @@ async function createParticipants(incidentId) {
                     ${statusButton}
                 </div>
         `));
-    }
+    });
 
     simpleParticipants.append($(`
         </div>
@@ -253,13 +257,13 @@ async function createParticipants(incidentId) {
 export async function reloadVolunteerRequests(incidentId) {
     volunteersList = $("#" + incidentId + "-volunteers-list");
     clearHtml(volunteersList);
-    console.log(event);
     console.log(incidentId);
     console.log(volunteersList);
 
     const participantsComponent = await createParticipants(incidentId);
     let component = $(`<div> No volunteer requests where found </div>`);
-    if (participantsComponent.children().length > 0) component = $(`
+    if (participantsComponent.children().length > 0)
+        component = $(`
             <div class="accordion" id=${"accordion-volunteers-" + incidentId}>
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading-vol-${incidentId}">
