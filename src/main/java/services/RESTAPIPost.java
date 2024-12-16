@@ -2,35 +2,27 @@ package services;
 
 import com.google.gson.Gson;
 import database.tables.EditIncidentsTable;
-import database.tables.EditParticipantsTable;
-import database.tables.EditVolunteersTable;
 import mainClasses.Incident;
-import mainClasses.Participant;
-import mainClasses.Volunteer;
 
-import java.util.List;
-import java.util.Map;
-
-import static services.StandardResponse.*;
-import static spark.Spark.*;
+import static services.StandardResponse.ErrorResponse;
+import static services.StandardResponse.MessageResponse;
+import static spark.Spark.post;
 import static utility.Resources.*;
-import static utility.Resources.INCIDENT_DANGER_UNKNOWN;
 
-public class RESTAPIPost {
-    static final String API_PATH = "E199API/";
-
+public class RESTAPIPost extends API {
     public static void startPostApi() {
         post(API_PATH + "/incident", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
-            System.out.println(request.body());
-            Incident incident = new Gson().fromJson(request.body(), Incident.class);
+            initResponse(response);
+            Validator validator = new Validator();
 
-            if (incident.getIncident_type() == null ||
-                    incident.getDescription() == null ||
-                    incident.getUser_type() == null ||
-                    incident.getUser_phone() == null ||
-                    incident.getAddress() == null) {
+            Incident incident = new Gson().fromJson(request.body(), Incident.class);
+            if (validator.hasNullItems(new String[]{
+                    incident.getIncident_type(),
+                    incident.getDescription(),
+                    incident.getUser_phone(),
+                    incident.getUser_type(),
+                    incident.getAddress()})
+            ) {
                 return ErrorResponse(response, 406, "Error: Not all mandatory fields contain information.");
             }
 
@@ -43,7 +35,7 @@ public class RESTAPIPost {
                 return ErrorResponse(response, 406, "Error: Invalid user type provided.");
 
             String incident_type = incident.getIncident_type();
-            if (incident_type != null && (!incident_type.equals(INCIDENTTYPE_FIRE) && !incident_type.equals(INCIDENTTYPE_ACCIDENT)))
+            if (incident_type != null && (!incident_type.equals(INCIDENT_TYPE_FIRE) && !incident_type.equals(INCIDENT_TYPE_ACCIDENT)))
                 return ErrorResponse(response, 406, "Error: Invalid incident type provided.");
 
             String prefecture = incident.getPrefecture();

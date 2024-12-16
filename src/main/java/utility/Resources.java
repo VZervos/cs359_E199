@@ -7,8 +7,9 @@ public class Resources {
     public static final String USER_TYPE_VOLUNTEER = "volunteer";
     public static final String[] USER_TYPES = new String[] {USER_TYPE_USER, USER_TYPE_GUEST, USER_TYPE_VOLUNTEER, USER_TYPE_ADMIN};
 
-    public static final String INCIDENTTYPE_FIRE = "fire";
-    public static final String INCIDENTTYPE_ACCIDENT = "accident";
+    public static final String INCIDENT_TYPE_FIRE = "fire";
+    public static final String INCIDENT_TYPE_ACCIDENT = "accident";
+    public static final String[] INCIDENT_TYPES = new String[] {INCIDENT_TYPE_FIRE, INCIDENT_TYPE_ACCIDENT};
 
     public static final String PREFECTURE_CHANIA = "Chania";
     public static final String PREFECTURE_RETHYMNO = "Rethymno";

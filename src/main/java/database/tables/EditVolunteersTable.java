@@ -8,6 +8,7 @@ package database.tables;
 import com.google.gson.Gson;
 import database.DB_Connection;
 import mainClasses.Volunteer;
+import services.Validator;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -77,6 +78,16 @@ public class EditVolunteersTable {
         }
     }
 
+    public Volunteer getVolunteerIfExist(String volunteerIdParam) throws SQLException, ClassNotFoundException {
+        Validator validator = new Validator();
+        Volunteer volunteer = null;
+        if (validator.isNumber(volunteerIdParam)) {
+            int volunteerId = Integer.parseInt(volunteerIdParam);
+            volunteer = databaseToVolunteer(volunteerId);
+        }
+        return volunteer;
+    }
+
     public Volunteer databaseToVolunteer(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -96,6 +107,24 @@ public class EditVolunteersTable {
         return null;
     }
 
+    public Volunteer databaseToVolunteer(int volunteer_id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM volunteers WHERE volunteer_id = '" + volunteer_id + "'");
+            rs.next();
+            String json = DB_Connection.getResultsToJSON(rs);
+            Gson gson = new Gson();
+            Volunteer user = gson.fromJson(json, Volunteer.class);
+            return user;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
 
     public ArrayList<Volunteer> getVolunteers(String type) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
@@ -125,6 +154,9 @@ public class EditVolunteersTable {
         return null;
     }
 
+    public ArrayList<Volunteer> getVolunteers() throws SQLException, ClassNotFoundException {
+        return getVolunteers("all");
+    }
 
     public String databaseVolunteerToJSON(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();

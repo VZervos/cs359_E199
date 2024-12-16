@@ -1,14 +1,11 @@
 package services;
 
-import com.google.gson.Gson;
 import database.tables.EditIncidentsTable;
 import database.tables.EditParticipantsTable;
 import database.tables.EditVolunteersTable;
 import mainClasses.Incident;
 import mainClasses.Participant;
 import mainClasses.Volunteer;
-import org.json.JSONObject;
-import utility.Utility;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,107 +16,74 @@ import static spark.Spark.*;
 import static utility.Resources.*;
 import static utility.Utility.isInTable;
 
-public class RESTAPIPut {
-    static final String API_PATH = "E199API/";
-
+public class RESTAPIPut extends API {
     public static void startPutApi() {
         put(API_PATH + "incidentStatus/:incident_id/:status", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
-
-            String incidentIdParam = request.params(":incident_id");
-            String incidentStatusParam = request.params(":status");
-
-            int incidentId;
-            try {
-                incidentId = Integer.parseInt(incidentIdParam);
-            } catch (NumberFormatException e) {
-                return ErrorResponse(response, 406, "Error: Incident Id provided is not a valid Id.");
-            }
-
-            if (Arrays.stream(INCIDENT_STATUSES).noneMatch(inc -> inc.equals(incidentStatusParam)))
-                return ErrorResponse(response, 406, "Error: Invalid incident status provided.");
-
+            initResponse(response);
+            String incidentIdParam = getRequestParam(request, "incident_id");
+            String incidentStatusParam = getRequestParam(request, "status");
 
             EditIncidentsTable eit = new EditIncidentsTable();
-            List<Incident> incidentList = eit.databaseToIncidents();
-            Incident incident = incidentList.stream().filter(inc -> inc.getIncident_id() == incidentId).findFirst().orElse(null);
 
+            if (Arrays.stream(INCIDENT_STATUSES).noneMatch(status -> status.equals(incidentStatusParam)))
+                return ErrorResponse(response, 406, "Error: Invalid incident status provided.");
+
+            Incident incident = eit.getIncidentIfExist(incidentIdParam);
             if (incident == null)
                 return ErrorResponse(response, 404, "Error: Incident not found.");
 
             String incidentStatus = incident.getStatus();
-            String newIncidentStatus = incidentStatusParam;
-            if ((incidentStatus.equals(INCIDENT_STATUS_SUBMITTED) && (!newIncidentStatus.equals(INCIDENT_STATUS_FAKE) && !newIncidentStatus.equals(INCIDENT_STATUS_RUNNING))) ||
-                    (incidentStatus.equals(INCIDENT_STATUS_RUNNING) && !newIncidentStatus.equals(INCIDENT_STATUS_FINISHED))
+            if ((incidentStatus.equals(INCIDENT_STATUS_SUBMITTED) && (!incidentStatusParam.equals(INCIDENT_STATUS_FAKE) && !incidentStatusParam.equals(INCIDENT_STATUS_RUNNING))) ||
+                    (incidentStatus.equals(INCIDENT_STATUS_RUNNING) && !incidentStatusParam.equals(INCIDENT_STATUS_FINISHED))
             )
-                return ErrorResponse(response, 403, "Error: Changing incident status " + incidentStatus + " to " + newIncidentStatus + " is illegal.");
+                return ErrorResponse(response, 403, "Error: Changing incident status " + incidentStatus + " to " + incidentStatusParam + " is illegal.");
 
-            eit.updateIncident(incidentIdParam, Map.of("status", newIncidentStatus));
-            if (newIncidentStatus.equals(INCIDENT_STATUS_FINISHED)) {
+            eit.updateIncident(incidentIdParam, Map.of("status", incidentStatusParam));
+            if (incidentStatusParam.equals(INCIDENT_STATUS_FINISHED)) {
                 incident.setEnd_datetime();
                 eit.updateIncident(incidentIdParam, Map.of("end_datetime", incident.getEnd_datetime()));
             }
 
-            return MessageResponse("Incident status successfully updated to " + newIncidentStatus + ".");
+            return MessageResponse("Incident status successfully updated to " + incidentStatusParam + ".");
         });
 
         put(API_PATH + "incidentFieldValue/:incident_id", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
-
-            String incidentIdParam = request.params(":incident_id");
-
-            int incidentId;
-            try {
-                incidentId = Integer.parseInt(incidentIdParam);
-            } catch (NumberFormatException e) {
-                return ErrorResponse(response, 406, "Error: Incident Id provided is not a valid Id.");
-            }
+            initResponse(response);
+            String incidentIdParam = getRequestParam(request, "incident_id");
+            String fieldParam = getBodyParam(request, "field");
+            String valueParam = getBodyParam(request, "value");
 
             EditIncidentsTable eit = new EditIncidentsTable();
-            List<Incident> incidentList = eit.databaseToIncidents();
-            Incident incident = incidentList.stream().filter(inc -> inc.getIncident_id() == incidentId).findFirst().orElse(null);
-
+            Incident incident = eit.getIncidentIfExist(incidentIdParam);
             if (incident == null)
                 return ErrorResponse(response, 404, "Error: Incident not found.");
-
-            JSONObject body = new JSONObject(request.body());
-            String field = body.getString("field");
-            String value = body.getString("value");
-            eit.updateIncident(incidentIdParam, Map.of(field, value));
-
-            return MessageResponse("Updated " + field + " to \"" + value + "\" of incident " + incidentId + ".");
+            
+            eit.updateIncident(incidentIdParam, Map.of(fieldParam, valueParam));
+            return MessageResponse("Updated " + fieldParam + " to \"" + valueParam + "\" of incident " + incidentIdParam + ".");
         });
 
         put(API_PATH + "/participantAccept/:participant_id/:volunteer_username", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
+            initResponse(response);
+            String participantIdParam = getRequestParam(request, "participant_id");
+            String volunteerUsernameParam = getRequestParam(request, "volunteer_username");
 
-            String participantIdParam = request.params(":participant_id");
-            String volunteerUsernameParam = request.params(":volunteer_username");
+            Validator validator = new Validator();
+            EditParticipantsTable ept = new EditParticipantsTable();
 
-            if (participantIdParam == null || volunteerUsernameParam == null)
+            if (validator.hasNullItems(new String[] {participantIdParam, volunteerUsernameParam}))
                 return ErrorResponse(response, 406, "Error: Participant Id or volunteer username not provided.");
 
-            int participantId;
-            try {
-                participantId = Integer.parseInt(participantIdParam);
-            } catch (NumberFormatException e) {
-                return ErrorResponse(response, 406, "Error: Participant Id provided is not a valid Id.");
-            }
-
-            EditParticipantsTable ept = new EditParticipantsTable();
-            Participant participant = ept.databaseToParticipant(participantId);
+            Participant participant = ept.getParticipantIfExist(participantIdParam);
             if (participant == null)
                 return ErrorResponse(response, 404, "Error: Participant not found.");
 
             EditVolunteersTable evt = new EditVolunteersTable();
-            List<Volunteer> volunteersList = evt.getVolunteers("all");
+            List<Volunteer> volunteersList = evt.getVolunteers();
             Volunteer volunteer = volunteersList.stream().filter(inc -> inc.getUsername().equals(volunteerUsernameParam)).findFirst().orElse(null);
             if (volunteer == null)
                 return ErrorResponse(response, 404, "Error: Volunteer not found.");
-            ept.acceptParticipant(participantId, volunteerUsernameParam);
+
+            ept.acceptParticipant(Integer.parseInt(participantIdParam), volunteerUsernameParam);
 
             EditIncidentsTable eit = new EditIncidentsTable();
             Incident incident = eit.databaseToIncident(participant.getIncident_id());
@@ -127,38 +91,30 @@ public class RESTAPIPut {
             String incidentVolunteerType = volunteerType.equals(VOLUNTEER_TYPE_SIMPLE) ? "firemen" : "vehicles";
             int newIncidentVolunteerTypeValue = volunteerType.equals(VOLUNTEER_TYPE_SIMPLE) ? incident.getFiremen() + 1 : incident.getVehicles() + 1;
             eit.updateIncident(String.valueOf(participant.getIncident_id()), Map.of(incidentVolunteerType, String.valueOf(newIncidentVolunteerTypeValue)));
-
-            return MessageResponse("Accepted participant " + participantId + "(" + volunteerUsernameParam + ").");
+            return MessageResponse("Accepted participant " + participantIdParam + "(" + volunteerUsernameParam + ").");
         });
 
         put(API_PATH + "/participantRelease/:participant_id/:success", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
+            initResponse(response);
+            String participantIdParam = getRequestParam(request, "participant_id");
+            String successParam = getRequestParam(request, "success");
+            String commentParam = getBodyParamElse(request, "municipality", "all");
 
-            String participantIdParam = request.params(":participant_id");
-            String successParam = request.params(":success");
-            String commentParam = request.raw().getParameter("municipality") == null ? "all" : request.raw().getParameter("municipality");
-
-            if (participantIdParam == null || successParam == null)
-                return ErrorResponse(response, 406, "Error: Participant Id or volunteer username not provided.");
-
-            int participantId;
-            try {
-                participantId = Integer.parseInt(participantIdParam);
-            } catch (NumberFormatException e) {
-                return ErrorResponse(response, 406, "Error: Participant Id provided is not a valid Id.");
-            }
-
+            Validator validator = new Validator();
             EditParticipantsTable ept = new EditParticipantsTable();
-            Participant participant = ept.databaseToParticipant(participantId);
-            if (participant == null)
-                return ErrorResponse(response, 404, "Error: Participant not found.");
+
+            if (validator.hasNullItems(new String[] {participantIdParam, successParam}))
+                return ErrorResponse(response, 406, "Error: Participant Id or success value not provided.");
 
             if (!isInTable(successParam, PARTICIPANT_SUCCESSOUTCOMES))
                 return ErrorResponse(response, 404, "Error: Invalid success outcome provided.");
-            ept.finalStatusParticipant(participantId, successParam, commentParam);
 
-            return MessageResponse("Released participant " + participantId + " with " + successParam + " outcome with comment \"" + commentParam + "\".");
+            Participant participant = ept.getParticipantIfExist(participantIdParam);
+            if (participant == null)
+                return ErrorResponse(response, 404, "Error: Participant not found.");
+
+            ept.finalStatusParticipant(Integer.parseInt(participantIdParam), successParam, commentParam);
+            return MessageResponse("Released participant " + participantIdParam + " with " + successParam + " outcome with comment \"" + commentParam + "\".");
         });
     }
 }

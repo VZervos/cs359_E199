@@ -8,15 +8,19 @@ package database.tables;
 import com.google.gson.Gson;
 import database.DB_Connection;
 import mainClasses.Incident;
+import services.Validator;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static services.StandardResponse.ErrorResponse;
 
 /**
  * @author Mike
@@ -107,6 +111,16 @@ public class EditIncidentsTable {
             System.err.println(e.getMessage());
         }
         return null;
+    }
+
+    public Incident getIncidentIfExist(String incidentIdParam) throws SQLException, ClassNotFoundException {
+        Validator validator = new Validator();
+        Incident incident = null;
+        if (validator.isNumber(incidentIdParam)) {
+            int incidentId = Integer.parseInt(incidentIdParam);
+            incident = databaseToIncident(incidentId);
+        }
+        return incident;
     }
 
     public Incident databaseToIncident(int incidentId) throws SQLException, ClassNotFoundException {

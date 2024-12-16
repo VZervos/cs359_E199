@@ -13,30 +13,25 @@ import java.util.List;
 import static services.StandardResponse.DataResponseAsJson;
 import static services.StandardResponse.ErrorResponse;
 import static spark.Spark.get;
-import static utility.Resources.INCIDENT_STATUSES;
-import static utility.Resources.VOLUNTEER_TYPES;
+import static utility.Resources.*;
 
-public class RESTAPIGet {
-    static final String API_PATH = "E199API/";
-
+public class RESTAPIGet extends API {
     public static void startGetApi() {
         get(API_PATH + "/incidents/:type/:status", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
+            initResponse(response);
+            String incidentTypeParam = getRequestParam(request, "type");
+            String incidentStatusParam = getRequestParam(request, "status");
+            String municipalityParam = getBodyParamElse(request, "municipality", "all");
 
-            String incidentTypeParam = request.params(":type") == null ? "all" : request.params(":type");
-            String incidentStatusParam = request.params(":status") == null ? "all" : request.params(":status");
-            String municipalityParam = request.raw().getParameter("municipality") == null ? "all" : request.raw().getParameter("municipality");
-
-            if (incidentTypeParam == null || incidentStatusParam == null)
-                return ErrorResponse(response, 406, "Error: Incident type or status not provided.");
-
+            Validator validator = new Validator();
+            EditIncidentsTable eit = new EditIncidentsTable();
+            
             if (!incidentStatusParam.equals("all") && !Utility.isInTable(incidentStatusParam, INCIDENT_STATUSES))
                 return ErrorResponse(response, 406, "Error: Invalid incident status provided.");
+            if (!incidentTypeParam.equals("all") && !Utility.isInTable(incidentTypeParam, INCIDENT_TYPES))
+                return ErrorResponse(response, 406, "Error: Invalid incident status provided.");
 
-            EditIncidentsTable eit = new EditIncidentsTable();
             List<Incident> incidentsList = eit.databaseToIncidentsSearch(incidentTypeParam, incidentStatusParam, municipalityParam);
-
             StringBuilder incidentsJson = new StringBuilder("[");
             for (Incident incident : incidentsList) {
                 incidentsJson.append(eit.incidentToJSON(incident)).append(',');
@@ -49,26 +44,16 @@ public class RESTAPIGet {
         });
 
         get(API_PATH + "/participants/:incident_id", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
-
-            String incidentIdParam = request.params(":incident_id");
-
-            int incidentId;
-            try {
-                incidentId = Integer.parseInt(incidentIdParam);
-            } catch (NumberFormatException e) {
-                return ErrorResponse(response, 406, "Error: Incident Id provided is not a valid Id.");
-            }
+            initResponse(response);
+            String incidentIdParam = getRequestParam(request, "incident_id");
 
             EditIncidentsTable eit = new EditIncidentsTable();
-            List<Incident> incidentList = eit.databaseToIncidents();
-            Incident incident = incidentList.stream().filter(inc -> inc.getIncident_id() == incidentId).findFirst().orElse(null);
+            EditParticipantsTable ept = new EditParticipantsTable();
 
+            Incident incident = eit.getIncidentIfExist(incidentIdParam);
             if (incident == null)
                 return ErrorResponse(response, 404, "Error: Incident not found.");
 
-            EditParticipantsTable ept = new EditParticipantsTable();
             StringBuilder participantsJson = new StringBuilder("[");
             List<Participant> participantList = participantList = ept.getParticipants(incidentIdParam);
             for (Participant volunteer : participantList) {
@@ -82,10 +67,8 @@ public class RESTAPIGet {
         });
 
         get(API_PATH + "/volunteers/:type", (request, response) -> {
-            response.status(200);
-            response.type("application/json");
-
-            String volunteerTypeParam = request.params(":type") == null ? "all" : request.params(":type");
+            initResponse(response);
+            String volunteerTypeParam = getRequestParamElse(request, "type", "all");
 
             if (!volunteerTypeParam.equals("all") && !Utility.isInTable(volunteerTypeParam, VOLUNTEER_TYPES))
                 return ErrorResponse(response, 406, "Error: Volunteer type is invalid.");
@@ -111,7 +94,6 @@ public class RESTAPIGet {
             if (volunteersJson.length() > 2)
                 volunteersJson.deleteCharAt(volunteersJson.length() - 1);
             volunteersJson.append("]");
-
 
             return DataResponseAsJson(volunteersJson.toString());
         });

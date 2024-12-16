@@ -14,7 +14,6 @@ import static spark.Spark.*;
 import static utility.Resources.*;
 
 public class RESTAPI {
-    static final String API_PATH = "E199API/";
 
     public static void main(String[] args) {
         RESTAPIGet.startGetApi();
