@@ -1,29 +1,41 @@
 import verifyAddress from "../evaluation/evaluateAddress.js";
 import {isTelephoneAvailable} from "../evaluation/checkForDuplicates.js";
 import {scrollAtComponent} from "../utility/utility.js";
-import {extractFormValues} from "./extractFormValues.js";
-import {getSessionUser} from "../session/getSessionUser";
+import {extractFormValues, extractFormValuesAsJson} from "./extractFormValues.js";
+import {getSession} from "../session/getSession.js";
 import {submitIncident} from "../ajax/ajaxIncident.js";
 
 $(document).ready(() => {
-    const incidentSubmissionForm = $('#incidentSubmission');
+    const incidentSubmissionForm = $('#incidentForm');
 
     incidentSubmissionForm.on('submit', async (event) => {
         const form = incidentSubmissionForm[0];
         event.preventDefault();
 
         const isFormValid = form.checkValidity()
-        const sessionUser = await getSessionUser();
+        const sessionUser = await getSession();
+        console.log("submitted");
+        console.log(isFormValid);
+        console.log(sessionUser);
 
-        let invalidFieldId = await verifyAddress()
-            || (sessionUser == null || sessionUser.usertype === "admin" ? null : isTelephoneAvailable());
+        let invalidFieldId = await verifyAddress();
 
+        console.log(invalidFieldId);
         if (isFormValid && !invalidFieldId) {
-            const incident = extractFormValues("incidentSubmission");
-            if (!incident.telephone) incident["telephone"] = sessionUser.user.telephone;
+            const incident = extractFormValuesAsJson("incidentForm");
+            console.log(incident);
+            incident.user_type = sessionUser.user_type;
+            if (!incident.user_phone)
+                incident["user_phone"] = sessionUser.sessionUser.telephone;
+            else {
+                incident.user_phone = incident.telephone;
+                delete incident.telephone;
+            }
+            console.log(incident);
             console.log("Incident submitted successfully!");
-            const result = submitIncident(incident);
-            $("#submission_result").text(result.message);
+            const result = await submitIncident(incident);
+            console.log(result);
+            $("#submission_result").html(result.message);
         } else if (!isFormValid) {
             const firstInvalidField = form.querySelector(':invalid');
             firstInvalidField.scrollIntoView({behavior: 'smooth', block: 'center'});
@@ -35,7 +47,5 @@ $(document).ready(() => {
             console.log("Incident submission failed due to validation errors.");
         }
     });
-
-    $("#submission_result").hide();
 });
 

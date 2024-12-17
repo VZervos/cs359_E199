@@ -23,7 +23,7 @@ export function registerUser(userData) {
     xhr.send(JSON.stringify(userData));
 }
 
-export function loginUser(usertype, user) {
+export function loginUser(user_type, user) {
     console.log(user)
 
     return new Promise((resolve, reject) => {
@@ -45,13 +45,13 @@ export function loginUser(usertype, user) {
         xhr.open('POST', getServletURL('LoginUser'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
-            "usertype": usertype,
+            "user_type": user_type,
             "user": user
         }));
     });
 }
 
-export function retrieveUser(usertype, username, password) {
+export function retrieveUser(user_type, username, password) {
     console.log(username)
     console.log(password);
 
@@ -87,14 +87,14 @@ export function retrieveUser(usertype, username, password) {
         xhr.open('POST', getServletURL('RetrieveUser'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
-            "usertype": usertype,
+            "user_type": user_type,
             "username": username,
             "password": password
         }));
     });
 }
 
-export function updateInfoField(usertype, field, value) {
+export function updateInfoField(user_type, field, value) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -105,7 +105,7 @@ export function updateInfoField(usertype, field, value) {
         xhr.open('POST', getServletURL('UpdateInfoField'));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({
-            "usertype": usertype,
+            "user_type": user_type,
             "field": field,
             "value": value
         }));

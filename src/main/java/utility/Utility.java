@@ -45,6 +45,16 @@ public class Utility {
         return sessionUser;
     }
 
+    public static JSONObject getAllSessionUserData(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String sessionUser = (String) session.getAttribute("user");
+        String sessionUserType = (String) session.getAttribute("user_type");
+        JSONObject sessionUserData = new JSONObject();
+        sessionUserData.put("user", sessionUser);
+        sessionUserData.put("user_type", sessionUserType);
+        return sessionUserData;
+    }
+
     public static String getCurrentDatetime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();

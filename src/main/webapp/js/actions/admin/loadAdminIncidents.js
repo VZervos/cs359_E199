@@ -57,7 +57,7 @@ export async function reloadIncidents() {
             <div>
                 Description:
                 <button class="save-info-button" id=${incident_id + "-change-description-button"}>Save Changes</button>
-                <textarea style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
+                <textarea class="big-text-box incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
             </div>
         </div>
     `;

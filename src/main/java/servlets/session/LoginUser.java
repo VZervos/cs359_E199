@@ -96,14 +96,14 @@ public class LoginUser extends HttpServlet {
     }
 
     private static HttpSession getActiveSession(HttpServletRequest request, JSONObject responseBody) {
-        String usertype;
+        String user_type;
         HttpSession session;
         session = request.getSession(false);
-        usertype = (String) session.getAttribute("usertype");
+        user_type = (String) session.getAttribute("user_type");
 
         String userdata = null;
         String username = null;
-        switch (usertype) {
+        switch (user_type) {
             case USER_TYPE_USER -> {
                 EditUsersTable eut = new EditUsersTable();
                 User sessionUser = eut.jsonToUser(getSessionUserData(request));
@@ -133,11 +133,11 @@ public class LoginUser extends HttpServlet {
     private static void startNewSession(HttpServletRequest request, HttpSession session, JSONObject responseBody) throws IOException {
         JSONObject bodyJson = getBodyJson(request);
         String body = bodyJson.getString("user");
-        String usertype = bodyJson.getString("usertype");
+        String user_type = bodyJson.getString("user_type");
 
         String username = null;
         String userData = null;
-        switch (usertype) {
+        switch (user_type) {
             case USER_TYPE_USER -> {
                 EditUsersTable eut = new EditUsersTable();
                 User user = eut.jsonToUser(body);
@@ -160,7 +160,7 @@ public class LoginUser extends HttpServlet {
             }
         }
         session.setAttribute("user", userData);
-        session.setAttribute("usertype", usertype);
+        session.setAttribute("user_type", user_type);
         responseBody.put("user", userData);
         responseBody.put("message", "Initiated new session for user " + username);
     }

@@ -16,8 +16,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
-import static utility.Utility.getSessionUserData;
-import static utility.Utility.isActiveSession;
+import static utility.Utility.*;
 
 /**
  * @author micha
@@ -58,10 +57,13 @@ public class GetActiveSession extends HttpServlet {
 
         JSONObject responseBody = new JSONObject();
         if (isActiveSession(request)) {
-            String sessionUserData = getSessionUserData(request);
+            JSONObject sessionUserData = getAllSessionUserData(request);
             responseBody.put("activeSession", true);
-            responseBody.put("user", sessionUserData);
-            responseBody.put("message", "Session found for user " + eut.jsonToUser(sessionUserData).getUsername());
+            String user = sessionUserData.getString("user");
+            String user_type = sessionUserData.getString("user_type");
+            responseBody.put("user", user);
+            responseBody.put("user_type", user_type);
+            responseBody.put("message", "Session found for " + user_type + " " + eut.jsonToUser(user).getUsername());
         } else {
             responseBody.put("activeSession", false);
             responseBody.put("message", "No active session found");

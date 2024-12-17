@@ -68,7 +68,7 @@ public class UpdateInfoField extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
 
         JSONObject newInfo = getBodyJson(request);
-        String usertype = newInfo.getString("usertype");
+        String user_type = newInfo.getString("user_type");
         String field = newInfo.getString("field");
         String value = newInfo.getString("value");
 
@@ -76,7 +76,7 @@ public class UpdateInfoField extends HttpServlet {
         Writer writer = response.getWriter();
         try {
             String username = null;
-            switch (usertype) {
+            switch (user_type) {
                 case USER_TYPE_USER -> {
                     EditUsersTable eut = new EditUsersTable();
                     User sessionUser = eut.jsonToUser(getSessionUserData(request));

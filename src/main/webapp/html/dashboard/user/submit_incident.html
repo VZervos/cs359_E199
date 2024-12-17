@@ -63,42 +63,30 @@
             <form id="incidentForm">
                 <div class="section-content">
                     <label class="field-title" for="incident_type">*Incident type:</label>
-                    <input id="incident_type"
-                           minlength="3"
-                           name="incident_type"
-                           pattern="[A-Za-z]{3,}"
-                           required
-                           title="Incident type must be at least 3 characters long."
-                           type="text"
+                    <select
+                            autocomplete="address-level1"
+                            class="form-select"
+                            id="incident_type"
+                            name="incident_type"
+                            required
                     >
+                        <option disabled selected value="">Select an incident type</option>
+                        <option value="fire">Fire</option>
+                        <option value="accident">Accident</option>
+                    </select>
                     <p id="incident_type_availability"></p>
                 </div>
 
                 <div class="section-content">
                     <label class="field-title" for="description">*Description:</label>
-                    <input id="description"
-                           name="description"
-                           minlength="3"
-                           required
-                           title="Description must be at least 3 characters long."
-                           type="text"
-                    >
+                    <textarea id="description"
+                              name="description"
+                              minlength="3"
+                              maxlength="100"
+                              required
+                              title="Description must be at least 3 characters long."
+                              class="big-text-box"></textarea>
                     <p id="description_availability"></p>
-                </div>
-
-<!--                TODO: Hide on User-->
-                <div class="section-content">
-                    <label class="field-title" for="telephone">*Mobile Number:</label>
-                    <input id="telephone"
-                           maxlength="14"
-                           minlength="10"
-                           name="telephone"
-                           pattern="[0-9]{10,14}"
-                           required
-                           title="Mobile number must contain only digits and be 10-14 characters long."
-                           type="tel"
-                    >
-                    <p id="telephone_availability"></p>
                 </div>
 
                 <div class="section-content">
@@ -400,12 +388,12 @@
                     <span>
                         <label class="field-title" for="address">*Address:</label>
                         <input id="address"
-                               maxlength="150"
+                               maxlength="100"
                                minlength="10"
                                name="address"
-                               pattern="[A-Za-z][A-Za-z0-9\-\,\. ]{9,149}"
+                               pattern="[A-Za-z][A-Za-z0-9\-\,\. ]{9,99}"
                                required
-                               title="Address must begin with a latin character and be 10-150 characters long."
+                               title="Address must begin with a latin character and be 10-100 characters long."
                                type="text"
                         >
                         <button id="showAddressOnMap" type="button"></button>
@@ -417,7 +405,7 @@
 
                 <input
                         class="main-button"
-                        id="registerButton"
+                        id="submitButton"
                         type="submit"
                         value="Submit"
                 >

@@ -1,6 +1,6 @@
 import {getAddress} from "../evaluation/evaluateAddress.js";
 
-export function extractFormValues(formId) {
+export function extractFormValuesAsJson(formId) {
     const formData = {};
     const userType = $('input[name="type"]:checked').val();
 
@@ -26,9 +26,9 @@ export function extractFormValues(formId) {
     const address = getAddress();
     formData["lat"] = address["lat"];
     formData["lon"] = address["lon"];
-    const jsonData = JSON.stringify(formData);
-    $('#result').show();
-    $('#json_result').text(jsonData);
-    console.log(jsonData);
-    return jsonData;
+    return formData;
+}
+
+export function extractFormValues(formId) {
+    return JSON.stringify(extractFormValuesAsJson(formId));
 }

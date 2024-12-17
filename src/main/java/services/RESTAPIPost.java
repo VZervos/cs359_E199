@@ -15,7 +15,8 @@ public class RESTAPIPost extends API {
             initResponse(response);
             Validator validator = new Validator();
 
-            Incident incident = new Gson().fromJson(request.body(), Incident.class);
+            EditIncidentsTable eit = new EditIncidentsTable();
+            Incident incident = eit.jsonToIncident(request.body());
             if (validator.hasNullItems(new String[]{
                     incident.getIncident_type(),
                     incident.getDescription(),
@@ -42,7 +43,6 @@ public class RESTAPIPost extends API {
             if (prefecture != null && (!prefecture.equals(PREFECTURE_CHANIA) && !prefecture.equals(PREFECTURE_RETHYMNO) && !prefecture.equals(PREFECTURE_HERAKLION) && !prefecture.equals(PREFECTURE_LASITHI)))
                 return ErrorResponse(response, 406, "Error: Invalid prefecture provided.");
 
-            EditIncidentsTable eit = new EditIncidentsTable();
             incident.setStatus(INCIDENT_STATUS_SUBMITTED);
             incident.setDanger(INCIDENT_DANGER_UNKNOWN);
             incident.setStart_datetime();

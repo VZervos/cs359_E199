@@ -87,11 +87,11 @@ public class RetrieveUser extends HttpServlet {
     private static JSONObject retrieveUserData(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ClassNotFoundException {
         JSONObject userCredentials = getBodyJson(request);
 
-        String usertype = userCredentials.getString("usertype");
+        String user_type = userCredentials.getString("user_type");
         String username = userCredentials.getString("username");
         String password = userCredentials.getString("password");
         JSONObject responseBody = new JSONObject();
-        switch (usertype) {
+        switch (user_type) {
             case USER_TYPE_USER -> {
                 EditUsersTable eut = new EditUsersTable();
                 User user = eut.databaseToUsers(username, password);

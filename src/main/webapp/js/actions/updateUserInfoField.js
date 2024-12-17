@@ -19,10 +19,10 @@ async function checkAddressValidity(invalidField, message) {
     return {invalidField, message};
 }
 
-async function updateInfo(invalidField, usertype, infoField, infoFieldValue, message, valueAvailabilityMessage) {
+async function updateInfo(invalidField, user_type, infoField, infoFieldValue, message, valueAvailabilityMessage) {
     let success = false;
     if (!invalidField) {
-        const updateResult = await updateInfoField(usertype, infoField, infoFieldValue);
+        const updateResult = await updateInfoField(user_type, infoField, infoFieldValue);
         console.log(updateResult);
         success = updateResult["success"];
         message = updateResult["message"];
@@ -47,12 +47,12 @@ $(document).ready(() => {
         console.log(isFormValid);
         console.log(event);
         console.log(event.target[1].id)
-        const usertype = event.target.id.split('-')[1];
+        const user_type = event.target.id.split('-')[1];
         const infoField = event.target.id.split('-')[2];
 
         console.log(infoField);
 
-        const formValues = JSON.parse(extractFormValues("form-" + usertype + "-" + infoField));
+        const formValues = JSON.parse(extractFormValues("form-" + user_type + "-" + infoField));
 
         const infoFieldValue = formValues[infoField];
         console.log(infoFieldValue);
@@ -73,7 +73,7 @@ $(document).ready(() => {
                     message = __ret.message;
                     if (!invalidField) {
                         for (const [field, value] of Object.entries(formValues)) {
-                            const updateResult = await updateInfo(invalidField, usertype, field, value, message, valueAvailabilityMessage);
+                            const updateResult = await updateInfo(invalidField, user_type, field, value, message, valueAvailabilityMessage);
                             if (updateResult["success"])
                                 valueAvailabilityMessage.text("All address fields have been successfully updated");
                             else break;
@@ -83,7 +83,7 @@ $(document).ready(() => {
                 } else if (infoField === "password") {
                     invalidField = verifyPassword();
                 }
-                await updateInfo(invalidField, usertype, infoField, infoFieldValue, message, valueAvailabilityMessage);
+                await updateInfo(invalidField, user_type, infoField, infoFieldValue, message, valueAvailabilityMessage);
             } else {
                 valueAvailabilityMessage.css("color", RESULT_STYLE[isAvailable]);
                 valueAvailabilityMessage.text(message);

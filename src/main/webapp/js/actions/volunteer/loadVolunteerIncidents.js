@@ -1,6 +1,6 @@
 import {clearHtml} from "../../utility/utility.js";
 import {getIncidentsList, getParticipantsList} from "../../ajax/ajaxLists.js";
-import {getSessionUser} from "../../session/getSessionUser.js";
+import {getSession} from "../../session/getSession.js";
 
 let loadIncidentsButton;
 let incidentsList;
@@ -61,7 +61,8 @@ export async function reloadIncidents() {
     loadIncidentsButton.text("Reload incidents")
 
     const incidents = await getIncidentsList();
-    const volunteer = await getSessionUser();
+    const session = await getSession();
+    const volunteer = session.sessionUser;
     const participants = await getParticipantsList();
 
     incidents.data
