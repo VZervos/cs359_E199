@@ -1,5 +1,5 @@
-import {checkForDuplicate} from "../ajax/ajax.js";
 import {RESULT_STYLE} from "../utility/utility.js";
+import {checkForDuplicate} from "../ajax/ajaxValidation.js";
 
 let usernameAvailable = false;
 let emailAvailable = false;

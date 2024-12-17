@@ -1,7 +1,6 @@
-import {loginUser, retrieveUser} from "../ajax/ajax.js";
-
 import {openDashboard} from "../pages/pageManagement.js";
 import {getRadioValue} from "../utility/utility.js";
+import {loginUser, retrieveUser} from "../ajax/ajaxUsers.js";
 
 $(document).ready(() => {
     $('#loginButton').click(async (event) => {

@@ -1,8 +1,9 @@
-import {checkForDuplicate, updateInfoField} from "../ajax/ajax.js";
 import {RESULT_STYLE} from "../utility/utility.js";
 import verifyAddress from "../evaluation/evaluateAddress.js";
 import verifyPassword from "../evaluation/evaluatePassword.js";
 import {extractFormValues} from "./extractFormValues.js";
+import {checkForDuplicate} from "../ajax/ajaxValidation.js";
+import {updateInfoField} from "../ajax/ajaxUsers.js";
 
 async function checkAddressValidity(invalidField, message) {
     const country = $('#country').val();

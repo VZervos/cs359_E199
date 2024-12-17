@@ -1,46 +1,41 @@
-import verifyPassword from "../evaluation/evaluatePassword.js";
-import verifyFiremanAge from "../evaluation/evaluateFiremanAge.js";
-import verifyAddress, {getAddress} from "../evaluation/evaluateAddress.js";
-import {registerUser} from "../ajax/ajax.js";
-import {isEmailAvailable, isTelephoneAvailable, isUsernameAvailable} from "../evaluation/checkForDuplicates.js";
+import verifyAddress from "../evaluation/evaluateAddress.js";
+import {isTelephoneAvailable} from "../evaluation/checkForDuplicates.js";
 import {scrollAtComponent} from "../utility/utility.js";
 import {extractFormValues} from "./extractFormValues.js";
-import {openPage} from "../pages/pageManagement.js";
+import {getSessionUser} from "../session/getSessionUser";
+import {submitIncident} from "../ajax/ajaxIncident.js";
 
 $(document).ready(() => {
-    const registrationForm = $('#registrationForm');
+    const incidentSubmissionForm = $('#incidentSubmission');
 
-    registrationForm.on('submit', async (event) => {
-        const form = registrationForm[0];
-
+    incidentSubmissionForm.on('submit', async (event) => {
+        const form = incidentSubmissionForm[0];
         event.preventDefault();
 
         const isFormValid = form.checkValidity()
-        const invalidFieldId =
-            verifyPassword()
-            || verifyFiremanAge()
-            || await verifyAddress()
-            || isUsernameAvailable()
-            || isEmailAvailable()
-            || isTelephoneAvailable();
+        const sessionUser = await getSessionUser();
+
+        let invalidFieldId = await verifyAddress()
+            || (sessionUser == null || sessionUser.usertype === "admin" ? null : isTelephoneAvailable());
 
         if (isFormValid && !invalidFieldId) {
-            const userData = extractFormValues("registrationForm");
-            console.log("Form submitted successfully!");
-            registerUser(userData);
-            openPage("session/registrationSuccess.html");
+            const incident = extractFormValues("incidentSubmission");
+            if (!incident.telephone) incident["telephone"] = sessionUser.user.telephone;
+            console.log("Incident submitted successfully!");
+            const result = submitIncident(incident);
+            $("#submission_result").text(result.message);
         } else if (!isFormValid) {
             const firstInvalidField = form.querySelector(':invalid');
             firstInvalidField.scrollIntoView({behavior: 'smooth', block: 'center'});
             firstInvalidField.focus();
             form.reportValidity();
-            console.log("Form submission failed due to validation errors.");
+            console.log("Incident submission failed due to validation errors.");
         } else {
             scrollAtComponent(invalidFieldId);
-            console.log("Form submission failed due to validation errors.");
+            console.log("Incident submission failed due to validation errors.");
         }
     });
 
-    $('#result').hide();
+    $("#submission_result").hide();
 });
 

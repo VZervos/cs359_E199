@@ -5,5 +5,5 @@ $(document).ready(async () => {
     const session = await hasActiveSession();
     console.log(session);
     if (session)
-        openDashboard("user");
+        openDashboard(session.usertype);
 });

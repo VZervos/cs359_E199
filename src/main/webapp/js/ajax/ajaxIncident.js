@@ -1,27 +1,10 @@
-import {getServiceURL} from "./ajax.js";
+import {getCallResult, getServiceURL} from "./ajax.js";
 
 export function updateIncidentStatus(incidentId, newStatus) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
-            let success = false;
-            let message = null;
-            let data = null;
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                success = true;
-                message = response.message;
-                console.log(message);
-            } else if (xhr.status !== 200) {
-                console.log("Error occurred");
-                const response = JSON.parse(xhr.responseText);
-                message = response.message;
-                console.log('Message:', message);
-                success = false;
-            }
-            console.log("result: ");
-            console.log(success);
-            console.log(message);
+            const {success, message} = getCallResult(xhr);
             resolve({success, message});
         };
 
@@ -35,24 +18,7 @@ export function updateIncidentFieldValue(incidentId, field, value) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
-            let success = false;
-            let message = null;
-            let data = null;
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                success = true;
-                message = response.message;
-                console.log(message);
-            } else if (xhr.status !== 200) {
-                console.log("Error occurred");
-                const response = JSON.parse(xhr.responseText);
-                message = response.message;
-                console.log('Message:', message);
-                success = false;
-            }
-            console.log("result: ");
-            console.log(success);
-            console.log(message);
+            const {success, message} = getCallResult(xhr);
             resolve({success, message});
         };
 
@@ -62,5 +28,20 @@ export function updateIncidentFieldValue(incidentId, field, value) {
             "field": field,
             "value": value
         }));
+    });
+}
+
+export function submitIncident(incidentData) {
+    return new Promise((resolve, reject) => {
+        console.log(incidentData);
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const {success, message} = getCallResult(xhr);
+            resolve({success, message});
+        };
+
+        xhr.open('POST', getServiceURL('incident'));
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify(incidentData));
     });
 }
