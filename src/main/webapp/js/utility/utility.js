@@ -3,6 +3,13 @@ export const RESULT_STYLE = {
     [false]: "red",
 };
 
+export const setResultMessage = (messageComponentId, result) => {
+    const messageComponent = $('#' + messageComponentId);
+    messageComponent.text(result.message);
+    messageComponent.css("color", RESULT_STYLE[result.success]);
+
+}
+
 export const scrollAtComponent = (component_id) =>
     $('html, body').animate({scrollTop: $('#' + component_id).offset().top}, 500);
 

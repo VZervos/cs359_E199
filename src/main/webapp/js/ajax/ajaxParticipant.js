@@ -1,4 +1,4 @@
-import {getCallResult, getCallResultData, getServiceURL, getServletURL} from "./ajax.js";
+import {getCallResult, getServiceURL, getServletURL} from "./ajax.js";
 
 export function acceptParticipant(participant_id, volunteer_username) {
     return new Promise((resolve, reject) => {

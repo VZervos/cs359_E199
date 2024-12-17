@@ -1,6 +1,6 @@
 import verifyPassword from "../evaluation/evaluatePassword.js";
 import verifyFiremanAge from "../evaluation/evaluateFiremanAge.js";
-import verifyAddress, {getAddress} from "../evaluation/evaluateAddress.js";
+import verifyAddress from "../evaluation/evaluateAddress.js";
 import {isEmailAvailable, isTelephoneAvailable, isUsernameAvailable} from "../evaluation/checkForDuplicates.js";
 import {scrollAtComponent} from "../utility/utility.js";
 import {extractFormValues} from "./extractFormValues.js";

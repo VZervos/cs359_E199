@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mainClasses.Participant;
-import mainClasses.Resources;
 import mainClasses.User;
 import mainClasses.Volunteer;
 import org.json.JSONObject;

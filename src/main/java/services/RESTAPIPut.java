@@ -12,8 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static services.StandardResponse.*;
-import static spark.Spark.*;
+import static services.StandardResponse.ErrorResponse;
+import static services.StandardResponse.MessageResponse;
+import static spark.Spark.put;
 import static utility.Resources.*;
 import static utility.Utility.isInTable;
 
@@ -59,7 +60,7 @@ public class RESTAPIPut extends API {
             Incident incident = eit.getIncidentIfExist(incidentIdParam);
             if (incident == null)
                 return ErrorResponse(response, 404, "Error: Incident not found.");
-            
+
             eit.updateIncident(incidentIdParam, Map.of(field, value));
             return MessageResponse("Updated " + field + " to \"" + value + "\" of incident " + incidentIdParam + ".");
         });
@@ -72,7 +73,7 @@ public class RESTAPIPut extends API {
             Validator validator = new Validator();
             EditParticipantsTable ept = new EditParticipantsTable();
 
-            if (validator.hasNullItems(new String[] {participantIdParam, volunteerUsernameParam}))
+            if (validator.hasNullItems(new String[]{participantIdParam, volunteerUsernameParam}))
                 return ErrorResponse(response, 406, "Error: Participant Id or volunteer username not provided.");
 
             Participant participant = ept.getParticipantIfExist(participantIdParam);
@@ -106,7 +107,7 @@ public class RESTAPIPut extends API {
             Validator validator = new Validator();
             EditParticipantsTable ept = new EditParticipantsTable();
 
-            if (validator.hasNullItems(new String[] {participantIdParam, successParam}))
+            if (validator.hasNullItems(new String[]{participantIdParam, successParam}))
                 return ErrorResponse(response, 406, "Error: Participant Id or success value not provided.");
 
             if (!isInTable(successParam, PARTICIPANT_SUCCESSOUTCOMES))

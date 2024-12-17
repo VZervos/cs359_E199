@@ -9,7 +9,6 @@ import mainClasses.Volunteer;
 import utility.Utility;
 
 import java.util.List;
-import java.util.Objects;
 
 import static services.StandardResponse.DataResponseAsJson;
 import static services.StandardResponse.ErrorResponse;
@@ -26,7 +25,7 @@ public class RESTAPIGet extends API {
 
             Validator validator = new Validator();
             EditIncidentsTable eit = new EditIncidentsTable();
-            
+
             if (!incidentStatusParam.equals("all") && !Utility.isInTable(incidentStatusParam, INCIDENT_STATUSES))
                 return ErrorResponse(response, 406, "Error: Invalid incident status provided.");
             if (!incidentTypeParam.equals("all") && !Utility.isInTable(incidentTypeParam, INCIDENT_TYPES))

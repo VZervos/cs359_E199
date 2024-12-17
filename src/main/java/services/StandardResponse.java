@@ -8,6 +8,14 @@ public class StandardResponse {
     private String message;
     private JsonElement data;
 
+    public StandardResponse(String message) {
+        this.message = message;
+    }
+
+    public StandardResponse(JsonElement data) {
+        this.data = data;
+    }
+
     public static String ErrorResponse(Response response, int code, String message) {
         response.status(code);
         return new Gson().toJson(new StandardResponse(message));
@@ -30,15 +38,6 @@ public class StandardResponse {
         }
         return new Gson().toJson(new StandardResponse(jsonElement));
     }
-
-    public StandardResponse(String message) {
-        this.message = message;
-    }
-
-    public StandardResponse(JsonElement data) {
-        this.data = data;
-    }
-
 
     public String getMessage() {
         return message;

@@ -8,7 +8,7 @@ export async function reloadIncidents() {
     const createIncidentInfo = (incident) => {
         const changeValueOfField = (field, newValue) => {
             const value = Math.max(0, newValue);
-            $(document).on('click', '#' + field, (event) => event.target.value  = value)
+            $(document).on('click', '#' + field, (event) => event.target.value = value)
         }
 
         const {

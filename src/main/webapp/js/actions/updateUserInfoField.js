@@ -1,4 +1,4 @@
-import {RESULT_STYLE} from "../utility/utility.js";
+import {setResultMessage} from "../utility/utility.js";
 import verifyAddress from "../evaluation/evaluateAddress.js";
 import verifyPassword from "../evaluation/evaluatePassword.js";
 import {extractFormValues} from "./extractFormValues.js";
@@ -19,19 +19,15 @@ async function checkAddressValidity(invalidField, message) {
     return {invalidField, message};
 }
 
-async function updateInfo(invalidField, user_type, infoField, infoFieldValue, message, valueAvailabilityMessage) {
+async function updateInfo(invalidField, user_type, infoField, infoFieldValue, message, valueAvailabilityMessageId) {
     let success = false;
     if (!invalidField) {
-        const updateResult = await updateInfoField(user_type, infoField, infoFieldValue);
-        console.log(updateResult);
-        success = updateResult["success"];
-        message = updateResult["message"];
-        valueAvailabilityMessage.css("color", RESULT_STYLE[success]);
-        valueAvailabilityMessage.text(message);
-    } else {
-        valueAvailabilityMessage.css("color", RESULT_STYLE[success]);
-        valueAvailabilityMessage.text(message);
+        const result = await updateInfoField(user_type, infoField, infoFieldValue);
+        console.log(result);
+        success = result["success"];
+        message = result["message"];
     }
+    setResultMessage(valueAvailabilityMessageId, {success, message});
     return {success, message};
 }
 
@@ -60,9 +56,9 @@ $(document).ready(() => {
 
         await checkForDuplicate(infoField, infoFieldValue).then(async result => {
             console.log("Promise result:", result);
+            const valueAvailabilityMessageId = infoField + '_availability';
             const isAvailable = result["success"];
             let message = result["message"];
-            const valueAvailabilityMessage = $('#' + infoField + '_availability');
 
             if (isAvailable) {
                 message = '';
@@ -73,9 +69,15 @@ $(document).ready(() => {
                     message = __ret.message;
                     if (!invalidField) {
                         for (const [field, value] of Object.entries(formValues)) {
-                            const updateResult = await updateInfo(invalidField, user_type, field, value, message, valueAvailabilityMessage);
+                            const updateResult = await updateInfo(invalidField, user_type, field, value, message, valueAvailabilityMessageId);
                             if (updateResult["success"])
-                                valueAvailabilityMessage.text("All address fields have been successfully updated");
+                                setResultMessage(
+                                    valueAvailabilityMessageId,
+                                    {
+                                        success: updateResult["success"],
+                                        message: "All address fields have been successfully updated"
+                                    }
+                                );
                             else break;
                         }
                     }
@@ -83,10 +85,9 @@ $(document).ready(() => {
                 } else if (infoField === "password") {
                     invalidField = verifyPassword();
                 }
-                await updateInfo(invalidField, user_type, infoField, infoFieldValue, message, valueAvailabilityMessage);
+                await updateInfo(invalidField, user_type, infoField, infoFieldValue, message, valueAvailabilityMessageId);
             } else {
-                valueAvailabilityMessage.css("color", RESULT_STYLE[isAvailable]);
-                valueAvailabilityMessage.text(message);
+                setResultMessage(valueAvailabilityMessageId, {success: isAvailable, message});
             }
         });
     });

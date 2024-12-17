@@ -1,7 +1,6 @@
 import verifyAddress from "../evaluation/evaluateAddress.js";
-import {isTelephoneAvailable} from "../evaluation/checkForDuplicates.js";
-import {scrollAtComponent} from "../utility/utility.js";
-import {extractFormValues, extractFormValuesAsJson} from "./extractFormValues.js";
+import {scrollAtComponent, setResultMessage} from "../utility/utility.js";
+import {extractFormValuesAsJson} from "./extractFormValues.js";
 import {getSession} from "../session/getSession.js";
 import {submitIncident} from "../ajax/ajaxIncident.js";
 
@@ -35,7 +34,7 @@ $(document).ready(() => {
             console.log("Incident submitted successfully!");
             const result = await submitIncident(incident);
             console.log(result);
-            $("#submission_result").html(result.message);
+            setResultMessage("submission_result", result);
         } else if (!isFormValid) {
             const firstInvalidField = form.querySelector(':invalid');
             firstInvalidField.scrollIntoView({behavior: 'smooth', block: 'center'});

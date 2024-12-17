@@ -2,17 +2,10 @@ package services;
 
 import database.tables.EditIncidentsTable;
 import mainClasses.Incident;
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 import static services.StandardResponse.ErrorResponse;
 import static services.StandardResponse.MessageResponse;
 import static spark.Spark.delete;
-import static spark.Spark.put;
-import static utility.Resources.*;
 
 public class RESTAPIDelete extends API {
     public static void startDeleteApi() {

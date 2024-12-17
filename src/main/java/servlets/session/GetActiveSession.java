@@ -16,7 +16,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
-import static utility.Utility.*;
+import static utility.Utility.getAllSessionUserData;
+import static utility.Utility.isActiveSession;
 
 /**
  * @author micha

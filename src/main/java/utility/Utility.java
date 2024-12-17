@@ -1,6 +1,5 @@
 package utility;
 
-import database.tables.EditUsersTable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.json.JSONObject;
@@ -10,8 +9,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-
-import static utility.Resources.INCIDENT_STATUSES;
 
 public class Utility {
     public static JSONObject getBodyJson(HttpServletRequest request) throws IOException {
