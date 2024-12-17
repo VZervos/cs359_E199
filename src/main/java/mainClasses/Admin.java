@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 public class Admin {
     public static final String ADMIN_USERNAME = "admin";
-    public static final String ADMIN_PASSWORD = "admin";
+    public static final String ADMIN_PASSWORD = "admin"; // TODO: change to "admiN12@*"
 
     public String username;
     public String password;

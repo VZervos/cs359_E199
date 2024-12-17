@@ -3,6 +3,7 @@ import {scrollAtComponent, setResultMessage} from "../utility/utility.js";
 import {extractFormValuesAsJson} from "./extractFormValues.js";
 import {getSession} from "../session/getSession.js";
 import {submitIncident} from "../ajax/ajaxIncident.js";
+import {checkForDuplicate} from "../ajax/ajaxValidation.js";
 
 $(document).ready(() => {
     const incidentSubmissionForm = $('#incidentForm');
@@ -17,6 +18,7 @@ $(document).ready(() => {
         console.log(isFormValid);
         console.log(sessionUser);
 
+        // TODO: Check duplicate for mobile
         let invalidFieldId = await verifyAddress();
 
         console.log(invalidFieldId);
