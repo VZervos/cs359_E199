@@ -29,7 +29,7 @@ $(document).ready(() => {
             console.log(incident);
             incident.user_type = user_type;
             if (!incident.telephone)
-                incident["user_phone"] = user_type === "admin" ? "199" : sessionUser.sessionUser.telephone;
+                incident["user_phone"] = user_type === "admin" ? "199" : sessionUser.user.telephone;
             else if (!incident.user_phone && incident.telephone) {
                 incident.user_phone = incident.telephone;
                 delete incident.telephone;

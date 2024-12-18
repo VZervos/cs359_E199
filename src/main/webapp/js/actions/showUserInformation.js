@@ -4,6 +4,7 @@ $(document).ready(async () => {
     const infoFields = $('.show-user-info-field');
 
     const session = await getSession();
+    console.log(session);
     const sessionUser = session.user;
     console.log(sessionUser);
 

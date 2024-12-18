@@ -43,13 +43,29 @@
             <h2>User Dashboard</h2>
             <p class="note">Select an action.</p>
         </div>
-        <div>
-            <div class="button-section">
-                <a
-                        class="button main-button"
-                        href="submit_incident.html"
-                        id="submitIncidentPageButton"
-                >Submit Incident</a>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto button-section">
+                    <a
+                            class="button main-button"
+                            href="submit_incident.html"
+                            id="submitIncidentPageButton"
+                    >Submit Incident</a>
+                </div>
+                <div class="col-auto button-section">
+                    <a
+                            class="button main-button"
+                            href="list_incidents.html"
+                            id="listIncidentsPageButton"
+                    >List Incidents</a>
+                </div>
+                <div class="col-auto button-section">
+                    <a
+                            class="button main-button"
+                            href="my_information.html"
+                            id="myInformationPageButton"
+                    >My information</a>
+                </div>
             </div>
         </div>
     </section>
@@ -141,7 +157,7 @@
         </div>
         <div>
             <div class="section-content">
-                <form id="form-email">
+                <form id="form-user-email">
                     <label class="field-title" for="email">Email:</label>
                     <input id="email"
                            name="email"
@@ -156,7 +172,7 @@
             </div>
 
             <div class="section-content">
-                <form id="form-password">
+                <form id="form-user-password">
                     <label class="field-title" for="password">Password:</label>
                     <input id="password"
                            maxlength="18"
@@ -198,7 +214,7 @@
             </div>
 
             <div class="section-content">
-                <form id="form-firstname">
+                <form id="form-user-firstname">
                     <label class="field-title" for="firstname">First Name:</label>
                     <input id="firstname"
                            maxlength="30"
@@ -215,7 +231,7 @@
             </div>
 
             <div class="section-content">
-                <form id="form-lastname">
+                <form id="form-user-lastname">
                     <label class="field-title" for="lastname">Last Name:</label>
                     <input id="lastname"
                            maxlength="30"
@@ -232,7 +248,7 @@
             </div>
 
             <div class="section-content">
-                <form id="form-birthdate">
+                <form id="form-user-birthdate">
                     <label class="field-title" for="birthdate">Birthdate:</label>
                     <input id="birthdate"
                            max="2011-12-31"
@@ -249,7 +265,7 @@
             </div>
 
             <div class="section-content">
-                <form id="form-gender">
+                <form id="form-user-gender">
                     <p class="field-title">Gender</p>
                     <input
                             checked="checked"
@@ -278,7 +294,7 @@
             </div>
 
             <div class="section-content">
-                <form id="form-address">
+                <form id="form-user-address">
                     <label class="field-title" for="country">Country:</label>
                     <select autocomplete="country"
                             class="form-select"
@@ -592,7 +608,7 @@
 
 
             <div class="section-content">
-                <form id="form-job">
+                <form id="form-user-job">
                     <label class="field-title" for="job">Job:</label>
                     <input id="job"
                            maxlength="30"

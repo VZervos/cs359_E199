@@ -53,7 +53,9 @@ export async function reloadIncidents() {
                 <span id=${incident_id + "-firemen-value"}>${firemen}</span>
             </div>
             <div>Started: ${start_datetime}</d>
-            <div>Result: ${finalResult}</d>
+            <div>
+                Result:
+                <textarea class="incident"${finalResult}</d>
             <div>
                 Description:
                 <button class="save-info-button" id=${incident_id + "-change-description-button"}>Save Changes</button>

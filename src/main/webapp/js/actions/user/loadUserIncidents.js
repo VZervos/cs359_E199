@@ -43,56 +43,31 @@ export async function reloadIncidents() {
     `;
     };
 
-    const createIncidentOptions = (incident_id, volunteer_id, status) => {
-        if (!status)
-            return `
-                <div>
-                    <div class="row">
-                        <span>
-                            <button class="request_participation-option-button" id=${volunteer_id + "-" + incident_id + "-manage_volunteers"}>Request to participate</button>
-                        </span>
-                    </div>
-                </div>
-            `;
-        return "";
-    };
-
     clearHtml(incidentsList);
     loadIncidentsButton.text("Reload incidents")
 
     const incidents = await getIncidentsList();
-    const session = await getSession();
-    const volunteer = session.user;
-    const participants = await getParticipantsList();
 
     incidents.data
-        .filter(
-            incident => incident.status === "running" ||
-                (participants.data.some(participant => participant.volunteer_username === volunteer.username && participant.incident_id === incident.incident_id))
-        )
+        .filter(incident => incident.status === "running")
         .reverse()
         .forEach(incident => {
             const {incident_id, incident_type, status} = incident;
             console.log(incident);
-            const participantsList = participants.data.filter(p => p.incident_id === incident_id);
-            console.log(participantsList)
-            const participant = participantsList.length > 0 ? participantsList.find(p => p.incident_id === incident_id && p.volunteer_username === volunteer.username) : null;
-            console.log(participant)
             const component = $(`
                 <div class="accordion" id=${"accordion-" + incident_id}>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading-${incident_id}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${incident_id}" aria-expanded="false" aria-controls="collapse-${incident_id}">
-                                ${status}: Incident #${incident_id} (${incident_type}) [${participant ? participant.status : "available"}]
+                                ${status}: Incident #${incident_id} (${incident_type})
                             </button>
                         </h2>
                         <div id="collapse-${incident_id}" class="accordion-collapse collapse" aria-labelledby="heading-${incident_id}" data-bs-parent=${"accordion-" + incident_id}>
                             <div class="accordion-body">
                                 <div class="section-content list-incidents-admin-item row align-items-center" id="${incident_id}">
-                                    ${createIncidentInfo(incident, participant ? participant.status : "available")}
-                                    ${createIncidentOptions(incident_id, volunteer.volunteer_id, participant ? participant.status : null)}
+                                    ${createIncidentInfo(incident)}
                                     <p id="${incident_id}-message"></p>
-                                    <div class="container" id="${incident_id}-volunteers-list"></div>
+                                    <div class="container" id="${incident_id}-users-list"></div>
                                 </div>
                             </div>
                         </div>

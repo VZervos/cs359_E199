@@ -9,7 +9,7 @@ export const openDashboard = (userType) => {
     const dashboards = {
         "guest": "submit_incident",
         "user": "submit_incident",
-        "volunteer": "submit_incident",
+        "volunteer": "list_incidents",
         "admin": "manage_incidents"
     }
     openPage("dashboard/" + userType + "/" + dashboards[userType] + ".html");
