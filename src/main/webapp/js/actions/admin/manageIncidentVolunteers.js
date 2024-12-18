@@ -93,23 +93,6 @@ export async function reloadIncidents() {
         }
         return statusOptions;
     };
-
-    const createSimpleParticipants = (incident) => {
-        const {incident_id, status} = incident;
-
-        return `
-        <div>
-            <div class="row">
-                ${createStatusOptions(incident_id, status)}
-                <span>
-                        <button class="manage_volunteers-option-button" id=${incident_id + "-manage_volunteers"}>Manage volunteers</button>
-                </span>
-            </div>
-        </div>
-    `;
-    };
-
-
     clearHtml(volunteersList);
     loadIncidentsButton.text("Reload incidents")
 

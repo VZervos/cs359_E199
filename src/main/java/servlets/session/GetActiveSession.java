@@ -67,6 +67,7 @@ public class GetActiveSession extends HttpServlet {
             responseBody.put("message", "Session found for " + user_type + " " + eut.jsonToUser(user).getUsername());
         } else {
             responseBody.put("activeSession", false);
+            responseBody.put("user_type", "guest");
             responseBody.put("message", "No active session found");
         }
 

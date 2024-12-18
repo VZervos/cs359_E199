@@ -2,6 +2,13 @@ package services;
 
 import database.tables.EditIncidentsTable;
 import mainClasses.Incident;
+import spark.Request;
+import spark.Response;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import static services.StandardResponse.ErrorResponse;
 import static services.StandardResponse.MessageResponse;
@@ -26,13 +33,16 @@ public class RESTAPIPost extends API {
                 return ErrorResponse(response, 406, "Error: Not all mandatory fields contain information.");
             }
 
-            String user_phone = incident.getUser_phone();
-            if (user_phone != null && (user_phone.length() < MIN_PHONE_LENGTH || user_phone.length() > MAX_PHONE_LENGTH))
-                return ErrorResponse(response, 406, "Error: Invalid user phone provided.");
-
             String user_type = incident.getUser_type();
             if (user_type != null && (!user_type.equals(USER_TYPE_ADMIN) && !user_type.equals(USER_TYPE_GUEST) && !user_type.equals(USER_TYPE_USER)))
                 return ErrorResponse(response, 406, "Error: Invalid user type provided.");
+
+            String user_phone = incident.getUser_phone();
+            if (user_phone != null && (
+                    (user_phone.equals("199") && !user_type.equals(USER_TYPE_ADMIN)) ||
+                    ((user_phone.length() < MIN_PHONE_LENGTH || user_phone.length() > MAX_PHONE_LENGTH) && !user_type.equals(USER_TYPE_ADMIN))
+            ))
+                return ErrorResponse(response, 406, "Error: Invalid user phone provided.");
 
             String incident_type = incident.getIncident_type();
             if (incident_type != null && (!incident_type.equals(INCIDENT_TYPE_FIRE) && !incident_type.equals(INCIDENT_TYPE_ACCIDENT)))
@@ -46,8 +56,9 @@ public class RESTAPIPost extends API {
             incident.setDanger(INCIDENT_DANGER_UNKNOWN);
             incident.setStart_datetime();
 
-            eit.addIncidentFromJSON(eit.incidentToJSON(incident));
-
+            int newIncidentId = eit.addIncidentFromJSON(eit.incidentToJSON(incident));
+            if (incident.getUser_type().equals(USER_TYPE_ADMIN))
+                forwardIncidentStatusUpdate(request, newIncidentId, "running");
             return MessageResponse("Incident successfully added.");
         });
 
@@ -77,4 +88,22 @@ public class RESTAPIPost extends API {
 //        });
 
     }
+
+    private static void forwardIncidentStatusUpdate(Request request, int incidentId, String status) {
+        try {
+            String url = BASE_URL(request) + API_PATH + "incidentStatus/" + incidentId + "/" + status;
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error while forwarding request: " + e.getMessage());
+        }
+    }
+
 }

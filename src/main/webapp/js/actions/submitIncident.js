@@ -3,7 +3,7 @@ import {scrollAtComponent, setResultMessage} from "../utility/utility.js";
 import {extractFormValuesAsJson} from "./extractFormValues.js";
 import {getSession} from "../session/getSession.js";
 import {submitIncident} from "../ajax/ajaxIncident.js";
-import {checkForDuplicate} from "../ajax/ajaxValidation.js";
+import {isTelephoneAvailable} from "../evaluation/checkForDuplicates.js";
 
 $(document).ready(() => {
     const incidentSubmissionForm = $('#incidentForm');
@@ -14,29 +14,32 @@ $(document).ready(() => {
 
         const isFormValid = form.checkValidity()
         const sessionUser = await getSession();
+        const {user_type} = sessionUser;
         console.log("submitted");
         console.log(isFormValid);
         console.log(sessionUser);
 
-        // TODO: Check duplicate for mobile
-        let invalidFieldId = await verifyAddress();
+        let invalidFieldId = null;
+        if (user_type === "guest") invalidFieldId = await isTelephoneAvailable();
+        invalidFieldId = invalidFieldId || await verifyAddress();
 
         console.log(invalidFieldId);
         if (isFormValid && !invalidFieldId) {
             const incident = extractFormValuesAsJson("incidentForm");
             console.log(incident);
-            incident.user_type = sessionUser.user_type;
-            if (!incident.user_phone)
-                incident["user_phone"] = sessionUser.sessionUser.telephone;
-            else {
+            incident.user_type = user_type;
+            if (!incident.telephone)
+                incident["user_phone"] = user_type === "admin" ? "199" : sessionUser.sessionUser.telephone;
+            else if (!incident.user_phone && incident.telephone) {
                 incident.user_phone = incident.telephone;
                 delete incident.telephone;
             }
             console.log(incident);
             console.log("Incident submitted successfully!");
             const result = await submitIncident(incident);
-            console.log(result);
+            console.log(result)
             setResultMessage("submission_result", result);
+
         } else if (!isFormValid) {
             const firstInvalidField = form.querySelector(':invalid');
             firstInvalidField.scrollIntoView({behavior: 'smooth', block: 'center'});
@@ -49,4 +52,3 @@ $(document).ready(() => {
         }
     });
 });
-

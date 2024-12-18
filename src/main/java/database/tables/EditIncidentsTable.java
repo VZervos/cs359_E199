@@ -24,12 +24,12 @@ import java.util.logging.Logger;
  */
 public class EditIncidentsTable {
 
-    public void addIncidentFromJSON(String json) throws ClassNotFoundException {
+    public int addIncidentFromJSON(String json) throws ClassNotFoundException {
         Incident bt = jsonToIncident(json);
         if (bt.getStart_datetime() == null) {
             bt.setStart_datetime();
         }
-        createNewIncident(bt);
+        return createNewIncident(bt);
     }
 
     public Incident jsonToIncident(String json) {
@@ -160,6 +160,25 @@ public class EditIncidentsTable {
         con.close();
     }
 
+    public int getLastInsertedIncidentId() throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        int lastId = -1;
+
+        try {
+            ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID() AS last_id");
+            if (rs.next()) {
+                lastId = rs.getInt("last_id");
+            }
+            rs.close();
+        } finally {
+            stmt.close();
+            con.close();
+        }
+
+        return lastId;
+    }
+
     public void createIncidentsTable() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -183,6 +202,7 @@ public class EditIncidentsTable {
                 + "firemen INTEGER, "
                 + "PRIMARY KEY (incident_id ))";
         stmt.execute(sql);
+
         stmt.close();
         con.close();
     }
@@ -192,11 +212,11 @@ public class EditIncidentsTable {
      *
      * @throws ClassNotFoundException
      */
-    public void createNewIncident(Incident bt) throws ClassNotFoundException {
+    public int createNewIncident(Incident bt) throws ClassNotFoundException {
+        int incidentId = -1;
 
         try {
             Connection con = DB_Connection.getConnection();
-
             Statement stmt = con.createStatement();
 
             String insertQuery = "INSERT INTO "
@@ -222,16 +242,24 @@ public class EditIncidentsTable {
                     + "'" + bt.getVehicles() + "',"
                     + "'" + bt.getFiremen() + "'"
                     + ")";
-            //stmt.execute(table);
+
             System.out.println(insertQuery);
             stmt.executeUpdate(insertQuery);
             System.out.println("# The incident was successfully added in the database.");
 
-            /* Get the member id from the database and set it to the member */
+            ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID() AS incident_id");
+            if (rs.next()) {
+                incidentId = rs.getInt("incident_id");
+            }
+            rs.close();
             stmt.close();
+            con.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(EditIncidentsTable.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        return incidentId;
     }
+
 }
