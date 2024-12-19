@@ -44,7 +44,7 @@ $(document).ready(function () {
 
     });
 
-    $(document).on('click', '.status-option-button', async function (event) {
+    $(document).on('click', '.participant_status-option-button', async function (event) {
         const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
         const getIncidentNewStatusFromEvent = (event) => event.target.id.split('-')[2];
 
@@ -52,7 +52,9 @@ $(document).ready(function () {
         const incidentId = getIncidentIdFromEvent(event);
         const incidentNewStatus = getIncidentNewStatusFromEvent(event);
 
-        const result = await updateIncidentStatus(incidentId, incidentNewStatus);
+        const incidentResult = $('#' + incidentId + "-result-value").text();
+
+        const result = await updateIncidentStatus(incidentId, incidentNewStatus, incidentResult);
         if (result.success)
             await reloadIncidents();
         $('#' + incidentId + '-message').text(result.message);

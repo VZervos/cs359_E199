@@ -26,24 +26,41 @@ export async function reloadIncidents() {
             firemen,
             start_datetime,
             finalResult,
-            description
+            description,
+            status
         } = incident;
 
-        return `
-        <div>
+        let finalResultField;
+        if (status === "running")
+            finalResultField = `
             <div>
-                    Danger: 
-                    <select class="incident-value-selector" id=${incident_id + "-danger-value"}>
-                        <option value="low" ${danger === 'low' ? 'selected' : ''}>low</option>
-                        <option value="medium" ${danger === 'medium' ? 'selected' : ''}>medium</option>
-                        <option value="high" ${danger === 'high' ? 'selected' : ''}>high</option>
-                        <option value="unknown" ${danger === 'unknown' ? 'selected' : ''}>unknown</option>
-                    </select>
-                    <button class="save-info-button" id=${incident_id + "-change-danger-button"}>Save Changes</button>
-                </div>
-            <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</d>
-            <div>Lat/Lon: ${lat}, ${lon}</d>
-            <div>User: ${user_type} (${user_phone})</d>
+                Result:
+                <textarea id=${incident_id + "-result-value"}>${finalResult}</textarea>
+            </div>
+            `
+        else
+            finalResultField = `
+            <div>
+                Result:
+                <textarea readonly id=${incident_id + "-result-value"}>${finalResult}</textarea>
+            </div>
+            `
+
+        return `
+        <div xmlns="http://www.w3.org/1999/html">
+            <div>
+                Danger: 
+                <select class="incident-value-selector" id=${incident_id + "-danger-value"}>
+                    <option value="low" ${danger === 'low' ? 'selected' : ''}>low</option>
+                    <option value="medium" ${danger === 'medium' ? 'selected' : ''}>medium</option>
+                    <option value="high" ${danger === 'high' ? 'selected' : ''}>high</option>
+                    <option value="unknown" ${danger === 'unknown' ? 'selected' : ''}>unknown</option>
+                </select>
+                <button class="save-info-button" id=${incident_id + "-change-danger-button"}>Save Changes</button>
+            </div>
+            <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</div>
+            <div>Lat/Lon: ${lat}, ${lon}</div>
+            <div>User: ${user_type} (${user_phone})</div>
             <div>
                 Vehicles: 
                 <span id=${incident_id + "-vehicles-value"}>${vehicles}</span>
@@ -52,10 +69,8 @@ export async function reloadIncidents() {
                 Firemen: 
                 <span id=${incident_id + "-firemen-value"}>${firemen}</span>
             </div>
-            <div>Started: ${start_datetime}</d>
-            <div>
-                Result:
-                <textarea class="incident"${finalResult}</d>
+            <div>Started: ${start_datetime}</div>
+            ${finalResultField}
             <div>
                 Description:
                 <button class="save-info-button" id=${incident_id + "-change-description-button"}>Save Changes</button>

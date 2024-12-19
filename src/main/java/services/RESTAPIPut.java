@@ -21,6 +21,7 @@ import static services.StandardResponse.ErrorResponse;
 import static services.StandardResponse.MessageResponse;
 import static spark.Spark.put;
 import static utility.Resources.*;
+import static utility.Utility.getBodyString;
 import static utility.Utility.isInTable;
 
 public class RESTAPIPut extends API {
@@ -29,7 +30,12 @@ public class RESTAPIPut extends API {
             initResponse(response);
             String incidentIdParam = getRequestParam(request, "incident_id");
             String incidentStatusParam = getRequestParam(request, "status");
+            //JSONObject body = getBody(request);
+            String requestBody = request.body(); // Get the raw body
+            JSONObject body = new JSONObject(requestBody); // Parse into a JSONObject
 
+            // Extract the "result" field from the JSON body
+            String incidentResultParam = body.getString("result");
             EditIncidentsTable eit = new EditIncidentsTable();
 
             if (Arrays.stream(INCIDENT_STATUSES).noneMatch(status -> status.equals(incidentStatusParam)))
@@ -48,7 +54,12 @@ public class RESTAPIPut extends API {
             eit.updateIncident(incidentIdParam, Map.of("status", incidentStatusParam));
             if (incidentStatusParam.equals(INCIDENT_STATUS_FINISHED)) {
                 incident.setEnd_datetime();
-                eit.updateIncident(incidentIdParam, Map.of("end_datetime", incident.getEnd_datetime()));
+                eit.updateIncident(incidentIdParam,
+                        Map.of(
+                                "end_datetime", incident.getEnd_datetime(),
+                                "finalResult", incidentResultParam
+                        )
+                );
             }
 
             return MessageResponse("Incident status successfully updated to " + incidentStatusParam + ".");

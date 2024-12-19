@@ -1,6 +1,6 @@
 import {getCallResult, getServiceURL} from "./ajax.js";
 
-export function updateIncidentStatus(incidentId, newStatus) {
+export function updateIncidentStatus(incidentId, newStatus, result) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -8,9 +8,12 @@ export function updateIncidentStatus(incidentId, newStatus) {
             resolve({success, message});
         };
 
+        console.log(result);
         xhr.open('PUT', getServiceURL('incidentStatus/' + incidentId + '/' + newStatus));
         xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.send();
+        xhr.send(JSON.stringify({
+            "result": result
+        }));
     });
 }
 

@@ -30,8 +30,10 @@ $(document).ready(function () {
         console.log(event);
         const incidentId = getIncidentIdFromEvent(event);
         const incidentNewStatus = getIncidentNewStatusFromEvent(event);
+        const incidentResult = $('#' + incidentId + "-result-value").val();
+        console.log(incidentResult)
 
-        const result = await updateIncidentStatus(incidentId, incidentNewStatus);
+        const result = await updateIncidentStatus(incidentId, incidentNewStatus, incidentResult);
         if (result.success)
             await reloadIncidents();
         $('#' + incidentId + '-message').text(result.message);
