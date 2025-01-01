@@ -1,9 +1,10 @@
 package services;
 
 import database.tables.EditIncidentsTable;
+import database.tables.EditMessagesTable;
 import mainClasses.Incident;
+import mainClasses.Message;
 import spark.Request;
-import spark.Response;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -60,6 +61,40 @@ public class RESTAPIPost extends API {
             if (incident.getUser_type().equals(USER_TYPE_ADMIN))
                 forwardIncidentStatusUpdate(request, newIncidentId, "running");
             return MessageResponse("Incident successfully added.");
+        });
+
+        post(API_PATH + "/message", (request, response) -> {
+            initResponse(response);
+            Validator validator = new Validator();
+
+            EditMessagesTable emt = new EditMessagesTable();
+            EditIncidentsTable eit = new EditIncidentsTable();
+
+            Message message = emt.jsonToMessage(request.body());
+            String sender = message.getSender();
+            String recipient = message.getRecipient();
+            if (validator.hasNullItems(new String[]{
+                    message.getMessage(),
+                    message.getSender(),
+                    message.getRecipient()})
+            ) {
+                return ErrorResponse(response, 406, "Error: Not all mandatory fields contain information.");
+            }
+
+            if (Validator.isUsernameUnique(sender))
+                return ErrorResponse(response, 404, "Error: Sender not found.");
+
+            if (Validator.isUsernameUnique(recipient))
+                return ErrorResponse(response, 404, "Error: Recipient not found.");
+
+            Incident incident = eit.getIncidentIfExist(String.valueOf(message.getIncident_id()));
+            if (incident == null)
+                return ErrorResponse(response, 404, "Error: Incident not found.");
+
+            message.setDate_time();
+
+            emt.addMessageFromJSON(emt.messageToJSON(message));
+            return MessageResponse("Message successfully added.");
         });
 
 //        post(API_PATH + "/participantAddition", (request, response) -> {

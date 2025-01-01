@@ -1,11 +1,8 @@
 package services;
 
-import database.tables.EditIncidentsTable;
-import database.tables.EditParticipantsTable;
-import database.tables.EditVolunteersTable;
-import mainClasses.Incident;
-import mainClasses.Participant;
-import mainClasses.Volunteer;
+import database.tables.*;
+import exceptions.UsernameAlreadyRegisteredException;
+import mainClasses.*;
 import utility.Utility;
 
 import java.util.List;
@@ -96,6 +93,47 @@ public class RESTAPIGet extends API {
             volunteersJson.append("]");
 
             return DataResponseAsJson(volunteersJson.toString());
+        });
+
+        get(API_PATH + "/messages/:incident_id", (request, response) -> {
+            initResponse(response);
+            String incidentIdParam = getRequestParam(request, "incident_id");
+            String senderParam = getQueryParamElse(request, "sender", "admin");
+            String recipientParam = getQueryParamElse(request, "recipient", "public");
+
+            EditMessagesTable emt = new EditMessagesTable();
+            EditIncidentsTable eit = new EditIncidentsTable();
+
+            try {
+                if (Utility.isInTable(senderParam, PREDEFINED_USERNAMES))
+                    throw new UsernameAlreadyRegisteredException(senderParam);
+                User.checkCredentialsUniqueness(senderParam, null, null);
+                Volunteer.checkCredentialsUniqueness(senderParam, null, null);
+                return ErrorResponse(response, 404, "Error: Sender not found.");
+            } catch (UsernameAlreadyRegisteredException _) {}
+
+            try {
+                if (Utility.isInTable(recipientParam, PREDEFINED_USERNAMES))
+                    throw new UsernameAlreadyRegisteredException(recipientParam);
+                User.checkCredentialsUniqueness(recipientParam, null, null);
+                Volunteer.checkCredentialsUniqueness(recipientParam, null, null);
+                return ErrorResponse(response, 404, "Error: Recipient not found.");
+            } catch (UsernameAlreadyRegisteredException _) {}
+
+            Incident incident = eit.getIncidentIfExist(incidentIdParam);
+            if (incident == null)
+                return ErrorResponse(response, 404, "Error: Incident not found.");
+
+            List<Message> messagesList = emt.databaseToMessages(Integer.parseInt(incidentIdParam), senderParam, recipientParam);
+            StringBuilder messagestJson = new StringBuilder("[");
+            for (Message message : messagesList) {
+                messagestJson.append(emt.messageToJSON(message)).append(',');
+            }
+            if (messagestJson.length() > 2)
+                messagestJson.deleteCharAt(messagestJson.length() - 1);
+            messagestJson.append("]");
+
+            return DataResponseAsJson(messagestJson.toString());
         });
     }
 }

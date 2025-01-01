@@ -12,10 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mainClasses.User;
 import mainClasses.Volunteer;
+import utility.Utility;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
+
+import static utility.Resources.PREDEFINED_USERNAMES;
 
 
 /**
@@ -56,6 +59,8 @@ public class IsUsernameAvailable extends HttpServlet {
             writer = response.getWriter();
 
             String username = request.getParameter("username");
+            if (Utility.isInTable(username, PREDEFINED_USERNAMES))
+                throw new UsernameAlreadyRegisteredException(username);
             User.checkCredentialsUniqueness(username, null, null);
             Volunteer.checkCredentialsUniqueness(username, null, null);
 

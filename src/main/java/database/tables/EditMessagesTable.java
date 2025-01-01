@@ -41,13 +41,19 @@ public class EditMessagesTable {
         return json;
     }
 
-    public ArrayList<Message> databaseToMessage(int incident_id) throws SQLException, ClassNotFoundException {
+    public ArrayList<Message> databaseToMessages(int incident_id) throws SQLException, ClassNotFoundException {
+        return databaseToMessages(incident_id, null, null);
+    }
+
+    public ArrayList<Message> databaseToMessages(int incident_id, String sender, String recipient) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Message> messages = new ArrayList<Message>();
         ResultSet rs;
+        String senderQuery = sender != null ? " AND sender='" + sender + "' " : "";
+        String recipientQuery = recipient != null ? " AND recipient='" + recipient + "'" : "";
         try {
-            rs = stmt.executeQuery("SELECT * FROM messages WHERE incident_id= '" + incident_id + "'");
+            rs = stmt.executeQuery("SELECT * FROM messages WHERE incident_id= '" + incident_id + "'" + senderQuery + recipientQuery);
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();

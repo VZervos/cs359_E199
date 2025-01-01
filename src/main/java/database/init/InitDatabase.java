@@ -134,7 +134,7 @@ public class InitDatabase {
         EditMessagesTable editmessages = new EditMessagesTable();
         ArrayList<Message> messagesOfIncident = new ArrayList<Message>();
         int incident_id = 1;
-        messagesOfIncident = editmessages.databaseToMessage(incident_id);
+        messagesOfIncident = editmessages.databaseToMessages(incident_id);
         Gson gson7 = new Gson();
         JsonArray messagesOfIncidentJSON = gson7.toJsonTree(messagesOfIncident).getAsJsonArray();
         System.out.println("All messages of Incident with ID " + incident_id + "\n" + messagesOfIncidentJSON + "\n");
