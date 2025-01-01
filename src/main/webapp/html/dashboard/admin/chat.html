@@ -73,12 +73,55 @@
 
     <section id="manage-incidents">
         <div>
-            <h2>Manage incidents</h2>
-            <p class="note">Load, list and manage incidents' information.</p>
-            <button id="load-incidents-button">Load incidents</button>
+            <h2>Chat</h2>
+            <p class="note">Read and send messages.</p>
         </div>
 
-        <div class="container" id="incident-list"></div>
+        <div class="container" id="incident-selector">
+            <div class="section-content">
+                <div class="section-item">
+                <span>
+                    <h4>Select incident</h4>
+                    <select autocomplete="incident"
+                            class="form-select"
+                            id="incident"
+                            name="incident"
+                            required
+                    >
+                            <option disabled value="">Select an incident</option>
+                    </select>
+                </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" id="messages">
+            <div class="section-content">
+                <div class="section-item">
+                    <span>
+                        <h4>Select chat</h4>
+                        <select autocomplete="type"
+                                class="form-select"
+                                id="type"
+                                name="type"
+                                required
+                        >
+                                <option disabled value="">Select an option</option>
+                        </select>
+                    </span>
+                    <h4>Volunteers</h4>
+                    <textarea class="giant-text-box"
+                              id="chat"
+                              name="chat"
+                              readonly></textarea>
+                    <h4>Send a message</h4>
+                    <textarea class="big-text-box"
+                              id="message"
+                              name="message"></textarea>
+                    <button id="send-message-button">Send</button>
+                </div>
+            </div>
+        </div>
     </section>
 </main>
 
