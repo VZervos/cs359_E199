@@ -3,9 +3,14 @@ package services;
 import database.tables.*;
 import exceptions.UsernameAlreadyRegisteredException;
 import mainClasses.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import utility.Utility;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static services.StandardResponse.DataResponseAsJson;
 import static services.StandardResponse.ErrorResponse;
@@ -134,6 +139,40 @@ public class RESTAPIGet extends API {
             messagestJson.append("]");
 
             return DataResponseAsJson(messagestJson.toString());
+        });
+
+        get(API_PATH + "/chatTypes", (request, response) -> {
+            initResponse(response);
+            String usernameParam = getQueryParamElse(request, "username", "admin");
+
+            EditUsersTable eut = new EditUsersTable();
+            EditVolunteersTable evt = new EditVolunteersTable();
+
+            try {
+                if (!Utility.isInTable(usernameParam, new String[] {"public", "volunteers", "admin"}))
+                    throw new UsernameAlreadyRegisteredException(usernameParam);
+                User.checkCredentialsUniqueness(usernameParam, null, null);
+                Volunteer.checkCredentialsUniqueness(usernameParam, null, null);
+                return ErrorResponse(response, 404, "Error: Username not found.");
+            } catch (UsernameAlreadyRegisteredException _) {}
+
+            List<String> usernames = null;
+            switch (usernameParam) {
+                case "admin" -> {
+                    usernames = new ArrayList<>(
+                            Stream.concat(
+                                    eut.getUsers().stream().map(User::getUsername),
+                                    evt.getVolunteers().stream().map(Volunteer::getUsername)
+                            ).sorted(Comparator.reverseOrder()).toList()
+                    );
+                    usernames.add("public");
+                    usernames.add("volunteers");
+                }
+            }
+
+            JSONArray usernamesJson = new JSONArray();
+            usernames.forEach(usernamesJson::put);
+            return DataResponseAsJson(usernamesJson.toString());
         });
     }
 }

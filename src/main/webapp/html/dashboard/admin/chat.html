@@ -71,54 +71,45 @@
         </div>
     </section>
 
-    <section id="manage-incidents">
+    <section id="chat">
         <div>
             <h2>Chat</h2>
             <p class="note">Read and send messages.</p>
         </div>
 
-        <div class="container" id="incident-selector">
+        <div class="container">
             <div class="section-content">
                 <div class="section-item">
-                <span>
-                    <h4>Select incident</h4>
-                    <select autocomplete="incident"
-                            class="form-select"
-                            id="incident"
-                            name="incident"
-                            required
-                    >
-                            <option disabled value="">Select an incident</option>
-                    </select>
-                </span>
+                <span id="incident-selector"></span>
                 </div>
+                <button id="load-chat-button">Load chat</button>
             </div>
         </div>
 
-        <div class="container" id="messages">
+        <div class="container">
             <div class="section-content">
-                <div class="section-item">
-                    <span>
-                        <h4>Select chat</h4>
-                        <select autocomplete="type"
-                                class="form-select"
-                                id="type"
-                                name="type"
-                                required
-                        >
-                                <option disabled value="">Select an option</option>
-                        </select>
-                    </span>
-                    <h4>Volunteers</h4>
-                    <textarea class="giant-text-box"
-                              id="chat"
-                              name="chat"
-                              readonly></textarea>
-                    <h4>Send a message</h4>
-                    <textarea class="big-text-box"
-                              id="message"
-                              name="message"></textarea>
-                    <button id="send-message-button">Send</button>
+                <div class="section-item" id="messages">
+<!--                    <span id="chat-selector">-->
+<!--                        <h4>Select chat</h4>-->
+<!--                        <select autocomplete="type"-->
+<!--                                class="form-select"-->
+<!--                                id="type"-->
+<!--                                name="type"-->
+<!--                                required-->
+<!--                        >-->
+<!--                                <option disabled value="">Select an option</option>-->
+<!--                        </select>-->
+<!--                    </span>-->
+<!--                    <h4>Volunteers Chat</h4>-->
+<!--                    <textarea class="giant-text-box"-->
+<!--                              id="chat_box"-->
+<!--                              name="chat_box"-->
+<!--                              readonly></textarea>-->
+<!--                    <h4>Send a message</h4>-->
+<!--                    <textarea class="big-text-box"-->
+<!--                              id="message_box"-->
+<!--                              name="message_box"></textarea>-->
+<!--                    <button id="send-message-button">Send</button>-->
                 </div>
             </div>
         </div>
@@ -135,21 +126,9 @@
     </div>
 </footer>
 
-<script src="../../../js/utility_actions/increaseDecreaseValue.js" type="module"></script>
-<script src="../../../js/actions/admin/loadAdminIncidents.js" type="module"></script>
-<script src="../../../js/actions/admin/saveAdminOptions.js" type="module"></script>
-<script src="../../../js/actions/admin/manageIncidentVolunteers.js" type="module"></script>
-<script src="../../../js/actions/admin/participantAdminOptions.js" type="module"></script>
+<script src="../../../js/actions/admin/loadAdminChat.js" type="module"></script>
 
 <script src="../../../js/session/loggedOut.js" type="module"></script>
-
-<script src="../../../js/actions/viewPassword.js"></script>
-<script src="../../../js/actions/toggleEditMode.js"></script>
-<script src="../../../js/actions/showUserInformation.js" type="module"></script>
-
-<script src="../../../js/maps/map.js" type="module"></script>
-<script src="../../../js/actions/updateUserInfoField.js" type="module"></script>
-<script src="../../../js/evaluation/evaluatePassword.js" type="module"></script>
 
 </body>
 </html>
