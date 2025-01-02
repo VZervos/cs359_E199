@@ -78,14 +78,48 @@
         </div>
     </section>
 
-    <section id="list-incidents">
+    <section id="chat">
         <div>
-            <h2>Incidents</h2>
-            <p class="note">View and take part in incidents.</p>
-            <button id="load-incidents-button">Load incidents</button>
+            <h2>Chat</h2>
+            <p class="note">Read and send messages.</p>
         </div>
 
-        <div class="container" id="incident-list"></div>
+        <div class="container">
+            <div class="section-content">
+                <div class="section-item">
+                <span id="incident-selector"></span>
+                </div>
+                <button id="load-chat-button">Load chat</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="section-content">
+                <div class="section-item" id="messages">
+<!--                    <span id="chat-selector">-->
+<!--                        <h4>Select chat</h4>-->
+<!--                        <select autocomplete="type"-->
+<!--                                class="form-select"-->
+<!--                                id="type"-->
+<!--                                name="type"-->
+<!--                                required-->
+<!--                        >-->
+<!--                                <option disabled value="">Select an option</option>-->
+<!--                        </select>-->
+<!--                    </span>-->
+<!--                    <h4>Volunteers Chat</h4>-->
+<!--                    <textarea class="giant-text-box"-->
+<!--                              id="chat_box"-->
+<!--                              name="chat_box"-->
+<!--                              readonly></textarea>-->
+<!--                    <h4>Send a message</h4>-->
+<!--                    <textarea class="big-text-box"-->
+<!--                              id="message_box"-->
+<!--                              name="message_box"></textarea>-->
+<!--                    <button id="send-message-button">Send</button>-->
+                </div>
+            </div>
+        </div>
     </section>
 </main>
 
@@ -99,9 +133,9 @@
     </div>
 </footer>
 
-<script src="../../../js/session/loggedOut.js" type="module"></script>
+<script src="../../../js/actions/user/loadUserChat.js" type="module"></script>
 
-<script src="../../../js/actions/user/loadUserIncidents.js" type="module"></script>
+<script src="../../../js/session/loggedOut.js" type="module"></script>
 
 </body>
 </html>

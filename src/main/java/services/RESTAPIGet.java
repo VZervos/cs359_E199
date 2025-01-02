@@ -108,7 +108,6 @@ public class RESTAPIGet extends API {
 
             EditMessagesTable emt = new EditMessagesTable();
             EditIncidentsTable eit = new EditIncidentsTable();
-
 //            try {
 //                if (Utility.isInTable(senderParam, PREDEFINED_USERNAMES))
 //                    throw new UsernameAlreadyRegisteredException(senderParam);
@@ -144,9 +143,11 @@ public class RESTAPIGet extends API {
         get(API_PATH + "/chatTypes", (request, response) -> {
             initResponse(response);
             String usernameParam = getQueryParamElse(request, "username", "admin");
+            String incidentIdParam = getQueryParamElse(request, "incidentId", "all");
 
             EditUsersTable eut = new EditUsersTable();
             EditVolunteersTable evt = new EditVolunteersTable();
+            EditParticipantsTable ept = new EditParticipantsTable();
 
             try {
                 if (!Utility.isInTable(usernameParam, new String[] {"public", "volunteers", "admin"}))
@@ -156,22 +157,49 @@ public class RESTAPIGet extends API {
                 return ErrorResponse(response, 404, "Error: Username not found.");
             } catch (UsernameAlreadyRegisteredException _) {}
 
-            List<String> usernames = null;
-            switch (usernameParam) {
-                case "admin" -> {
-                    usernames = new ArrayList<>(
+            String username = usernameParam;
+            String usertype = usernameParam;
+            List<User> usersList;
+            List<Volunteer> volunteersList;
+            if (!usertype.equals("admin")) {
+                usersList = eut.getUsers();
+                volunteersList = evt.getVolunteers();
+                User user = usersList.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+                Volunteer volunteer = volunteersList.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+                if (user != null) usertype = USER_TYPE_USER;
+                else if (volunteer != null) usertype = USER_TYPE_VOLUNTEER;
+                else return ErrorResponse(response, 404, "Error: Usertype not found.");
+            }
+
+            // TODO Paragraph 3.7 with messages. Convert to json objects with whether it can readonly or write too, etc.
+            List<String> recipients = null;
+            switch (usertype) {
+                case USER_TYPE_ADMIN -> {
+                    recipients = new ArrayList<>(
                             Stream.concat(
                                     eut.getUsers().stream().map(User::getUsername),
                                     evt.getVolunteers().stream().map(Volunteer::getUsername)
                             ).sorted(Comparator.reverseOrder()).toList()
                     );
-                    usernames.add("public");
-                    usernames.add("volunteers");
+                    recipients.add("public");
+                    recipients.add("volunteers");
+                }
+//                case USER_TYPE_VOLUNTEER -> {
+//                    List<Participant> participants = ept.getParticipants(inci)
+//                    recipients = new ArrayList<>()
+//                    recipients.add("public");
+//                    recipients.add("volunteers");
+//                    recipients.add("admin");
+//                }
+//                case USER_TYPE_USER ->
+//                    recipients = List.of(new String[]{"admin", "public"});
+                default -> {
+                    assert false;
                 }
             }
 
             JSONArray usernamesJson = new JSONArray();
-            usernames.forEach(usernamesJson::put);
+            recipients.forEach(usernamesJson::put);
             return DataResponseAsJson(usernamesJson.toString());
         });
     }
