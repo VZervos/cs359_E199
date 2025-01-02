@@ -1,9 +1,21 @@
 import {clearHtml} from "../../utility/utility.js";
 import {getIncidentsList} from "../../ajax/ajaxLists.js";
-import {getChatTypes} from "../../ajax/ajaxChat.js";
+import {getChatTypes, getMessages} from "../../ajax/ajaxChat.js";
 
 let loadChatButton;
 let chatSection;
+
+let incidentId;
+let chattype;
+
+async function loadChatHistory(incidentId, chattype) {
+    console.log(incidentId, chattype);
+    const chatbox = $('#chat_box')
+    const messages = await getMessages(incidentId, chattype);
+    console.log(messages);
+    clearHtml(chatbox)
+    messages.data.forEach(message => chatbox.append(message.sender + ": " + message.message + '\n'))
+}
 
 export async function loadChatSection(incidentId, username = "admin") {
     async function loadChatSelector() {
@@ -33,7 +45,7 @@ export async function loadChatSection(incidentId, username = "admin") {
                     ${await loadChatSelector()}
             </select>
         </span>
-        <h4>Volunteers Chat</h4>
+        <h4 id="chat_title">${"Incident #" + incidentId + ": " + chattype + " chat"}</h4>
         <textarea class="giant-text-box"
                   id="chat_box"
                   name="chat_box"
@@ -44,6 +56,10 @@ export async function loadChatSection(incidentId, username = "admin") {
                   name="message_box"></textarea>
         <button id="send-message-button">Send</button>
     `);
+}
+
+async function sendMessage() {
+
 }
 
 async function loadIncidentSelector() {
@@ -87,8 +103,21 @@ $(document).ready(async function () {
     chatSection = $('#messages');
 
     loadChatButton.on('click', async function () {
-        const incident = $('#incident').val()
+        chattype = "public";
+        const incident = $('#incident').val();
+        incidentId = incident;
         await loadChatSection(incident);
+        await loadChatHistory(incidentId, chattype)
+    });
+
+    $(document).on('change', '#type', async function (event) {
+        chattype = $('#type').val();
+        $('#chat_title').text("Incident #" + incidentId + ": " + chattype + " chat");
+        await loadChatHistory(incidentId, chattype);
+    });
+
+    $(document).on('click', '#send-message-button', async function (event) {
+        await sendMessage();
     });
 
     await loadIncidentSelector()

@@ -103,25 +103,25 @@ public class RESTAPIGet extends API {
         get(API_PATH + "/messages/:incident_id", (request, response) -> {
             initResponse(response);
             String incidentIdParam = getRequestParam(request, "incident_id");
-            String senderParam = getQueryParamElse(request, "sender", "admin");
-            String recipientParam = getQueryParamElse(request, "recipient", "public");
+//            String senderParam = getQueryParamElse(request, "sender", "admin");
+            String chatType = getQueryParamElse(request, "chattype", "public");
 
             EditMessagesTable emt = new EditMessagesTable();
             EditIncidentsTable eit = new EditIncidentsTable();
 
-            try {
-                if (Utility.isInTable(senderParam, PREDEFINED_USERNAMES))
-                    throw new UsernameAlreadyRegisteredException(senderParam);
-                User.checkCredentialsUniqueness(senderParam, null, null);
-                Volunteer.checkCredentialsUniqueness(senderParam, null, null);
-                return ErrorResponse(response, 404, "Error: Sender not found.");
-            } catch (UsernameAlreadyRegisteredException _) {}
+//            try {
+//                if (Utility.isInTable(senderParam, PREDEFINED_USERNAMES))
+//                    throw new UsernameAlreadyRegisteredException(senderParam);
+//                User.checkCredentialsUniqueness(senderParam, null, null);
+//                Volunteer.checkCredentialsUniqueness(senderParam, null, null);
+//                return ErrorResponse(response, 404, "Error: Sender not found.");
+//            } catch (UsernameAlreadyRegisteredException _) {}
 
             try {
-                if (Utility.isInTable(recipientParam, PREDEFINED_USERNAMES))
-                    throw new UsernameAlreadyRegisteredException(recipientParam);
-                User.checkCredentialsUniqueness(recipientParam, null, null);
-                Volunteer.checkCredentialsUniqueness(recipientParam, null, null);
+                if (Utility.isInTable(chatType, PREDEFINED_USERNAMES))
+                    throw new UsernameAlreadyRegisteredException(chatType);
+                User.checkCredentialsUniqueness(chatType, null, null);
+                Volunteer.checkCredentialsUniqueness(chatType, null, null);
                 return ErrorResponse(response, 404, "Error: Recipient not found.");
             } catch (UsernameAlreadyRegisteredException _) {}
 
@@ -129,16 +129,16 @@ public class RESTAPIGet extends API {
             if (incident == null)
                 return ErrorResponse(response, 404, "Error: Incident not found.");
 
-            List<Message> messagesList = emt.databaseToMessages(Integer.parseInt(incidentIdParam), senderParam, recipientParam);
-            StringBuilder messagestJson = new StringBuilder("[");
+            List<Message> messagesList = emt.databaseToMessages(Integer.parseInt(incidentIdParam), null, chatType);
+            StringBuilder messagesJson = new StringBuilder("[");
             for (Message message : messagesList) {
-                messagestJson.append(emt.messageToJSON(message)).append(',');
+                messagesJson.append(emt.messageToJSON(message)).append(',');
             }
-            if (messagestJson.length() > 2)
-                messagestJson.deleteCharAt(messagestJson.length() - 1);
-            messagestJson.append("]");
+            if (messagesJson.length() > 2)
+                messagesJson.deleteCharAt(messagesJson.length() - 1);
+            messagesJson.append("]");
 
-            return DataResponseAsJson(messagestJson.toString());
+            return DataResponseAsJson(messagesJson.toString());
         });
 
         get(API_PATH + "/chatTypes", (request, response) -> {
