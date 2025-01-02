@@ -1,20 +1,23 @@
 import {clearHtml} from "../../utility/utility.js";
 import {getIncidentsList} from "../../ajax/ajaxLists.js";
-import {getChatTypes, getMessages} from "../../ajax/ajaxChat.js";
+import {getChatTypes, getMessages, sendMessage} from "../../ajax/ajaxChat.js";
+import {ErrorMessage} from "../../utility/ErrorMessage.js";
 
 let loadChatButton;
 let chatSection;
+let errorMessage;
+let messageBox;
+let chatBox;
 
 let incidentId;
 let chattype;
 
 async function loadChatHistory(incidentId, chattype) {
     console.log(incidentId, chattype);
-    const chatbox = $('#chat_box')
     const messages = await getMessages(incidentId, chattype);
     console.log(messages);
-    clearHtml(chatbox)
-    messages.data.forEach(message => chatbox.append(message.sender + ": " + message.message + '\n'))
+    clearHtml(chatBox)
+    messages.data.forEach(message => chatBox.append(message.sender + ": " + message.message + '\n'))
 }
 
 export async function loadChatSection(incidentId, username = "admin") {
@@ -54,12 +57,22 @@ export async function loadChatSection(incidentId, username = "admin") {
         <textarea class="big-text-box"
                   id="message_box"
                   name="message_box"></textarea>
+        <p id="message_status"></p>
         <button id="send-message-button">Send</button>
     `);
+
+    errorMessage = new ErrorMessage("message_status");
 }
 
-async function sendMessage() {
+async function submitMessage(incidentId, message, sender, recipient) {
+    const result = await sendMessage(incidentId, message, sender, recipient);
+    if (!result.success) {
+        errorMessage.showError(result.message);
+    }
 
+    errorMessage.hideError();
+    await loadChatHistory(incidentId, recipient);
+    messageBox.val("")
 }
 
 async function loadIncidentSelector() {
@@ -107,6 +120,8 @@ $(document).ready(async function () {
         const incident = $('#incident').val();
         incidentId = incident;
         await loadChatSection(incident);
+        chatBox = $('#chat_box');
+        messageBox = $('#message_box')
         await loadChatHistory(incidentId, chattype)
     });
 
@@ -117,7 +132,9 @@ $(document).ready(async function () {
     });
 
     $(document).on('click', '#send-message-button', async function (event) {
-        await sendMessage();
+        const message = messageBox.val();
+        const sender = "admin";
+        await submitMessage(incidentId, message, sender, chattype);
     });
 
     await loadIncidentSelector()

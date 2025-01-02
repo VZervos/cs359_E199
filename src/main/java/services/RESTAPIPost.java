@@ -41,7 +41,7 @@ public class RESTAPIPost extends API {
             String user_phone = incident.getUser_phone();
             if (user_phone != null && (
                     (user_phone.equals("199") && !user_type.equals(USER_TYPE_ADMIN)) ||
-                    ((user_phone.length() < MIN_PHONE_LENGTH || user_phone.length() > MAX_PHONE_LENGTH) && !user_type.equals(USER_TYPE_ADMIN))
+                            ((user_phone.length() < MIN_PHONE_LENGTH || user_phone.length() > MAX_PHONE_LENGTH) && !user_type.equals(USER_TYPE_ADMIN))
             ))
                 return ErrorResponse(response, 406, "Error: Invalid user phone provided.");
 
@@ -77,9 +77,11 @@ public class RESTAPIPost extends API {
                     message.getMessage(),
                     message.getSender(),
                     message.getRecipient()})
-            ) {
+            )
                 return ErrorResponse(response, 406, "Error: Not all mandatory fields contain information.");
-            }
+
+            if (message.getMessage().isEmpty())
+                return ErrorResponse(response, 406, "Error: Invalid message provided.");
 
             if (Validator.isUsernameUnique(sender))
                 return ErrorResponse(response, 404, "Error: Sender not found.");
