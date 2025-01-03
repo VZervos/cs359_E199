@@ -3,13 +3,17 @@ package services;
 import database.tables.*;
 import exceptions.UsernameAlreadyRegisteredException;
 import mainClasses.*;
+import org.eclipse.jetty.util.ajax.JSON;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utility.Utility;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static services.StandardResponse.DataResponseAsJson;
@@ -148,6 +152,7 @@ public class RESTAPIGet extends API {
             EditUsersTable eut = new EditUsersTable();
             EditVolunteersTable evt = new EditVolunteersTable();
             EditParticipantsTable ept = new EditParticipantsTable();
+            EditIncidentsTable eit = new EditIncidentsTable();
 
             try {
                 if (!Utility.isInTable(usernameParam, new String[] {"public", "volunteers", "admin"}))
@@ -173,34 +178,99 @@ public class RESTAPIGet extends API {
 
             // TODO Paragraph 3.7 with messages. Convert to json objects with whether it can readonly or write too, etc.
             List<String> recipients = null;
+            JSONArray recipientsJson = new JSONArray();
             switch (usertype) {
-                case USER_TYPE_ADMIN -> {
-                    recipients = new ArrayList<>(
-                            Stream.concat(
-                                    eut.getUsers().stream().map(User::getUsername),
-                                    evt.getVolunteers().stream().map(Volunteer::getUsername)
-                            ).sorted(Comparator.reverseOrder()).toList()
-                    );
-                    recipients.add("public");
-                    recipients.add("volunteers");
+                case USER_TYPE_ADMIN -> recipientsJson = generateAdminRecipients();
+                case USER_TYPE_VOLUNTEER -> {
+                    Incident incident = eit.getIncidentIfExist(incidentIdParam);
+                    if (incident == null)
+                        return ErrorResponse(response, 404, "Error: Incident not found.");
+                    recipientsJson = generateVolunteerRecipients(incident, username);
                 }
-//                case USER_TYPE_VOLUNTEER -> {
-//                    List<Participant> participants = ept.getParticipants(inci)
-//                    recipients = new ArrayList<>()
-//                    recipients.add("public");
-//                    recipients.add("volunteers");
-//                    recipients.add("admin");
-//                }
-//                case USER_TYPE_USER ->
-//                    recipients = List.of(new String[]{"admin", "public"});
+                case USER_TYPE_USER -> {
+                    Incident incident = eit.getIncidentIfExist(incidentIdParam);
+                    if (incident == null)
+                        return ErrorResponse(response, 404, "Error: Incident not found.");
+                    recipientsJson = generateUserRecipients(incident);
+                }
                 default -> {
                     assert false;
                 }
             }
 
-            JSONArray usernamesJson = new JSONArray();
-            recipients.forEach(usernamesJson::put);
-            return DataResponseAsJson(usernamesJson.toString());
+            return DataResponseAsJson(recipientsJson.toString());
         });
+    }
+
+    private static JSONArray generateVolunteerRecipients(Incident incident, String username) throws SQLException, ClassNotFoundException {
+        JSONArray recipientsJson = new JSONArray();
+        EditMessagesTable emt = new EditMessagesTable();
+        EditParticipantsTable ept = new EditParticipantsTable();
+        List<Participant> participantsList = ept.getParticipants(String.valueOf(incident.getIncident_id()));
+        Arrays.stream(RECIPIENT_LISTS).forEach(rec -> {
+                    JSONObject recipient = new JSONObject();
+                    recipient.put("username", rec);
+                    recipient.put("canSend", incident.getStatus().equals(INCIDENT_STATUS_RUNNING));
+                    recipientsJson.put(recipient);
+                });
+        Participant participant = participantsList.stream()
+                .filter(p ->
+                        p.getIncident_id() == incident.getIncident_id()
+                        && p.getVolunteer_username().equals(username)
+                )
+                .findFirst().orElse(null);
+        if (participant != null) {
+            emt.databaseToMessages(incident.getIncident_id())
+                    .stream()
+                    .map(Message::getRecipient)
+                    .filter(rec -> IntStream.range(0, recipientsJson.length())
+                            .mapToObj(recipientsJson::getJSONObject)
+                            .noneMatch(recEntry -> recEntry.getString("username").equals(rec)))
+                    .forEach(rec -> {
+                        JSONObject recipient = new JSONObject();
+                        recipient.put("username", rec);
+                        recipient.put("canSend", true);
+                        recipientsJson.put(recipient);
+                    });
+        }
+        return recipientsJson;
+    }
+
+    private static JSONArray generateUserRecipients(Incident incident) throws SQLException, ClassNotFoundException {
+        JSONArray recipientsJson = new JSONArray();
+        List.of(new String[]{"admin", "public"})
+                .forEach(rec -> {
+                    JSONObject recipient = new JSONObject();
+                    recipient.put("username", rec);
+                    recipient.put("canSend", incident.getStatus().equals(INCIDENT_STATUS_RUNNING));
+                    recipientsJson.put(recipient);
+                });
+        return recipientsJson;
+    }
+
+    private static JSONArray generateAdminRecipients() throws SQLException, ClassNotFoundException {
+        EditUsersTable eut = new EditUsersTable();
+        EditVolunteersTable evt = new EditVolunteersTable();
+        JSONArray recipientsJson = new JSONArray();
+        Stream.concat(
+                eut.getUsers().stream().map(User::getUsername),
+                evt.getVolunteers().stream().map(Volunteer::getUsername)
+        )
+                .sorted(Comparator.reverseOrder())
+                .forEach(recipient -> {
+                    JSONObject recipientJson = new JSONObject();
+                    recipientJson.put("username", recipient);
+                    recipientJson.put("canSend", true);
+                    recipientsJson.put(recipientJson);
+                });
+        JSONObject publicRecipient = new JSONObject();
+        publicRecipient.put("username", "public");
+        publicRecipient.put("canSend", true);
+        recipientsJson.put(publicRecipient);
+        JSONObject volunteersRecipient = new JSONObject();
+        volunteersRecipient.put("username", "volunteers");
+        volunteersRecipient.put("canSend", true);
+        recipientsJson.put(volunteersRecipient);
+        return recipientsJson;
     }
 }

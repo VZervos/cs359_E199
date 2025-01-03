@@ -7,6 +7,7 @@ public class Resources {
     public static final String USER_TYPE_VOLUNTEER = "volunteer";
     public static final String[] USER_TYPES = new String[]{USER_TYPE_USER, USER_TYPE_GUEST, USER_TYPE_VOLUNTEER, USER_TYPE_ADMIN};
     public static final String[] PREDEFINED_USERNAMES = new String[]{USER_TYPE_USER, USER_TYPE_GUEST, USER_TYPE_VOLUNTEER, USER_TYPE_ADMIN, "public", "volunteers"};
+    public static final String[] RECIPIENT_LISTS = new String[]{"admin", "volunteers", "public"};
 
     public static final String INCIDENT_TYPE_FIRE = "fire";
     public static final String INCIDENT_TYPE_ACCIDENT = "accident";
