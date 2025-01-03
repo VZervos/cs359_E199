@@ -5,30 +5,51 @@ import {ErrorMessage} from "../utility/ErrorMessage.js";
 
 let errorMessage;
 
-export async function loadChatHistory(incidentId, chattype, chatBox) {
+export async function loadChatBox(incidentId, chattype, chatBox) {
     console.log(incidentId, chattype);
     const messages = await getMessages(incidentId, chattype);
     console.log(messages);
-    clearHtml(chatBox)
-    messages.data.forEach(message => chatBox.append(message.sender + ": " + message.message + '\n'))
+    const chatContent = messages.data.map(message =>
+        `${message.sender}: ${message.message}`
+    ).join('\n');
+    chatBox.val(chatContent);
 }
 
-export async function loadChatSection(incidentId, sender = "admin", chattype = "public") {
-    async function loadChatSelector() {
-        const chatTypes = await getChatTypes(sender);
-        if (!chatTypes.data.length)
+export async function loadChatSection(incidentId, sender, recipient) {
+    async function generateChatTypesOptions(chattypes) {
+        if (!chattypes.data.length)
             return `<label class="note">No chat types found</label>`;
 
         const chatTypesOptions = [];
-        chatTypes.data.forEach(chatType => {
+        chattypes.data.forEach(chatType => {
+            const {username} = chatType;
             chatTypesOptions.push(
-                `<option ${chatType === "public" ? "selected" : ""} value="${chatType}">${chatType}</option>`
+                `<option ${username === "public" ? "selected" : ""} value="${username}">${username}</option>`
             );
         });
 
         return chatTypesOptions.join('\n');
     }
 
+    async function generateMessageBox(chattype) {
+        const {canSend} = chattype;
+        if (canSend)
+            return (`
+                <h4>Send a message</h4>
+                <textarea class="big-text-box"
+                          id="message_box"
+                          name="message_box"></textarea>
+                <p id="message_status"></p>
+                <button id="send-message-button">Send</button>
+            `)
+        return "";
+    }
+
+    console.log(incidentId);
+    const chattypes = await getChatTypes(sender, incidentId);
+    console.log(chattypes);
+    const chattype = chattypes.data.filter(ct => ct.username === recipient)?.[0];
+    console.log(chattype)
     $('#messages').html(`
         <span id="chat-selector">
             <h4>Select chat</h4>
@@ -38,20 +59,15 @@ export async function loadChatSection(incidentId, sender = "admin", chattype = "
                     name="type"
                     required
             >
-                    ${await loadChatSelector()}
+                    ${await generateChatTypesOptions(chattypes)}
             </select>
         </span>
-        <h4 id="chat_title">${"Incident #" + incidentId + ": " + chattype + " chat"}</h4>
+        <h4 id="chat_title">${"Incident #" + incidentId + ": " + recipient + " chat"}</h4>
         <textarea class="giant-text-box"
                   id="chat_box"
                   name="chat_box"
                   readOnly></textarea>
-        <h4>Send a message</h4>
-        <textarea class="big-text-box"
-                  id="message_box"
-                  name="message_box"></textarea>
-        <p id="message_status"></p>
-        <button id="send-message-button">Send</button>
+        ${await generateMessageBox(chattype)}
     `);
 
     errorMessage = new ErrorMessage("message_status");
@@ -65,7 +81,7 @@ export async function submitMessage(incidentId, message, sender, recipient, chat
     }
 
     errorMessage.hideError();
-    await loadChatHistory(incidentId, recipient, chatBox);
+    await loadChatBox(incidentId, recipient, chatBox);
     messageBox.val("")
 }
 
@@ -73,7 +89,9 @@ export async function loadIncidentSelector() {
     const incidentSelector = $('#incident-selector');
     clearHtml(incidentSelector);
 
+    console.log("loading selector");
     const incidentsList = await getIncidentsList();
+    console.log(incidentsList);
     if (!incidentsList.data.length) {
         incidentSelector.html(`
             <label class="note">No incidents found</label>

@@ -3,17 +3,14 @@ package services;
 import database.tables.*;
 import exceptions.UsernameAlreadyRegisteredException;
 import mainClasses.*;
-import org.eclipse.jetty.util.ajax.JSON;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utility.Utility;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static services.StandardResponse.DataResponseAsJson;
@@ -126,7 +123,8 @@ public class RESTAPIGet extends API {
                 User.checkCredentialsUniqueness(chatType, null, null);
                 Volunteer.checkCredentialsUniqueness(chatType, null, null);
                 return ErrorResponse(response, 404, "Error: Recipient not found.");
-            } catch (UsernameAlreadyRegisteredException _) {}
+            } catch (UsernameAlreadyRegisteredException _) {
+            }
 
             Incident incident = eit.getIncidentIfExist(incidentIdParam);
             if (incident == null)
@@ -147,7 +145,7 @@ public class RESTAPIGet extends API {
         get(API_PATH + "/chatTypes", (request, response) -> {
             initResponse(response);
             String usernameParam = getQueryParamElse(request, "username", "admin");
-            String incidentIdParam = getQueryParamElse(request, "incidentId", "all");
+            String incidentIdParam = getQueryParamElse(request, "incidentId", null);
 
             EditUsersTable eut = new EditUsersTable();
             EditVolunteersTable evt = new EditVolunteersTable();
@@ -155,12 +153,13 @@ public class RESTAPIGet extends API {
             EditIncidentsTable eit = new EditIncidentsTable();
 
             try {
-                if (!Utility.isInTable(usernameParam, new String[] {"public", "volunteers", "admin"}))
+                if (!Utility.isInTable(usernameParam, new String[]{"public", "volunteers", "admin"}))
                     throw new UsernameAlreadyRegisteredException(usernameParam);
                 User.checkCredentialsUniqueness(usernameParam, null, null);
                 Volunteer.checkCredentialsUniqueness(usernameParam, null, null);
                 return ErrorResponse(response, 404, "Error: Username not found.");
-            } catch (UsernameAlreadyRegisteredException _) {}
+            } catch (UsernameAlreadyRegisteredException _) {
+            }
 
             String username = usernameParam;
             String usertype = usernameParam;
@@ -208,27 +207,23 @@ public class RESTAPIGet extends API {
         EditParticipantsTable ept = new EditParticipantsTable();
         List<Participant> participantsList = ept.getParticipants(String.valueOf(incident.getIncident_id()));
         Arrays.stream(RECIPIENT_LISTS).forEach(rec -> {
-                    JSONObject recipient = new JSONObject();
-                    recipient.put("username", rec);
-                    recipient.put("canSend", incident.getStatus().equals(INCIDENT_STATUS_RUNNING));
-                    recipientsJson.put(recipient);
-                });
+            JSONObject recipient = new JSONObject();
+            recipient.put("username", rec);
+            recipient.put("canSend", incident.getStatus().equals(INCIDENT_STATUS_RUNNING));
+            recipientsJson.put(recipient);
+        });
         Participant participant = participantsList.stream()
                 .filter(p ->
                         p.getIncident_id() == incident.getIncident_id()
-                        && p.getVolunteer_username().equals(username)
+                                && p.getVolunteer_username().equals(username)
                 )
                 .findFirst().orElse(null);
         if (participant != null) {
-            emt.databaseToMessages(incident.getIncident_id())
-                    .stream()
-                    .map(Message::getRecipient)
-                    .filter(rec -> IntStream.range(0, recipientsJson.length())
-                            .mapToObj(recipientsJson::getJSONObject)
-                            .noneMatch(recEntry -> recEntry.getString("username").equals(rec)))
-                    .forEach(rec -> {
+            participantsList.stream()
+                    .filter(p -> p.getIncident_id() == incident.getIncident_id())
+                    .forEach(p -> {
                         JSONObject recipient = new JSONObject();
-                        recipient.put("username", rec);
+                        recipient.put("username", p.getVolunteer_username());
                         recipient.put("canSend", true);
                         recipientsJson.put(recipient);
                     });
@@ -253,9 +248,9 @@ public class RESTAPIGet extends API {
         EditVolunteersTable evt = new EditVolunteersTable();
         JSONArray recipientsJson = new JSONArray();
         Stream.concat(
-                eut.getUsers().stream().map(User::getUsername),
-                evt.getVolunteers().stream().map(Volunteer::getUsername)
-        )
+                        eut.getUsers().stream().map(User::getUsername),
+                        evt.getVolunteers().stream().map(Volunteer::getUsername)
+                )
                 .sorted(Comparator.reverseOrder())
                 .forEach(recipient -> {
                     JSONObject recipientJson = new JSONObject();

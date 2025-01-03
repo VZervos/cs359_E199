@@ -1,6 +1,6 @@
 import {getCallResult, getCallResultData, getServiceURL} from "./ajax.js";
 
-export function getChatTypes(username) {
+export function getChatTypes(username, incidentId) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -8,7 +8,7 @@ export function getChatTypes(username) {
             resolve({success, message, data});
         };
 
-        xhr.open('GET', getServiceURL('chatTypes?username=' + username));
+        xhr.open('GET', getServiceURL('chatTypes?username=' + username + '&incidentId=' + incidentId));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send();
     });
