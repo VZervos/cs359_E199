@@ -20,6 +20,7 @@
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 
     <script src="../../../js/evaluation/evaluateAddress.js" type="module"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
 <body class="bg-body-secondary">
@@ -78,14 +79,34 @@
         </div>
     </section>
 
-    <section id="manage-incidents">
+    <section id="chat">
         <div>
-            <h2>Manage incidents</h2>
-            <p class="note">Load, list and manage incidents' information.</p>
-            <button id="load-incidents-button">Load incidents</button>
+            <h2>Chat</h2>
+            <p class="note">Read and send messages.</p>
         </div>
 
-        <div class="container" id="incident-list"></div>
+        <div class="container">
+            <div class="section-content">
+                <div class="section-item">
+                <span id="incident-selector"></span>
+                </div>
+                <button id="load-chat-button">Load chat</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="section-content" id="statistics">
+                <div class="section-item">
+                    <div id="statistics-incidents_per_type" style="max-width:700px; height:400px"></div>
+                </div>
+                <div class="section-item">
+                    <div id="statistics-users_volunteers_count" style="max-width:700px; height:400px"></div>
+                </div>
+                <div class="section-item">
+                    <div id="statistics-firemen_vehicles_participated" style="max-width:700px; height:400px"></div>
+                </div>
+            </div>
+        </div>
     </section>
 </main>
 
@@ -99,21 +120,9 @@
     </div>
 </footer>
 
-<script src="../../../js/utility_actions/increaseDecreaseValue.js" type="module"></script>
-<script src="../../../js/actions/admin/loadAdminIncidents.js" type="module"></script>
-<script src="../../../js/actions/admin/saveAdminOptions.js" type="module"></script>
-<script src="../../../js/actions/admin/manageIncidentVolunteers.js" type="module"></script>
-<script src="../../../js/actions/admin/participantAdminOptions.js" type="module"></script>
+<script src="../../../js/actions/admin/loadStatistics.js" type="module"></script>
 
 <script src="../../../js/session/loggedOut.js" type="module"></script>
-
-<script src="../../../js/actions/viewPassword.js"></script>
-<script src="../../../js/actions/toggleEditMode.js"></script>
-<script src="../../../js/actions/showUserInformation.js" type="module"></script>
-
-<script src="../../../js/maps/map.js" type="module"></script>
-<script src="../../../js/actions/updateUserInfoField.js" type="module"></script>
-<script src="../../../js/evaluation/evaluatePassword.js" type="module"></script>
 
 </body>
 </html>
