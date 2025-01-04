@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static utility.Utility.SQLizeString;
+
 /**
  * @author mountant
  */
@@ -102,7 +104,7 @@ public class EditMessagesTable {
                     + " messages (incident_id,message,sender,recipient,date_time) "
                     + " VALUES ("
                     + "'" + msg.getIncident_id() + "',"
-                    + "'" + msg.getMessage() + "',"
+                    + "'" + SQLizeString(msg.getMessage()) + "',"
                     + "'" + msg.getSender() + "',"
                     + "'" + msg.getRecipient() + "',"
                     + "'" + msg.getDate_time() + "'"

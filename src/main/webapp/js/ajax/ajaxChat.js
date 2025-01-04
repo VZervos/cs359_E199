@@ -14,7 +14,7 @@ export function getChatTypes(username, incidentId) {
     });
 }
 
-export function getMessages(incidentId, chattype = "public") {
+export function getMessages(incidentId, chattype = "public", username) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -22,7 +22,7 @@ export function getMessages(incidentId, chattype = "public") {
             resolve({success, message, data});
         };
 
-        xhr.open('GET', getServiceURL('messages/' + incidentId + '?chattype=' + chattype));
+        xhr.open('GET', getServiceURL('messages/' + incidentId + '/' + chattype + '/' + username));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send();
     });

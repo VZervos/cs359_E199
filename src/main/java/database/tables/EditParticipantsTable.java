@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static utility.Utility.SQLizeString;
+
 /**
  * @author Mike
  */
@@ -108,7 +110,7 @@ public class EditParticipantsTable {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         String updateQuery = "UPDATE participants SET status='finished', success='" + success + "', comment='" +
-                comment + "' WHERE participant_id= '" + participantID + "'";
+                SQLizeString(comment) + "' WHERE participant_id= '" + participantID + "'";
         stmt.executeUpdate(updateQuery);
         stmt.close();
         con.close();

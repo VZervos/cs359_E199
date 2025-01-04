@@ -62,4 +62,11 @@ public class Utility {
         return Arrays.asList(table).contains(item);
     }
 
+    public static String SQLizeString(String str) {
+        return str
+                .replace("\\", "\\\\")
+                .replace("'", "''")
+                .replace("\"", "\\\"");
+    }
+
 }

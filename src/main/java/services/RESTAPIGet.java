@@ -101,11 +101,11 @@ public class RESTAPIGet extends API {
             return DataResponseAsJson(volunteersJson.toString());
         });
 
-        get(API_PATH + "/messages/:incident_id", (request, response) -> {
+        get(API_PATH + "/messages/:incident_id/:chattype/:username", (request, response) -> {
             initResponse(response);
             String incidentIdParam = getRequestParam(request, "incident_id");
-//            String senderParam = getQueryParamElse(request, "sender", "admin");
-            String chatType = getQueryParamElse(request, "chattype", "public");
+            String chatType = getRequestParam(request, "chattype");
+            String username = getRequestParam(request, "username");
 
             EditMessagesTable emt = new EditMessagesTable();
             EditIncidentsTable eit = new EditIncidentsTable();
@@ -130,7 +130,15 @@ public class RESTAPIGet extends API {
             if (incident == null)
                 return ErrorResponse(response, 404, "Error: Incident not found.");
 
-            List<Message> messagesList = emt.databaseToMessages(Integer.parseInt(incidentIdParam), null, chatType);
+            System.out.println(username + chatType);
+            List<Message> messagesList;
+            if (chatType.equals(CHATTYPE_PUBLIC) || chatType.equals(CHATTYPE_VOLUNTEERS)) {
+                messagesList = emt.databaseToMessages(Integer.parseInt(incidentIdParam), null, chatType);
+            } else {
+                messagesList = emt.databaseToMessages(Integer.parseInt(incidentIdParam), username, chatType);
+                messagesList.addAll(emt.databaseToMessages(Integer.parseInt(incidentIdParam), chatType, username));
+            }
+            messagesList.sort(Comparator.comparingInt(Message::getMessage_id));
             StringBuilder messagesJson = new StringBuilder("[");
             for (Message message : messagesList) {
                 messagesJson.append(emt.messageToJSON(message)).append(',');
@@ -197,6 +205,13 @@ public class RESTAPIGet extends API {
                 }
             }
 
+            for (int i = 0; i < recipientsJson.length(); i++) {
+                JSONObject obj = recipientsJson.getJSONObject(i);
+                if (obj.getString("username").equals(username)) {
+                    recipientsJson.remove(i);
+                    break;
+                }
+            }
             return DataResponseAsJson(recipientsJson.toString());
         });
     }
@@ -212,22 +227,19 @@ public class RESTAPIGet extends API {
             recipient.put("canSend", incident.getStatus().equals(INCIDENT_STATUS_RUNNING));
             recipientsJson.put(recipient);
         });
-        Participant participant = participantsList.stream()
+        participantsList.stream()
                 .filter(p ->
                         p.getIncident_id() == incident.getIncident_id()
                                 && p.getVolunteer_username().equals(username)
                 )
-                .findFirst().orElse(null);
-        if (participant != null) {
-            participantsList.stream()
-                    .filter(p -> p.getIncident_id() == incident.getIncident_id())
-                    .forEach(p -> {
-                        JSONObject recipient = new JSONObject();
-                        recipient.put("username", p.getVolunteer_username());
-                        recipient.put("canSend", true);
-                        recipientsJson.put(recipient);
-                    });
-        }
+                .findFirst().ifPresent(_ -> participantsList.stream()
+                        .filter(p -> p.getIncident_id() == incident.getIncident_id())
+                        .forEach(p -> {
+                            JSONObject recipient = new JSONObject();
+                            recipient.put("username", p.getVolunteer_username());
+                            recipient.put("canSend", true);
+                            recipientsJson.put(recipient);
+                        }));
         return recipientsJson;
     }
 

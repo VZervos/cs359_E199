@@ -15,14 +15,14 @@ $(document).ready(async function () {
         console.log(incidentId);
         await loadChatSection(incidentId, sender, chattype);
         const chatBox = $('#chat_box');
-        await loadChatBox(incidentId, chattype, chatBox)
+        await loadChatBox(incidentId, chattype, sender, chatBox)
     });
 
     $(document).on('change', '#type', async function (event) {
         chattype = $('#type').val();
         $('#chat_title').text("Incident #" + incidentId + ": " + chattype + " chat");
         const chatBox = $('#chat_box');
-        await loadChatBox(incidentId, chattype, chatBox)
+        await loadChatBox(incidentId, chattype, sender, chatBox)
     });
 
     $(document).on('click', '#send-message-button', async function (event) {

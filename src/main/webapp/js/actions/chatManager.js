@@ -5,9 +5,9 @@ import {ErrorMessage} from "../utility/ErrorMessage.js";
 
 let errorMessage;
 
-export async function loadChatBox(incidentId, chattype, chatBox) {
+export async function loadChatBox(incidentId, chattype, username, chatBox) {
     console.log(incidentId, chattype);
-    const messages = await getMessages(incidentId, chattype);
+    const messages = await getMessages(incidentId, chattype, username);
     console.log(messages);
     const chatContent = messages.data.map(message =>
         `${message.sender}: ${message.message}`
@@ -81,7 +81,7 @@ export async function submitMessage(incidentId, message, sender, recipient, chat
     }
 
     errorMessage.hideError();
-    await loadChatBox(incidentId, recipient, chatBox);
+    await loadChatBox(incidentId, recipient, sender, chatBox);
     messageBox.val("")
 }
 
