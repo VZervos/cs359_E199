@@ -14,6 +14,20 @@ export function getIncidentsList(type = "all", status = "all") {
     });
 }
 
+export function getUsersList() {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const {success, message, data} = getCallResultData(xhr);
+            resolve({success, message, data});
+        };
+
+        xhr.open('GET', getServiceURL('users'));
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send();
+    });
+}
+
 export function getVolunteersList(type = "all") {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();

@@ -81,29 +81,31 @@
 
     <section id="chat">
         <div>
-            <h2>Chat</h2>
-            <p class="note">Read and send messages.</p>
+            <h2>Statistics</h2>
+            <p class="note">Some useful E199 statistics.</p>
         </div>
 
         <div class="container">
             <div class="section-content">
                 <div class="section-item">
-                <span id="incident-selector"></span>
+                    <h4>Incidents per type</h4>
+                    <div id="statistics-incidents_per_type"></div>
                 </div>
-                <button id="load-chat-button">Load chat</button>
             </div>
         </div>
-
         <div class="container">
-            <div class="section-content" id="statistics">
+            <div class="section-content">
                 <div class="section-item">
-                    <div id="statistics-incidents_per_type" style="max-width:700px; height:400px"></div>
+                    <h4>Number of users and volunteers</h4>
+                    <div id="statistics-users_volunteers_count"></div>
                 </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="section-content">
                 <div class="section-item">
-                    <div id="statistics-users_volunteers_count" style="max-width:700px; height:400px"></div>
-                </div>
-                <div class="section-item">
-                    <div id="statistics-firemen_vehicles_participated" style="max-width:700px; height:400px"></div>
+                    <h4>Number of firemen and vehicles</h4>
+                    <div id="statistics-firemen_vehicles_participated"></div>
                 </div>
             </div>
         </div>

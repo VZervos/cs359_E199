@@ -58,10 +58,7 @@ public class RESTAPIGet extends API {
                 return ErrorResponse(response, 404, "Error: Incident not found.");
 
             StringBuilder participantsJson = new StringBuilder("[");
-            List<Participant> participantList = ept.getParticipants(incidentIdParam);
-            for (Participant volunteer : participantList) {
-                participantsJson.append(ept.participantToJSON(volunteer)).append(',');
-            }
+            ept.getParticipants(incidentIdParam).forEach(participant -> participantsJson.append(ept.participantToJSON(participant)).append(','));
             if (participantsJson.length() > 2)
                 participantsJson.deleteCharAt(participantsJson.length() - 1);
             participantsJson.append("]");
@@ -78,27 +75,30 @@ public class RESTAPIGet extends API {
 
             EditVolunteersTable evt = new EditVolunteersTable();
             StringBuilder volunteersJson = new StringBuilder("[");
-            List<Volunteer> volunteersList;
             if (volunteerTypeParam.equals("all")) {
-                volunteersList = evt.getVolunteers("simple");
-                for (Volunteer volunteer : volunteersList) {
-                    volunteersJson.append(evt.volunteerToJSON(volunteer)).append(',');
-                }
-                volunteersList = evt.getVolunteers("driver");
-                for (Volunteer volunteer : volunteersList) {
-                    volunteersJson.append(evt.volunteerToJSON(volunteer)).append(',');
-                }
+                evt.getVolunteers("simple").forEach(volunteer -> volunteersJson.append(evt.volunteerToJSON(volunteer)).append(','));
+                evt.getVolunteers("driver").forEach(volunteer -> volunteersJson.append(evt.volunteerToJSON(volunteer)).append(','));;
             } else {
-                volunteersList = evt.getVolunteers(volunteerTypeParam);
-                for (Volunteer volunteer : volunteersList) {
-                    volunteersJson.append(evt.volunteerToJSON(volunteer)).append(',');
-                }
+                evt.getVolunteers(volunteerTypeParam).forEach(volunteer -> volunteersJson.append(evt.volunteerToJSON(volunteer)).append(','));
             }
             if (volunteersJson.length() > 2)
                 volunteersJson.deleteCharAt(volunteersJson.length() - 1);
             volunteersJson.append("]");
 
             return DataResponseAsJson(volunteersJson.toString());
+        });
+
+        get(API_PATH + "/users", (request, response) -> {
+            initResponse(response);
+            EditUsersTable eut = new EditUsersTable();
+            StringBuilder usersJson = new StringBuilder("[");
+            eut.getUsers().forEach(user -> usersJson.append(eut.userToJSON(user)).append(','));
+
+            if (usersJson.length() > 2)
+                usersJson.deleteCharAt(usersJson.length() - 1);
+            usersJson.append("]");
+
+            return DataResponseAsJson(usersJson.toString());
         });
 
         get(API_PATH + "/messages/:incident_id/:chattype/:username", (request, response) -> {
