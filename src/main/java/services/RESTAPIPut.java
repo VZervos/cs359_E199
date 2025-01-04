@@ -31,11 +31,9 @@ public class RESTAPIPut extends API {
             String incidentIdParam = getRequestParam(request, "incident_id");
             String incidentStatusParam = getRequestParam(request, "status");
             //JSONObject body = getBody(request);
-            String requestBody = request.body(); // Get the raw body
-            JSONObject body = new JSONObject(requestBody); // Parse into a JSONObject
+            String requestBody = request.body();
+            JSONObject body = new JSONObject(requestBody);
 
-            // Extract the "result" field from the JSON body
-            String incidentResultParam = body.getString("result");
             EditIncidentsTable eit = new EditIncidentsTable();
 
             if (Arrays.stream(INCIDENT_STATUSES).noneMatch(status -> status.equals(incidentStatusParam)))
@@ -53,6 +51,7 @@ public class RESTAPIPut extends API {
 
             eit.updateIncident(incidentIdParam, Map.of("status", incidentStatusParam));
             if (incidentStatusParam.equals(INCIDENT_STATUS_FINISHED)) {
+                String incidentResultParam = body.getString("result");
                 incident.setEnd_datetime();
                 eit.updateIncident(incidentIdParam,
                         Map.of(
@@ -81,36 +80,52 @@ public class RESTAPIPut extends API {
             return MessageResponse("Updated " + field + " to \"" + value + "\" of incident " + incidentIdParam + ".");
         });
 
-        put(API_PATH + "/participantAccept/:participant_id/:volunteer_username", (request, response) -> {
+        put(API_PATH + "/participantAccept/:participant_id/:incident_id", (request, response) -> {
             initResponse(response);
             String participantIdParam = getRequestParam(request, "participant_id");
-            String volunteerUsernameParam = getRequestParam(request, "volunteer_username");
+            String incidentIdParam = getRequestParam(request, "incident_id");
 
             Validator validator = new Validator();
             EditParticipantsTable ept = new EditParticipantsTable();
+            EditVolunteersTable evt = new EditVolunteersTable();
 
-            if (validator.hasNullItems(new String[]{participantIdParam, volunteerUsernameParam}))
-                return ErrorResponse(response, 406, "Error: Participant Id or volunteer username not provided.");
+            if (validator.hasNullItems(new String[]{participantIdParam, incidentIdParam}))
+                return ErrorResponse(response, 406, "Error: Participant Id or incident Id not provided.");
 
             Participant participant = ept.getParticipantIfExist(participantIdParam);
             if (participant == null)
                 return ErrorResponse(response, 404, "Error: Participant not found.");
 
-            EditVolunteersTable evt = new EditVolunteersTable();
             List<Volunteer> volunteersList = evt.getVolunteers();
-            Volunteer volunteer = volunteersList.stream().filter(inc -> inc.getUsername().equals(volunteerUsernameParam)).findFirst().orElse(null);
+            Volunteer volunteer = volunteersList.stream().filter(inc -> inc.getUsername().equals(participant.getVolunteer_username())).findFirst().orElse(null);
             if (volunteer == null)
                 return ErrorResponse(response, 404, "Error: Volunteer not found.");
 
-            ept.acceptParticipant(Integer.parseInt(participantIdParam), volunteerUsernameParam);
+            ept.acceptParticipant(Integer.parseInt(participantIdParam), volunteer.getUsername());
 
             EditIncidentsTable eit = new EditIncidentsTable();
             Incident incident = eit.databaseToIncident(participant.getIncident_id());
             String volunteerType = volunteer.getVolunteer_type();
-            String incidentVolunteerType = volunteerType.equals(VOLUNTEER_TYPE_SIMPLE) ? "firemen" : "vehicles";
-            int newIncidentVolunteerTypeValue = volunteerType.equals(VOLUNTEER_TYPE_SIMPLE) ? incident.getFiremen() + 1 : incident.getVehicles() + 1;
-            eit.updateIncident(String.valueOf(participant.getIncident_id()), Map.of(incidentVolunteerType, String.valueOf(newIncidentVolunteerTypeValue)));
-            return MessageResponse("Accepted participant " + participantIdParam + "(" + volunteerUsernameParam + ").");
+            List<Participant> participantList = ept.getParticipants(String.valueOf(incident.getIncident_id()));
+            int activeTypeParticipants = Math.toIntExact(participantList.stream()
+                    .filter(
+                            p -> p.getIncident_id() == incident.getIncident_id()
+                                    && p.getVolunteer_type().equals(volunteer.getVolunteer_type())
+                                    && !p.getStatus().equals(PARTICIPANT_STATUS_REQUESTED)
+                    ).count());
+            if (volunteerType.equals(VOLUNTEER_TYPE_SIMPLE) && activeTypeParticipants > incident.getFiremen()) {
+                eit.updateIncident(incidentIdParam,
+                        Map.of(
+                                "firemen", String.valueOf(incident.getFiremen() + 1)
+                        )
+                );
+            } else if (volunteerType.equals(VOLUNTEER_TYPE_DRIVER) && activeTypeParticipants > incident.getVehicles())
+                eit.updateIncident(incidentIdParam,
+                        Map.of(
+                                "vehicles", String.valueOf(incident.getVehicles() + 1)
+                        )
+                );
+            return MessageResponse("Accepted participant " + participantIdParam + "(" + volunteer.getUsername() + ").");
         });
 
         put(API_PATH + "/participantRelease/:participant_id/:success", (request, response) -> {

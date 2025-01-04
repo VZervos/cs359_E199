@@ -27,10 +27,10 @@ $(document).ready(function () {
 
         let result;
         if (newParticipantStatus === "accepted")
-            result = await acceptParticipant(participantId, volunteer["username"]);
+            result = await acceptParticipant(participantId, incidentId);
         else {
             const success = $('#' + incidentId + "-" + participantId + "-success-value").val();
-            const comment = $('#' + incidentId + "-" + participantId + "-comment-value").text();
+            const comment = $('#' + incidentId + "-" + participantId + "-comment-value").val();
             console.log(success, comment);
             result = await releaseParticipant(participantId, success, comment);
         }
@@ -44,7 +44,7 @@ $(document).ready(function () {
 
     });
 
-    $(document).on('click', '.participant_status-option-button', async function (event) {
+    $(document).on('click', '.status-option-button', async function (event) {
         const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
         const getIncidentNewStatusFromEvent = (event) => event.target.id.split('-')[2];
 

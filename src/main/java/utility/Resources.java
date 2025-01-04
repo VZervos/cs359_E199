@@ -38,6 +38,9 @@ public class Resources {
     public static final String PARTICIPANT_SUCCESS_YES = "yes";
     public static final String PARTICIPANT_SUCCESS_NO = "no";
     public static final String[] PARTICIPANT_SUCCESSOUTCOMES = new String[]{PARTICIPANT_SUCCESS_YES, PARTICIPANT_SUCCESS_NO};
+    public static final String PARTICIPANT_STATUS_REQUESTED = "requested";
+    public static final String PARTICIPANT_STATUS_ACCEPTED = "accepted";
+    public static final String PARTICIPANT_STATUS_FINISHED = "finished";
 
     public static final int MIN_PHONE_LENGTH = 10;
     public static final int MAX_PHONE_LENGTH = 14;

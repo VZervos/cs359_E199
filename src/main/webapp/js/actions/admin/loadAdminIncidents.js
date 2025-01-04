@@ -11,6 +11,53 @@ export async function reloadIncidents() {
             $(document).on('click', '#' + field, (event) => event.target.value = value)
         }
 
+        const generateVehiclesFiremenSelectors = (incident) => {
+            let vehiclesFiremenSelectors;
+            if (incident.status == "submitted") {
+                vehiclesFiremenSelectors = `
+                    <div>
+                        Vehicles: 
+                        <button type="button" class="incrdecr-button decr-button" id=${incident_id + "-vehicles-decrease"}>-</button>
+                        <span id=${incident_id + "-vehicles-value"}>${vehicles}</span>
+                        <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-vehicles-increase"}>+</button>
+                    </div>
+                    <div>
+                        Firemen:
+                        <button type="button" class="incrdecr-button decr-button" id=${incident_id + "-firemen-decrease"}>-</button>
+                        <span id=${incident_id + "-firemen-value"}>${firemen}</span>
+                        <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-firemen-increase"}>+</button>
+                    </div>
+                `
+            } else if (incident.status == "running") {
+                vehiclesFiremenSelectors = `
+                    <div>
+                        Vehicles: 
+                        <span id=${incident_id + "-vehicles-value"}>${vehicles}</span>
+                        <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-vehicles-increase"}>+</button>
+                        <button class="save-info-button" id=${incident_id + "-change-vehicles-button"}>Save Changes</button>
+                    </div>
+                    <div>
+                        Firemen:
+                        <span id=${incident_id + "-firemen-value"}>${firemen}</span>
+                        <button type="button" class="incrdecr-button incr-button" id=${incident_id + "-firemen-increase"}>+</button>
+                        <button class="save-info-button" id=${incident_id + "-change-firemen-button"}>Save Changes</button>
+                    </div>
+                `
+            } else {
+                vehiclesFiremenSelectors = `
+                    <div>
+                        Vehicles: 
+                        <span id=${incident_id + "-vehicles-value"}>${vehicles}</span>
+                    </div>
+                    <div>
+                        Firemen: 
+                        <span id=${incident_id + "-firemen-value"}>${firemen}</span>
+                    </div>
+                `
+            }
+            return vehiclesFiremenSelectors
+        }
+
         const {
             incident_id,
             danger,
@@ -61,14 +108,7 @@ export async function reloadIncidents() {
             <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</div>
             <div>Lat/Lon: ${lat}, ${lon}</div>
             <div>User: ${user_type} (${user_phone})</div>
-            <div>
-                Vehicles: 
-                <span id=${incident_id + "-vehicles-value"}>${vehicles}</span>
-            </div>
-            <div>
-                Firemen: 
-                <span id=${incident_id + "-firemen-value"}>${firemen}</span>
-            </div>
+            ${generateVehiclesFiremenSelectors(incident)}
             <div>Started: ${start_datetime}</div>
             ${finalResultField}
             <div>

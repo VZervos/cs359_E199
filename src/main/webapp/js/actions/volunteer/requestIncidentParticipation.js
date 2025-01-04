@@ -20,7 +20,7 @@ $(document).ready(function () {
         const volunteer = volunteersList["data"].find(v => v.volunteer_id == volunteerId);
         console.log(volunteer);
 
-        const result = await createParticipant(incidentId, volunteer.username, volunteer.type);
+        const result = await createParticipant(incidentId, volunteer.username, volunteer.volunteer_type);
         if (result.success)
             await reloadIncidents();
         $('#' + incidentId + '-message').text(result.message);

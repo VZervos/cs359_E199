@@ -43,8 +43,25 @@ export async function reloadIncidents() {
     `;
     };
 
-    const createIncidentOptions = (incident_id, volunteer_id, status) => {
-        if (!status)
+    const createIncidentOptions = (incident, volunteer, participantsList) => {
+        const {incident_id, vehicles, firemen} = incident;
+        const {volunteer_id, volunteer_type} = volunteer;
+        let setAcceptButton;
+
+        console.log(incident);
+        console.log(volunteer);
+        if (volunteer_type === "simple") {
+            const activeFiremen = participantsList.filter(p => p.incident_id == incident_id && p.volunteer_type == "simple" && !p.volunteer_type == "requested").length;
+            console.log(activeFiremen)
+            setAcceptButton = activeFiremen < firemen;
+        } else {
+            const activeVehicles = participantsList.filter(p => p.incident_id == incident_id && p.volunteer_type == "driver" && !p.volunteer_type == "requested").length;
+            console.log(activeVehicles)
+            setAcceptButton = activeVehicles < vehicles;
+        }
+        console.log(setAcceptButton);
+
+        if (setAcceptButton)
             return `
                 <div>
                     <div class="row">
@@ -90,7 +107,7 @@ export async function reloadIncidents() {
                             <div class="accordion-body">
                                 <div class="section-content list-incidents-admin-item row align-items-center" id="${incident_id}">
                                     ${createIncidentInfo(incident, participant ? participant.status : "available")}
-                                    ${createIncidentOptions(incident_id, volunteer.volunteer_id, participant ? participant.status : null)}
+                                    ${createIncidentOptions(incident, volunteer, participantsList)}
                                     <p id="${incident_id}-message"></p>
                                     <div class="container" id="${incident_id}-volunteers-list"></div>
                                 </div>

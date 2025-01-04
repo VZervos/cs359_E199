@@ -1,6 +1,6 @@
 import {getCallResult, getServiceURL, getServletURL} from "./ajax.js";
 
-export function acceptParticipant(participant_id, volunteer_username) {
+export function acceptParticipant(participant_id, incident_id) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -8,7 +8,7 @@ export function acceptParticipant(participant_id, volunteer_username) {
             resolve({success, message});
         };
 
-        xhr.open('PUT', getServiceURL('participantAccept/' + participant_id + "/" + volunteer_username));
+        xhr.open('PUT', getServiceURL('participantAccept/' + participant_id + "/" + incident_id));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send();
     });
