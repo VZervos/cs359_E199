@@ -7,7 +7,6 @@ package database.tables;
 
 import com.google.gson.Gson;
 import database.DB_Connection;
-import mainClasses.User;
 import mainClasses.Volunteer;
 import services.Validator;
 

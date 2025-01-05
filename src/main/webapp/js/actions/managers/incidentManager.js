@@ -1,4 +1,4 @@
-import {clearHtml} from "../utility/utility.js";
+import {clearHtml} from "../../utility/utility.js";
 
 export async function reloadIncidents(
     incidents = [],

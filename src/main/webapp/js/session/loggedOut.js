@@ -1,5 +1,5 @@
 import {hasActiveSession} from "./hasActiveSession.js";
-import {getBaseURL, openIndex} from "../pages/pageManagement.js";
+import {getBaseURL, openIndex} from "../actions/managers/pageManager.js";
 
 export function invalidateSession() {
     return new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
-import {clearHtml} from "../utility/utility.js";
-import {getIncidentsList} from "../ajax/ajaxLists.js";
-import {getChatTypes, getMessages, sendMessage} from "../ajax/ajaxChat.js";
-import {ErrorMessage} from "../utility/ErrorMessage.js";
+import {clearHtml} from "../../utility/utility.js";
+import {getIncidentsList} from "../../ajax/ajaxLists.js";
+import {getChatTypes, getMessages, sendMessage} from "../../ajax/ajaxChat.js";
+import {ErrorMessage} from "../../utility/ErrorMessage.js";
 
 let errorMessage;
 

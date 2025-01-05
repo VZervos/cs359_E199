@@ -7,12 +7,7 @@ import mainClasses.Incident;
 import mainClasses.Participant;
 import mainClasses.Volunteer;
 import org.json.JSONObject;
-import spark.Response;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +16,6 @@ import static services.StandardResponse.ErrorResponse;
 import static services.StandardResponse.MessageResponse;
 import static spark.Spark.put;
 import static utility.Resources.*;
-import static utility.Utility.getBodyString;
 import static utility.Utility.isInTable;
 
 public class RESTAPIPut extends API {

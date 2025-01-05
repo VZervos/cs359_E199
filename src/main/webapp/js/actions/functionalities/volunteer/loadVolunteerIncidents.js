@@ -1,6 +1,6 @@
-import {getIncidentsList, getParticipantsList} from "../../ajax/ajaxLists.js";
-import {getSession} from "../../session/getSession.js";
-import {reloadIncidents} from "../loadIncidents.js";
+import {getIncidentsList, getParticipantsList} from "../../../ajax/ajaxLists.js";
+import {getSession} from "../../../session/getSession.js";
+import {reloadIncidents} from "../../managers/incidentManager.js";
 
 let loadIncidentsButton;
 let incidentsListDiv;

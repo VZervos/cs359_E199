@@ -1,4 +1,4 @@
-import {getSession} from "../session/getSession.js";
+import {getSession} from "../../../session/getSession.js";
 
 $(document).ready(async () => {
     const infoFields = $('.show-user-info-field');

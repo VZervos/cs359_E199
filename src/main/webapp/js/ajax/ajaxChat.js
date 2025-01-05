@@ -1,4 +1,4 @@
-import {getCallResult, getCallResultData, getServiceURL} from "./ajax.js";
+import {getCallResultData, getServiceURL} from "./ajax.js";
 
 export function getChatTypes(username, incidentId) {
     return new Promise((resolve, reject) => {

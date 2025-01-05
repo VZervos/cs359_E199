@@ -10,9 +10,8 @@ public class Resources {
     public static final String CHATTYPE_PUBLIC = "public";
     public static final String CHATTYPE_VOLUNTEERS = "volunteers";
     public static final String CHATTYPE_ADMIN = USER_TYPE_ADMIN;
-    public static final String[] PREDEFINED_USERNAMES = new String[]{USER_TYPE_USER, USER_TYPE_GUEST, USER_TYPE_VOLUNTEER, USER_TYPE_ADMIN, CHATTYPE_PUBLIC, CHATTYPE_VOLUNTEERS};
     public static final String[] RECIPIENT_LISTS = new String[]{CHATTYPE_ADMIN, CHATTYPE_VOLUNTEERS, CHATTYPE_PUBLIC};
-
+    public static final String[] PREDEFINED_USERNAMES = new String[]{USER_TYPE_USER, USER_TYPE_GUEST, USER_TYPE_VOLUNTEER, USER_TYPE_ADMIN, CHATTYPE_PUBLIC, CHATTYPE_VOLUNTEERS};
     public static final String INCIDENT_TYPE_FIRE = "fire";
     public static final String INCIDENT_TYPE_ACCIDENT = "accident";
     public static final String[] INCIDENT_TYPES = new String[]{INCIDENT_TYPE_FIRE, INCIDENT_TYPE_ACCIDENT};

@@ -1,9 +1,9 @@
-import verifyAddress from "../evaluation/evaluateAddress.js";
-import {scrollAtComponent, setResultMessage} from "../utility/utility.js";
-import {extractFormValuesAsJson} from "./extractFormValues.js";
-import {getSession} from "../session/getSession.js";
-import {submitIncident} from "../ajax/ajaxIncident.js";
-import {isTelephoneAvailable} from "../evaluation/checkForDuplicates.js";
+import verifyAddress from "../../../evaluation/evaluateAddress.js";
+import {scrollAtComponent, setResultMessage} from "../../../utility/utility.js";
+import {extractFormValuesAsJson} from "../../../utility_actions/extractFormValues.js";
+import {getSession} from "../../../session/getSession.js";
+import {submitIncident} from "../../../ajax/ajaxIncident.js";
+import {isTelephoneAvailable} from "../../../evaluation/checkForDuplicates.js";
 
 $(document).ready(() => {
     const incidentSubmissionForm = $('#incidentForm');

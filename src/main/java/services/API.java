@@ -6,6 +6,7 @@ import spark.Response;
 
 public abstract class API {
     public static final String API_PATH = "E199API/";
+
     public static String BASE_URL(Request request) {
         return request.scheme() + "://" + request.host() + "/";
     }

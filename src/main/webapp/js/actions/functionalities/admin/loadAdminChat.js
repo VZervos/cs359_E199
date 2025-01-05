@@ -1,4 +1,4 @@
-import {loadChatBox, loadChatSection, loadIncidentSelector, submitMessage} from "../chatManager.js";
+import {loadChatBox, loadChatSection, loadIncidentSelector, submitMessage} from "../../managers/chatManager.js";
 
 let incidentId;
 let chattype;

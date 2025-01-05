@@ -1,4 +1,4 @@
-import {updateFiremanHeight, updateFiremanWeight} from "../utility_actions/heightWeightChange.js";
+import {updateFiremanHeight, updateFiremanWeight} from "../../../utility_actions/heightWeightChange.js";
 
 $(document).ready(() => {
     function enableFiremanFields() {

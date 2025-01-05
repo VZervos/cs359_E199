@@ -3,7 +3,7 @@
 //     .join('&');
 
 
-import {getBaseURL} from "../pages/pageManagement.js";
+import {getBaseURL} from "../actions/managers/pageManager.js";
 
 export const getServletURL = (servlet) => {
     return getBaseURL() + servlet;

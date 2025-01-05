@@ -1,11 +1,11 @@
-import verifyPassword from "../evaluation/evaluatePassword.js";
-import verifyFiremanAge from "../evaluation/evaluateFiremanAge.js";
-import verifyAddress from "../evaluation/evaluateAddress.js";
-import {isEmailAvailable, isTelephoneAvailable, isUsernameAvailable} from "../evaluation/checkForDuplicates.js";
-import {scrollAtComponent} from "../utility/utility.js";
-import {extractFormValues} from "./extractFormValues.js";
-import {openPage} from "../pages/pageManagement.js";
-import {registerUser} from "../ajax/ajaxUsers.js";
+import verifyPassword from "../../../evaluation/evaluatePassword.js";
+import verifyFiremanAge from "../../../evaluation/evaluateFiremanAge.js";
+import verifyAddress from "../../../evaluation/evaluateAddress.js";
+import {isEmailAvailable, isTelephoneAvailable, isUsernameAvailable} from "../../../evaluation/checkForDuplicates.js";
+import {scrollAtComponent} from "../../../utility/utility.js";
+import {extractFormValues} from "../../../utility_actions/extractFormValues.js";
+import {openPage} from "../../managers/pageManager.js";
+import {registerUser} from "../../../ajax/ajaxUsers.js";
 
 $(document).ready(() => {
     const registrationForm = $('#registrationForm');

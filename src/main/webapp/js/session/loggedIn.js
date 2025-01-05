@@ -1,5 +1,5 @@
 import {hasActiveSession} from "./hasActiveSession.js";
-import {openDashboard} from "../pages/pageManagement.js";
+import {openDashboard} from "../actions/managers/pageManager.js";
 
 $(document).ready(async () => {
     const session = await hasActiveSession();

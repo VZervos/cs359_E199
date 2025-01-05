@@ -1,9 +1,9 @@
-import {setResultMessage} from "../utility/utility.js";
-import verifyAddress from "../evaluation/evaluateAddress.js";
-import verifyPassword from "../evaluation/evaluatePassword.js";
-import {extractFormValues} from "./extractFormValues.js";
-import {checkForDuplicate} from "../ajax/ajaxValidation.js";
-import {updateInfoField} from "../ajax/ajaxUsers.js";
+import {setResultMessage} from "../../../utility/utility.js";
+import verifyAddress from "../../../evaluation/evaluateAddress.js";
+import verifyPassword from "../../../evaluation/evaluatePassword.js";
+import {extractFormValues} from "../../../utility_actions/extractFormValues.js";
+import {checkForDuplicate} from "../../../ajax/ajaxValidation.js";
+import {updateInfoField} from "../../../ajax/ajaxUsers.js";
 
 async function checkAddressValidity(invalidField, message) {
     const country = $('#country').val();

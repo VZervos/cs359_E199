@@ -1,5 +1,5 @@
-import {loadChatBox, loadChatSection, loadIncidentSelector, submitMessage} from "../chatManager.js";
-import {getSession} from "../../session/getSession.js";
+import {loadChatBox, loadChatSection, loadIncidentSelector, submitMessage} from "../../managers/chatManager.js";
+import {getSession} from "../../../session/getSession.js";
 
 let incidentId;
 let chattype;

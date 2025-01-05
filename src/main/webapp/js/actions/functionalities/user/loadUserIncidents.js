@@ -1,5 +1,5 @@
-import {getIncidentsList} from "../../ajax/ajaxLists.js";
-import {reloadIncidents} from "../loadIncidents.js";
+import {getIncidentsList} from "../../../ajax/ajaxLists.js";
+import {reloadIncidents} from "../../managers/incidentManager.js";
 
 let loadIncidentsButton;
 let incidentsListDiv;

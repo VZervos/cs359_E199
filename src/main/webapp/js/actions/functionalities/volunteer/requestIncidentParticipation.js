@@ -1,5 +1,5 @@
-import {getVolunteersList} from "../../ajax/ajaxLists.js";
-import {createParticipant} from "../../ajax/ajaxParticipant.js";
+import {getVolunteersList} from "../../../ajax/ajaxLists.js";
+import {createParticipant} from "../../../ajax/ajaxParticipant.js";
 import {reloadUserIncidents} from "../user/loadUserIncidents.js";
 
 let loadIncidentsButton;

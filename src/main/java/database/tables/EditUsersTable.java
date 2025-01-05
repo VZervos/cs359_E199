@@ -7,7 +7,6 @@ package database.tables;
 
 import com.google.gson.Gson;
 import database.DB_Connection;
-import mainClasses.Participant;
 import mainClasses.User;
 
 import java.sql.Connection;

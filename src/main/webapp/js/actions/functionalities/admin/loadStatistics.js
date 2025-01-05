@@ -1,4 +1,4 @@
-import {getIncidentsList, getParticipantsList, getUsersList, getVolunteersList} from "../../ajax/ajaxLists.js";
+import {getIncidentsList, getParticipantsList, getUsersList, getVolunteersList} from "../../../ajax/ajaxLists.js";
 
 //https://www.w3schools.com/js/js_graphics_google_chart.asp
 async function loadIncidentsPerTypeStatistics(chartDiv) {
@@ -32,6 +32,7 @@ async function loadIncidentsPerTypeStatistics(chartDiv) {
         chart.draw(data, options);
     });
 }
+
 async function loadUsersVolunteers(chartDiv) {
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(async function drawChart() {
@@ -58,6 +59,7 @@ async function loadUsersVolunteers(chartDiv) {
         chart.draw(data, options);
     });
 }
+
 async function loadFiremenVehicles(chartDiv) {
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(async function drawChart() {
@@ -72,9 +74,9 @@ async function loadFiremenVehicles(chartDiv) {
         participantsList.data
             .filter(participant => participant.status !== "requested")
             .forEach(participant => {
-            const {volunteer_type} = participant;
-            participantsPerType[volunteer_type] = volunteer_type in participantsPerType ? participantsPerType[volunteer_type] + 1 : 1;
-        });
+                const {volunteer_type} = participant;
+                participantsPerType[volunteer_type] = volunteer_type in participantsPerType ? participantsPerType[volunteer_type] + 1 : 1;
+            });
         Object.entries(participantsPerType).forEach(([key, value]) => {
             data.addRow([key, value]);
         });
