@@ -1,31 +1,33 @@
-import {clearHtml} from "../../utility/utility.js";
 import {getIncidentsList, getParticipantsList} from "../../ajax/ajaxLists.js";
 import {getSession} from "../../session/getSession.js";
+import {reloadIncidents} from "../loadIncidents.js";
 
 let loadIncidentsButton;
-let incidentsList;
+let incidentsListDiv;
 
-export async function reloadIncidents() {
-    const createIncidentInfo = (incident) => {
-        const {
-            incident_id,
-            danger,
-            address,
-            municipality,
-            prefecture,
-            country,
-            lat,
-            lon,
-            user_type,
-            user_phone,
-            vehicles,
-            firemen,
-            start_datetime,
-            finalResult,
-            description
-        } = incident;
+const session = await getSession();
+const volunteer = session.user;
 
-        return `
+const createIncidentInfo = (incident) => {
+    const {
+        incident_id,
+        danger,
+        address,
+        municipality,
+        prefecture,
+        country,
+        lat,
+        lon,
+        user_type,
+        user_phone,
+        vehicles,
+        firemen,
+        start_datetime,
+        finalResult,
+        description
+    } = incident;
+
+    return `
         <div>
             <div>Danger: ${danger} </div>
             <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</d>
@@ -41,28 +43,27 @@ export async function reloadIncidents() {
             </div>
         </div>
     `;
-    };
+};
+const createIncidentOptions = ({incident, volunteer, participants}) => {
+    const {incident_id, vehicles, firemen} = incident;
+    const {volunteer_id, volunteer_type} = volunteer;
+    let setAcceptButton;
 
-    const createIncidentOptions = (incident, volunteer, participantsList) => {
-        const {incident_id, vehicles, firemen} = incident;
-        const {volunteer_id, volunteer_type} = volunteer;
-        let setAcceptButton;
+    console.log(incident);
+    console.log(volunteer);
+    if (volunteer_type === "simple") {
+        const activeFiremen = participants.data.filter(p => p.incident_id == incident_id && p.volunteer_type == "simple" && !p.volunteer_type == "requested").length;
+        console.log(activeFiremen)
+        setAcceptButton = activeFiremen < firemen;
+    } else {
+        const activeVehicles = participants.data.filter(p => p.incident_id == incident_id && p.volunteer_type == "driver" && !p.volunteer_type == "requested").length;
+        console.log(activeVehicles)
+        setAcceptButton = activeVehicles < vehicles;
+    }
+    console.log(setAcceptButton);
 
-        console.log(incident);
-        console.log(volunteer);
-        if (volunteer_type === "simple") {
-            const activeFiremen = participantsList.filter(p => p.incident_id == incident_id && p.volunteer_type == "simple" && !p.volunteer_type == "requested").length;
-            console.log(activeFiremen)
-            setAcceptButton = activeFiremen < firemen;
-        } else {
-            const activeVehicles = participantsList.filter(p => p.incident_id == incident_id && p.volunteer_type == "driver" && !p.volunteer_type == "requested").length;
-            console.log(activeVehicles)
-            setAcceptButton = activeVehicles < vehicles;
-        }
-        console.log(setAcceptButton);
-
-        if (setAcceptButton)
-            return `
+    if (setAcceptButton)
+        return `
                 <div>
                     <div class="row">
                         <span>
@@ -71,61 +72,32 @@ export async function reloadIncidents() {
                     </div>
                 </div>
             `;
-        return "";
-    };
+    return "";
+};
 
-    clearHtml(incidentsList);
-    loadIncidentsButton.text("Reload incidents")
-
-    const incidents = await getIncidentsList();
-    const session = await getSession();
-    const volunteer = session.user;
+export async function reloadVolunteerIncidents() {
+    loadIncidentsButton.text("Reload incidents");
+    const incidentsList = await getIncidentsList();
     const participants = await getParticipantsList();
-
-    incidents.data
+    const incidents = incidentsList.data
         .filter(
             incident => incident.status === "running" ||
                 (participants.data.some(participant => participant.volunteer_username === volunteer.username && participant.incident_id === incident.incident_id))
         )
         .reverse()
-        .forEach(incident => {
-            const {incident_id, incident_type, status} = incident;
-            console.log(incident);
-            const participantsList = participants.data.filter(p => p.incident_id === incident_id);
-            console.log(participantsList)
-            const participant = participantsList.length > 0 ? participantsList.find(p => p.incident_id === incident_id && p.volunteer_username === volunteer.username) : null;
-            console.log(participant)
-            const component = $(`
-                <div class="accordion" id=${"accordion-" + incident_id}>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading-${incident_id}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${incident_id}" aria-expanded="false" aria-controls="collapse-${incident_id}">
-                                ${status}: Incident #${incident_id} (${incident_type}) [${participant ? participant.status : "available"}]
-                            </button>
-                        </h2>
-                        <div id="collapse-${incident_id}" class="accordion-collapse collapse" aria-labelledby="heading-${incident_id}" data-bs-parent=${"accordion-" + incident_id}>
-                            <div class="accordion-body">
-                                <div class="section-content list-incidents-admin-item row align-items-center" id="${incident_id}">
-                                    ${createIncidentInfo(incident, participant ? participant.status : "available")}
-                                    ${createIncidentOptions(incident, volunteer, participantsList)}
-                                    <p id="${incident_id}-message"></p>
-                                    <div class="container" id="${incident_id}-volunteers-list"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `);
+    await reloadIncidents(
+        incidents,
+        incidentsListDiv,
+        createIncidentInfo,
+        {createIncidentOptions, createIncidentOptionsArgs: {volunteer, participants}});
 
-            incidentsList.append(component);
-        });
 }
 
 $(document).ready(function () {
     loadIncidentsButton = $('#load-incidents-button');
-    incidentsList = $('#incident-list');
+    incidentsListDiv = $('#incident-list');
 
     loadIncidentsButton.on('click', async function () {
-        await reloadIncidents();
+        await reloadVolunteerIncidents();
     });
 });

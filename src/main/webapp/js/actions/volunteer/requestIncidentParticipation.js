@@ -1,6 +1,6 @@
 import {getVolunteersList} from "../../ajax/ajaxLists.js";
 import {createParticipant} from "../../ajax/ajaxParticipant.js";
-import {reloadIncidents} from "./loadVolunteerIncidents.js";
+import {reloadUserIncidents} from "../user/loadUserIncidents.js";
 
 let loadIncidentsButton;
 let incidentsList;
@@ -22,7 +22,7 @@ $(document).ready(function () {
 
         const result = await createParticipant(incidentId, volunteer.username, volunteer.volunteer_type);
         if (result.success)
-            await reloadIncidents();
+            await reloadUserIncidents();
         $('#' + incidentId + '-message').text(result.message);
     });
 });

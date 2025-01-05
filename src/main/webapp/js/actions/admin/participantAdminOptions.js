@@ -1,8 +1,9 @@
-import {reloadIncidents} from "./loadAdminIncidents.js";
 import {getVolunteersList} from "../../ajax/ajaxLists.js";
 import {acceptParticipant, releaseParticipant} from "../../ajax/ajaxParticipant.js";
 import {reloadVolunteerRequests} from "./manageIncidentVolunteers.js";
 import {updateIncidentStatus} from "../../ajax/ajaxIncident.js";
+import {reloadIncidents} from "../loadIncidents.js";
+import {reloadAdminIncidents} from "./loadAdminIncidents.js";
 
 $(document).ready(function () {
     $(document).on('click', '.participant_status-option-button', async function (event) {
@@ -56,7 +57,7 @@ $(document).ready(function () {
 
         const result = await updateIncidentStatus(incidentId, incidentNewStatus, incidentResult);
         if (result.success)
-            await reloadIncidents();
+            await reloadAdminIncidents();
         $('#' + incidentId + '-message').text(result.message);
 
         console.log(incidentId + incidentNewStatus);
