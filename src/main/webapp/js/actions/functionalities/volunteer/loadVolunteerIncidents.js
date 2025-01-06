@@ -30,13 +30,13 @@ const createIncidentInfo = (incident) => {
     return `
         <div>
             <div>Danger: ${danger} </div>
-            <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</d>
-            <div>Lat/Lon: ${lat}, ${lon}</d>
-            <div>User: ${user_type} (${user_phone})</d>
+            <div>Location: <span id=${incident_id + "-location"}>{address}, ${municipality}, ${country} [${prefecture}]</span></div>
+            <div>Lat/Lon: ${lat}, ${lon}</div>
+            <div>User: ${user_type} (${user_phone})</div>
             <div>Vehicles: ${vehicles} </div>
             <div>Firemen:  ${firemen} </div>
-            <div>Started: ${start_datetime}</d>
-            <div>Result: ${finalResult}</d>
+            <div>Started: ${start_datetime}</div>
+            <div>Result: ${finalResult}</div>
             <div>
                 Description:
                 <textarea readonly style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>

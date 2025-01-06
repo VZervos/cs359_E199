@@ -106,7 +106,7 @@ const createIncidentInfo = (incident) => {
             </select>
             <button class="save-info-button" id=${incident_id + "-change-danger-button"}>Save Changes</button>
         </div>
-        <div>Location: ${address}, ${municipality}, ${prefecture}, ${country}</div>
+        <div>Location: <span id=${incident_id + "-location"}>{address}, ${municipality}, ${country} [${prefecture}]</span></div>
         <div>Lat/Lon: ${lat}, ${lon}</div>
         <div>User: ${user_type} (${user_phone})</div>
         ${generateVehiclesFiremenSelectors(incident)}

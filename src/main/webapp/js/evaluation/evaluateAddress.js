@@ -1,8 +1,6 @@
 import {reverseGeocode} from "../maps/geocoding.js"
 import {ErrorMessage} from "../utility/ErrorMessage.js";
 
-const ADDRESS_FIELD_ID = "address";
-
 const ERROR_SERVICE_ONLY_IN_CRETE = "Currently, the service is available only in Crete.";
 const ERROR_INVALID_ADDRESS = "The address entered is invalid.";
 
@@ -20,15 +18,22 @@ export const getAddress = () => {
     }
 }
 
-const extractAddress = () => {
-    const addressName = $('#' + ADDRESS_FIELD_ID).val();
-    const municipality = $('#municipality').val();
-    const country = $('#country').val();
+const extractAddress = (addressField, municipalityField, countryField) => {
+    const addressName = addressField.val() || addressField.text();
+    const municipality = municipalityField.val() || municipalityField.text();
+    const country = countryField.val() || countryField.text();
     address = addressName + ", " + municipality + ", " + country;
 }
 
-export async function verifyAddress() {
-    extractAddress();
+export async function verifyAddress(addressField, municipalityField, countryField) {
+    extractAddress(addressField, municipalityField, countryField);
+    console.log(address);
+    return verifyFulladdress(address);
+}
+
+export async function verifyFulladdress(fulladdress) {
+    address = fulladdress;
+    console.log(address);
     const response = await reverseGeocode(address);
 
     if (!response || Object.entries(response).length === 0) {
@@ -36,10 +41,10 @@ export async function verifyAddress() {
         lat = 0;
         lon = 0;
         errorMessage.showError(ERROR_INVALID_ADDRESS);
-        return ADDRESS_FIELD_ID;
+        return "address";
     } else if (!response[0].display_name.includes("Region of Crete")) {
         errorMessage.showError(ERROR_SERVICE_ONLY_IN_CRETE);
-        return ADDRESS_FIELD_ID;
+        return "address";
     } else {
         const addressInfo = response[0];
         addressFullname = addressInfo.display_name;

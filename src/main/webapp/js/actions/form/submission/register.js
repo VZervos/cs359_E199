@@ -19,7 +19,7 @@ $(document).ready(() => {
         const invalidFieldId =
             verifyPassword()
             || verifyFiremanAge()
-            || await verifyAddress()
+            || await verifyAddress($('#address'), $('#municipality'), $('#country'))
             || isUsernameAvailable()
             || isEmailAvailable()
             || isTelephoneAvailable();

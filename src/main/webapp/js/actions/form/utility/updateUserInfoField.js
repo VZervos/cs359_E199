@@ -14,7 +14,7 @@ async function checkAddressValidity(invalidField, message) {
         invalidField = true;
         message = "Some address fields are empty."
     } else {
-        invalidField = await verifyAddress()
+        invalidField = await verifyAddress($('#address'), $('#municipality'), $('#country'))
     }
     return {invalidField, message};
 }

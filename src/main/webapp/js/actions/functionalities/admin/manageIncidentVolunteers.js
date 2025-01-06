@@ -82,7 +82,7 @@ async function createParticipants(incidentId) {
             case "finished":
                 finishInfo = `
                     <span>
-                        <div>Success: ${success}</d>
+                        <div>Success: ${success}</div>
                         <div>
                             Comment:
                             <textarea readonly style="width: 100%; height: 5em" class="incident-value-selector" id=${incident_id + "-" + participant_id + "-comment-value"}>${comment}</textarea>

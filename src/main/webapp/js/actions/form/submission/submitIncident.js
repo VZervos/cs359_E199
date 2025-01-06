@@ -21,7 +21,7 @@ $(document).ready(() => {
 
         let invalidFieldId = null;
         if (user_type === "guest") invalidFieldId = await isTelephoneAvailable();
-        invalidFieldId = invalidFieldId || await verifyAddress();
+        invalidFieldId = invalidFieldId || await verifyAddress($('#address'), $('#municipality'), $('#country'));
 
         console.log(invalidFieldId);
         if (isFormValid && !invalidFieldId) {
