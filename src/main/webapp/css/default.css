@@ -61,10 +61,6 @@ section {
     padding-top: 1em;
 }
 
-.copyright {
-    color: white;
-}
-
 .field-title {
     font-weight: bold;
 }
@@ -135,4 +131,18 @@ button {
 
 button:active {
     box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.7);
+}
+
+.footer-text {
+    color: white;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icon {
+    font-size: xx-large;
+    color: white;
 }
