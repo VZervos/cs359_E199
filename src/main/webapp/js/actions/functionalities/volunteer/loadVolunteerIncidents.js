@@ -95,10 +95,11 @@ export async function reloadVolunteerIncidents() {
     const incidentsList = await getIncidentsList();
     const participants = await getParticipantsList();
     const incidents = incidentsList.data
-        .filter(
-            incident => incident.status === "running" ||
-                (participants.data.some(participant => participant.volunteer_username === volunteer.username && participant.incident_id === incident.incident_id))
-        )
+        .filter(incident => incident.status === "running")
+        // TODO: Code for history
+        //     incident => incident.status === "running" ||
+        //         (participants.data.some(participant => participant.volunteer_username === volunteer.username && participant.incident_id === incident.incident_id))
+        // )
         .reverse()
     await reloadIncidents(
         incidents,
