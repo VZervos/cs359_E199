@@ -1,6 +1,6 @@
 import {getIncidentsList, getParticipantsList} from "../../../ajax/ajaxLists.js";
 import {getSession} from "../../../session/getSession.js";
-import {reloadIncidents} from "../../managers/incidentManager.js";
+import {reloadIncidents, shareIncident} from "../../managers/incidentManager.js";
 
 let loadIncidentsButton;
 let incidentsListDiv;
@@ -24,8 +24,14 @@ const createIncidentInfo = (incident) => {
         firemen,
         start_datetime,
         finalResult,
-        description
+        description,
+        status
     } = incident;
+
+    const shareButtons = status === "running" ? `
+        <button id=${incident_id + "-share-facebook"} class="share-button fa fa-facebook social-icon"></button>
+        <button id=${incident_id + "-share-twitter"} class="share-button fa fa-twitter social-icon"></button>
+        ` : "";
 
     return `
         <div>
@@ -41,9 +47,15 @@ const createIncidentInfo = (incident) => {
                 Description:
                 <textarea readonly style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
             </div>
+            ${shareButtons}
         </div>
     `;
 };
+// <button class="map-toggle-button" id=${incident_id + "-showAddressOnMap"} type="button">Show map</button>
+// <p class="errorMessage" id=${incident_id + "-address_error"}></p>
+// <p id=${incident_id + "-address_availability"}></p>
+// <div id=${incident_id + "-map"}></div>
+
 const createIncidentOptions = ({incident, volunteer, participants}) => {
     const {incident_id, vehicles, firemen} = incident;
     const {volunteer_id, volunteer_type} = volunteer;
@@ -99,5 +111,15 @@ $(document).ready(function () {
 
     loadIncidentsButton.on('click', async function () {
         await reloadVolunteerIncidents();
+    });
+
+    $(document).on('click', '.share-button', async function (event) {
+        const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
+        const getPlatformIdFromEvent = (event) => event.target.id.split('-')[2];
+
+        console.log(event);
+        const incidentId = getIncidentIdFromEvent(event);
+        const platformId = getPlatformIdFromEvent(event);
+        await shareIncident(incidentId, platformId);
     });
 });

@@ -1,6 +1,8 @@
 import {getIncidentsList} from "../../../ajax/ajaxLists.js";
-import {reloadIncidents} from "../../managers/incidentManager.js";
+import {reloadIncidents, shareIncident} from "../../managers/incidentManager.js";
 import {AddressMap} from "../../../maps/AddressMap.js";
+import {updateIncidentStatus} from "../../../ajax/ajaxIncident.js";
+import {reloadAdminIncidents} from "../admin/loadAdminIncidents.js";
 
 let loadIncidentsButton;
 let incidentsListDiv;
@@ -20,8 +22,14 @@ const createIncidentInfo = (incident) => {
         firemen,
         start_datetime,
         finalResult,
-        description
+        description,
+        status
     } = incident;
+
+    const shareButtons = status === "running" ? `
+        <button id=${incident_id + "-share-facebook"} class="share-button fa fa-facebook social-icon"></button>
+        <button id=${incident_id + "-share-twitter"} class="share-button fa fa-twitter social-icon"></button>
+        ` : "";
 
     return `
         <div>
@@ -41,6 +49,7 @@ const createIncidentInfo = (incident) => {
             <p class="errorMessage" id=${incident_id + "-address_error"}></p>
             <p id=${incident_id + "-address_availability"}></p>
             <div id=${incident_id + "-map"}></div>
+            ${shareButtons}
         </div>
     `;
 };
@@ -58,5 +67,15 @@ $(document).ready(function () {
 
     loadIncidentsButton.on('click', async function () {
         await reloadUserIncidents();
+    });
+
+    $(document).on('click', '.share-button', async function (event) {
+        const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
+        const getPlatformIdFromEvent = (event) => event.target.id.split('-')[2];
+
+        console.log(event);
+        const incidentId = getIncidentIdFromEvent(event);
+        const platformId = getPlatformIdFromEvent(event);
+        await shareIncident(incidentId, platformId);
     });
 });

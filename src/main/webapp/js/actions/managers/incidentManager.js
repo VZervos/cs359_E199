@@ -1,4 +1,5 @@
 import {clearHtml} from "../../utility/utility.js";
+import {getIncidentsList} from "../../ajax/ajaxLists.js";
 
 export async function reloadIncidents(
     incidents = [],
@@ -38,4 +39,51 @@ export async function reloadIncidents(
 
         incidentsListDiv.append(component);
     });
+}
+
+export async function shareIncident(incidentId, platformId) {
+    let shareURL = "";
+    const incidentsList = await getIncidentsList()
+    const incident = incidentsList.data.find(incident => incident.incident_id == incidentId);
+    const {
+        incident_id,
+        danger,
+        address,
+        municipality,
+        prefecture,
+        lat,
+        lon,
+        user_type,
+        user_phone,
+        vehicles,
+        firemen,
+        start_datetime,
+        finalResult,
+        description
+    } = incident;
+
+    if (platformId === "facebook") {
+        shareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://www.fireservice.gr/')}&quote=${encodeURIComponent(`
+                Incident at ${address}, ${municipality}, ${prefecture}:
+                Danger: ${danger}
+                Lat/Lon: ${lat}, ${lon}
+                Vehicles: ${vehicles}
+                Firemen: ${firemen}
+                Started: ${start_datetime}
+                Result: ${finalResult}
+                #Incident #Emergency
+            `)}`;
+    } else {
+        shareURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`
+                Incident at ${address}, ${municipality}, ${prefecture}:
+                Danger: ${danger}
+                Lat/Lon: ${lat}, ${lon}
+                Vehicles: ${vehicles}
+                Firemen: ${firemen}
+                Started: ${start_datetime}
+                Result: ${finalResult}
+                #Incident #Emergency
+            `)}`;
+    }
+    window.open(shareURL, '_blank');
 }
