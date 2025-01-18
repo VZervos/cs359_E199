@@ -77,6 +77,18 @@
         </div>
     </section>
 
+    <section id="notifications">
+        <a
+                class="button main-button"
+                id="closeNotificationButton"
+        >Close</a>
+        <div>
+            <h2>Notification</h2>
+            <p class="note">Most recent incident close to you (less than 30km away)</p>
+        </div>
+        <div class="section-content" id="notification">Loading...</div>
+    </section>
+
     <section id="submit-incident">
         <div>
             <h2>Incident Submission form</h2>
@@ -450,6 +462,7 @@
 
 <script src="../../../js/session/loggedOut.js" type="module"></script>
 
+<script src="../../../js/actions/functionalities/user/loadUserNotifications.js" type="module"></script>
 <script src="../../../js/actions/form/submission/submitIncident.js" type="module"></script>
 <script src="../../../js/maps/listeners/form.js" type="module"></script>
 
