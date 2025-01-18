@@ -1,8 +1,6 @@
 import {getIncidentsList} from "../../../ajax/ajaxLists.js";
 import {reloadIncidents, shareIncident} from "../../managers/incidentManager.js";
-import {AddressMap} from "../../../maps/AddressMap.js";
-import {updateIncidentStatus} from "../../../ajax/ajaxIncident.js";
-import {reloadAdminIncidents} from "../admin/loadAdminIncidents.js";
+
 
 let loadIncidentsButton;
 let incidentsListDiv;

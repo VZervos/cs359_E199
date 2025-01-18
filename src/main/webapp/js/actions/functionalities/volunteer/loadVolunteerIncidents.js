@@ -15,7 +15,6 @@ const createIncidentInfo = (incident) => {
         address,
         municipality,
         prefecture,
-        country,
         lat,
         lon,
         user_type,
@@ -36,7 +35,7 @@ const createIncidentInfo = (incident) => {
     return `
         <div>
             <div>Danger: ${danger} </div>
-            <div>Location: <span id=${incident_id + "-location"}>{address}, ${municipality}, ${country} [${prefecture}]</span></div>
+            <div>Location: <span id=${incident_id + "-location"}>${address}, ${municipality}, Greece [${prefecture}]</span></div>
             <div>Lat/Lon: ${lat}, ${lon}</div>
             <div>User: ${user_type} (${user_phone})</div>
             <div>Vehicles: ${vehicles} </div>
@@ -47,6 +46,10 @@ const createIncidentInfo = (incident) => {
                 Description:
                 <textarea readonly style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
             </div>
+            <button class="map-toggle-button" id=${incident_id + "-showAddressOnMap"} type="button">Show map</button>
+            <p class="errorMessage" id=${incident_id + "-address_error"}></p>
+            <p id=${incident_id + "-address_availability"}></p>
+            <div id=${incident_id + "-map"}></div>
             ${shareButtons}
         </div>
     `;
