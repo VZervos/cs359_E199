@@ -82,7 +82,7 @@ const createIncidentOptions = ({incident, volunteer, participants}) => {
                 <div>
                     <div class="row">
                         <span>
-                            <button class="request_participation-option-button" id=${volunteer_id + "-" + incident_id + "-manage_volunteers"}>Request to participate</button>
+                            <button class="request_participation-option-button" id=${volunteer_id + "-" + incident_id}>Request to participate</button>
                         </span>
                     </div>
                 </div>
@@ -95,12 +95,7 @@ export async function reloadVolunteerIncidents() {
     const incidentsList = await getIncidentsList();
     const participants = await getParticipantsList();
     const incidents = incidentsList.data
-        .filter(incident => incident.status === "running")
-        // TODO: Code for history
-        //     incident => incident.status === "running" ||
-        //         (participants.data.some(participant => participant.volunteer_username === volunteer.username && participant.incident_id === incident.incident_id))
-        // )
-        .reverse()
+        .filter(incident => incident.status === "running").reverse()
     await reloadIncidents(
         incidents,
         incidentsListDiv,

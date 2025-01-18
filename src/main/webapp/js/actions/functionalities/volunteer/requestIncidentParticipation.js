@@ -12,6 +12,7 @@ $(document).ready(function () {
 
         const incidentId = getIncidentIdFromEvent(event);
         const volunteerId = getVolunteerIdFromEvent(event);
+        const isFromNotification = event.target.id.split('-').length > 2;
 
         console.log(incidentId, volunteerId);
         incidentsList = $("#incident-list");
@@ -21,8 +22,8 @@ $(document).ready(function () {
         console.log(volunteer);
 
         const result = await createParticipant(incidentId, volunteer.username, volunteer.volunteer_type);
-        if (result.success)
+        if (result.success && !isFromNotification)
             await reloadUserIncidents();
-        $('#' + incidentId + '-message').text(result.message);
+        isFromNotification ? $('#notification').html(result.message) : $('#' + incidentId + '-message').text(result.message);
     });
 });

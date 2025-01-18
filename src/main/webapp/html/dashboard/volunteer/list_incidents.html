@@ -81,6 +81,18 @@
         </div>
     </section>
 
+    <section id="notifications">
+        <a
+                class="button main-button"
+                id="closeNotificationButton"
+        >Close</a>
+        <div>
+            <h2>Notification</h2>
+            <p class="note">Most recent incident close to you (less than 30km away)</p>
+        </div>
+        <div class="section-content" id="notification">Loading...</div>
+    </section>
+
     <section id="list-incidents">
         <div>
             <h2>Incidents</h2>
@@ -104,6 +116,7 @@
 
 <script src="../../../js/session/loggedOut.js" type="module"></script>
 
+<script src="../../../js/actions/functionalities/volunteer/loadVolunteerNotification.js" type="module"></script>
 <script src="../../../js/maps/listeners/incident.js" type="module"></script>
 <script src="../../../js/actions/functionalities/volunteer/loadVolunteerIncidents.js" type="module"></script>
 <script src="../../../js/actions/functionalities/volunteer/requestIncidentParticipation.js" type="module"></script>
