@@ -3,6 +3,7 @@ package utility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.json.JSONObject;
+import spark.utils.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,10 +25,15 @@ public class Utility {
             }
         }
 
-        System.out.println("Request Body: " + body);
         String jsonString = body.toString();
-        System.out.println("Request Body: " + jsonString);
+        if (jsonString.startsWith("\"{") && jsonString.endsWith("}\"")) {
+            jsonString = jsonString.substring(1, jsonString.length() - 1).replace("\\\"", "\"");
+        }
         return jsonString;
+    }
+
+    public static String replaceLast(String text, String regex, String replacement) {
+        return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
     }
 
     public static boolean isActiveSession(HttpServletRequest request) {

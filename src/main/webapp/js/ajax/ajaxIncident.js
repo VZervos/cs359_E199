@@ -9,6 +9,8 @@ export function updateIncidentStatus(incidentId, newStatus, result, vehicles, fi
         };
 
         console.log(result);
+        console.log(vehicles);
+        console.log(firemen);
         xhr.open('PUT', getServiceURL('incidentStatus/' + incidentId + '/' + newStatus));
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify({

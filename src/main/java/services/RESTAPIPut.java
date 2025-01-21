@@ -53,6 +53,19 @@ public class RESTAPIPut extends API {
                                 "finalResult", incidentResultParam
                         )
                 );
+            } else if (incidentStatusParam.equals(INCIDENT_STATUS_RUNNING)) {
+                String firemen = body.getString("firemen");
+                if (!firemen.isBlank()) eit.updateIncident(incidentIdParam,
+                        Map.of(
+                                "firemen", body.getString("firemen")
+                        )
+                );
+                String vehicles = body.getString("vehicles");
+                if (!vehicles.isBlank()) eit.updateIncident(incidentIdParam,
+                        Map.of(
+                                "vehicles", body.getString("vehicles")
+                        )
+                );
             }
 
             return MessageResponse("Incident status successfully updated to " + incidentStatusParam + ".");

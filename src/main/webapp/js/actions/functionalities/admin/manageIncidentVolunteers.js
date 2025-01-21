@@ -201,6 +201,7 @@ $(document).ready(function () {
 
     });
 
+    // TODO Conflict with loadAdminIncidents (same listener), make them one
     $(document).on('click', '.status-option-button', async function (event) {
         const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
         const getIncidentNewStatusFromEvent = (event) => event.target.id.split('-')[2];
