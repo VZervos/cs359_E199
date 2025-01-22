@@ -26,6 +26,7 @@ $(document).ready(async function () {
         if (mostRecentCloseIncident) {
             const {
                 incident_id,
+                incident_type,
                 danger,
                 address,
                 municipality,
@@ -38,21 +39,37 @@ $(document).ready(async function () {
                 firemen,
                 start_datetime,
                 finalResult,
+                status,
                 description
             } = mostRecentCloseIncident;
 
             notification = `
-                <div>Danger: ${danger} </div>
-                <div>Location: ${address}, ${municipality}, ${prefecture}, Greece</div>
-                <div>Lat/Lon: ${lat}, ${lon}</div>
-                <div>User: ${user_type} (${user_phone})</div>
-                <div>Vehicles: ${vehicles} </div>
-                <div>Firemen:  ${firemen} </div>
-                <div>Started: ${start_datetime}</div>
-                <div>Result: ${finalResult}</div>
-                <div>
-                    Description:
-                    <textarea readonly style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
+                <div class="accordion" id="accordion-notification">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-notification">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-notification" aria-expanded="false" aria-controls="collapse-notification">
+                                ${status}: Incident #${incident_id} (${incident_type})
+                            </button>
+                        </h2>
+                        <div id="collapse-notification" class="accordion-collapse collapse" aria-labelledby="heading-notification" data-bs-parent="accordion-notification">
+                            <div class="accordion-body">
+                                <div class="section-content list-incidents-admin-item row align-items-center" id="${incident_id}">
+                                    <div>Danger: ${danger} </div>
+                                    <div>Location: ${address}, ${municipality}, ${prefecture}, Greece</div>
+                                    <div>Lat/Lon: ${lat}, ${lon}</div>
+                                    <div>User: ${user_type} (${user_phone})</div>
+                                    <div>Vehicles: ${vehicles} </div>
+                                    <div>Firemen:  ${firemen} </div>
+                                    <div>Started: ${start_datetime}</div>
+                                    <div>Result: ${finalResult}</div>
+                                    <div>
+                                        Description:
+                                        <textarea readonly style="width: 100%; height: 10em" class="incident-value-selector" id=${incident_id + "-description-value"}>${description}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `
         }

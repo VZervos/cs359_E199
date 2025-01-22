@@ -96,7 +96,6 @@ $(document).ready(async function () {
                         </div>
                     </div>
                 </div>
-               
             `
         }
         return notification;

@@ -202,21 +202,21 @@ $(document).ready(function () {
     });
 
     // TODO Conflict with loadAdminIncidents (same listener), make them one
-    $(document).on('click', '.status-option-button', async function (event) {
-        const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
-        const getIncidentNewStatusFromEvent = (event) => event.target.id.split('-')[2];
-
-        console.log(event);
-        const incidentId = getIncidentIdFromEvent(event);
-        const incidentNewStatus = getIncidentNewStatusFromEvent(event);
-
-        const incidentResult = $('#' + incidentId + "-result-value").text();
-
-        const result = await updateIncidentStatus(incidentId, incidentNewStatus, incidentResult);
-        if (result.success)
-            await reloadAdminIncidents();
-        $('#' + incidentId + '-message').text(result.message);
-
-        console.log(incidentId + incidentNewStatus);
-    });
+    // $(document).on('click', '.status-option-button', async function (event) {
+    //     const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
+    //     const getIncidentNewStatusFromEvent = (event) => event.target.id.split('-')[2];
+    //
+    //     console.log(event);
+    //     const incidentId = getIncidentIdFromEvent(event);
+    //     const incidentNewStatus = getIncidentNewStatusFromEvent(event);
+    //
+    //     const incidentResult = $('#' + incidentId + "-result-value").text();
+    //
+    //     const result = await updateIncidentStatus(incidentId, incidentNewStatus, incidentResult);
+    //     if (result.success)
+    //         await reloadAdminIncidents();
+    //     $('#' + incidentId + '-message').text(result.message);
+    //
+    //     console.log(incidentId + incidentNewStatus);
+    // });
 });
