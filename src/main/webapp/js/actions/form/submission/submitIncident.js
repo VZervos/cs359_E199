@@ -38,6 +38,8 @@ $(document).ready(() => {
             console.log("Incident submitted successfully!");
             const result = await submitIncident(incident);
             console.log(result)
+            if (result.success)
+                location.reload();
             setResultMessage("submission_result", result);
 
         } else if (!isFormValid) {

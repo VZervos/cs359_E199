@@ -20,7 +20,7 @@ export async function reloadIncidents(
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading-${incident_id}">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${incident_id}" aria-expanded="false" aria-controls="collapse-${incident_id}">
-                            ${status}: Incident #${incident_id} (${incident_type})
+                            <span class="incident-title"> <span style="font-weight: bolder">${status.toUpperCase()}</span> Incident #${incident_id} (${incident_type})</span>
                         </button>
                     </h2>
                     <div id="collapse-${incident_id}" class="accordion-collapse collapse" aria-labelledby="heading-${incident_id}" data-bs-parent=${"accordion-" + incident_id}>
