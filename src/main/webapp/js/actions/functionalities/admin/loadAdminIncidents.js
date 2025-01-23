@@ -1,11 +1,11 @@
 import {getIncidentsList} from "../../../ajax/ajaxLists.js";
 import {reloadIncidents, shareIncident} from "../../managers/incidentManager.js";
 import {updateIncidentFieldValue, updateIncidentStatus} from "../../../ajax/ajaxIncident.js";
+import {setResultMessage} from "../../../utility/utility.js";
 
 let loadIncidentsButton;
 let incidentsListDiv;
 
-// export async function reloadIncidents() {
 const createIncidentInfo = (incident) => {
     const changeValueOfField = (field, newValue) => {
         const value = Math.max(0, newValue);
@@ -205,7 +205,7 @@ $(document).ready(function () {
         const newValue = getIncidentFieldNewValue(incidentId, fieldId);
 
         const result = await updateIncidentFieldValue(incidentId, fieldId, newValue);
-        $('#' + incidentId + '-message').text(result.message);
+        setResultMessage(incidentId + '-message', result);
 
         console.log(incidentId);
         console.log(fieldId);
@@ -239,7 +239,7 @@ $(document).ready(function () {
                 {createStatusOptions, sublistComponent: volunteersList}
             );
         }
-        $('#' + incidentId + '-message').text(result.message);
+        setResultMessage(incidentId + '-message', result);
 
         console.log(incidentId + incidentNewStatus);
     });

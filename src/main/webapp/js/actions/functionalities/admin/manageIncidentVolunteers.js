@@ -1,8 +1,6 @@
-import {clearHtml} from "../../../utility/utility.js";
+import {clearHtml, setResultMessage} from "../../../utility/utility.js";
 import {getIncidentsList, getParticipantsList, getVolunteersList} from "../../../ajax/ajaxLists.js";
 import {acceptParticipant, releaseParticipant} from "../../../ajax/ajaxParticipant.js";
-import {updateIncidentStatus} from "../../../ajax/ajaxIncident.js";
-import {reloadAdminIncidents} from "./loadAdminIncidents.js";
 
 let volunteersList;
 
@@ -193,30 +191,11 @@ $(document).ready(function () {
         }
 
         await reloadVolunteerRequests(incidentId);
-        $('#' + incidentId + '_vol-message').text(result.message);
+        setResultMessage(incidentId + '_vol-message', result)
 
         console.log(incidentId);
         console.log(participantId);
         console.log(volunteerId);
 
     });
-
-    // TODO Conflict with loadAdminIncidents (same listener), make them one
-    // $(document).on('click', '.status-option-button', async function (event) {
-    //     const getIncidentIdFromEvent = (event) => event.target.id.split('-')[0];
-    //     const getIncidentNewStatusFromEvent = (event) => event.target.id.split('-')[2];
-    //
-    //     console.log(event);
-    //     const incidentId = getIncidentIdFromEvent(event);
-    //     const incidentNewStatus = getIncidentNewStatusFromEvent(event);
-    //
-    //     const incidentResult = $('#' + incidentId + "-result-value").text();
-    //
-    //     const result = await updateIncidentStatus(incidentId, incidentNewStatus, incidentResult);
-    //     if (result.success)
-    //         await reloadAdminIncidents();
-    //     $('#' + incidentId + '-message').text(result.message);
-    //
-    //     console.log(incidentId + incidentNewStatus);
-    // });
 });

@@ -1,4 +1,3 @@
-
 import {getSession} from "../../../session/getSession.js";
 import {generateNotification} from "../../managers/notificationManager.js";
 
@@ -6,7 +5,7 @@ const session = await getSession();
 const volunteer = session.user;
 
 $(document).ready(async function () {
-    const filterFunction = ({ incident, volunteer, participants, distances }) => {
+    function filterFunction({incident, volunteer, participants, distances}) {
         const {incident_id} = incident;
         const entry = distances.find(entry => entry.id == incident_id);
         const isAlreadyParticipating = participants.data.filter(
@@ -21,7 +20,7 @@ $(document).ready(async function () {
         return entry.distance && entry.distance > 0 && entry.distance <= 30000 && needsParticipants && !isAlreadyParticipating;
     }
 
-    const optionsComponent = ({volunteer_id, incident_id}) => {
+    function optionsComponent({volunteer_id, incident_id}) {
         return `
             <div>
                 <div class="row">

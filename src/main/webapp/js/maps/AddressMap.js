@@ -65,16 +65,15 @@ export class AddressMap {
     zoomAtPosition(position) {
         if (!this.map) {
             console.error("Map is not initialized. Initializing map.");
-            this.map = this.setupMap(); // Ensure the map is initialized
+            this.map = this.setupMap();
         }
 
-        this.mapDiv.css({ width: "100%", height: "30em", display: "block" });
+        this.mapDiv.css({width: "100%", height: "30em", display: "block"});
         this.map.updateSize();
 
         const zoom = 11;
         this.map.setCenter(position, zoom);
     }
-
 
 
     handler(position, message) {
@@ -94,7 +93,7 @@ export class AddressMap {
     setupMap() {
         if (this.map) {
             console.warn("Map already initialized.");
-            return this.map; // Return the existing map instance
+            return this.map;
         }
 
         const map = new OpenLayers.Map(this.mapId);
@@ -103,10 +102,9 @@ export class AddressMap {
         this.markers = new OpenLayers.Layer.Markers("Markers");
         map.addLayer(this.markers);
 
-        this.map = map; // Store the map instance
+        this.map = map;
         return map;
     }
-
 
 
     updateMapView(address) {

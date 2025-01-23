@@ -1,8 +1,3 @@
-// const urlEncodedData = Object.keys(dataObj)
-//     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(dataObj[key]))
-//     .join('&');
-
-
 import {getBaseURL} from "../actions/managers/pageManager.js";
 
 export const getServletURL = (servlet) => {

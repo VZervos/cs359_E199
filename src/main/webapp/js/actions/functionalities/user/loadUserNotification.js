@@ -4,7 +4,7 @@ import {generateNotification} from "../../managers/notificationManager.js";
 const session = await getSession();
 
 $(document).ready(async function () {
-    const filterFunction = ({ incident, distances }) => {
+    const filterFunction = ({incident, distances}) => {
         const entry = distances.find(entry => entry.id == incident.incident_id);
         console.log(entry);
         return entry.distance && entry.distance > 0 && entry.distance <= 30000;

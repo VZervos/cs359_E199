@@ -54,39 +54,37 @@ const createIncidentInfo = (incident) => {
         </div>
     `;
 };
-// <button class="map-toggle-button" id=${incident_id + "-showAddressOnMap"} type="button">Show map</button>
-// <p class="errorMessage" id=${incident_id + "-address_error"}></p>
-// <p id=${incident_id + "-address_availability"}></p>
-// <div id=${incident_id + "-map"}></div>
 
 const createIncidentOptions = ({incident, volunteer, participants}) => {
     const {incident_id, vehicles, firemen} = incident;
-    const {volunteer_id, volunteer_type} = volunteer;
-    let setAcceptButton;
+    const {volunteer_id, volunteer_type, username} = volunteer;
+    let needsVolunteers = false;
 
     console.log(incident);
     console.log(volunteer);
-    if (volunteer_type === "simple") {
+    const isAlreadyParticipating = participants.data.filter(p => p.incident_id == incident_id && p.volunteer_username == username).length > 0;
+    if (!isAlreadyParticipating && volunteer_type === "simple") {
         const activeFiremen = participants.data.filter(p => p.incident_id == incident_id && p.volunteer_type == "simple" && !p.volunteer_type == "requested").length;
         console.log(activeFiremen)
-        setAcceptButton = activeFiremen < firemen;
-    } else {
+        needsVolunteers = activeFiremen < firemen;
+    } else if (!isAlreadyParticipating) {
         const activeVehicles = participants.data.filter(p => p.incident_id == incident_id && p.volunteer_type == "driver" && !p.volunteer_type == "requested").length;
         console.log(activeVehicles)
-        setAcceptButton = activeVehicles < vehicles;
+        needsVolunteers = activeVehicles < vehicles;
     }
-    console.log(setAcceptButton);
+    console.log(isAlreadyParticipating);
+    console.log(needsVolunteers);
 
-    if (setAcceptButton)
+    if (!isAlreadyParticipating && needsVolunteers)
         return `
-                <div>
-                    <div class="row">
-                        <span>
-                            <button class="request_participation-option-button" id=${volunteer_id + "-" + incident_id}>Request to participate</button>
-                        </span>
-                    </div>
+            <div>
+                <div class="row">
+                    <span>
+                        <button class="request_participation-option-button" id=${volunteer_id + "-" + incident_id}>Request to participate</button>
+                    </span>
                 </div>
-            `;
+            </div>
+        `;
     return "";
 };
 

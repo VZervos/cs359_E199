@@ -1,6 +1,5 @@
 import {getIncidentsList, getParticipantsList} from "../ajax/ajaxLists.js";
-import {reloadIncidents, shareIncident} from "../actions/managers/incidentManager.js";
-import {getSession} from "../session/getSession.js";
+import {reloadIncidents} from "../actions/managers/incidentManager.js";
 
 let loadIncidentsButton;
 let incidentsListDiv;
@@ -49,7 +48,7 @@ export async function reloadUserIncidents() {
     loadIncidentsButton.text("Reload incidents");
     const incidentsList = await getIncidentsList();
     await getParticipantsList();
-    const incidents = incidentsList.data.filter( incident => incident.status === "finished" ).reverse()
+    const incidents = incidentsList.data.filter(incident => incident.status === "finished").reverse()
     await reloadIncidents(incidents, incidentsListDiv, createIncidentInfo);
 }
 

@@ -1,6 +1,7 @@
 import {getVolunteersList} from "../../../ajax/ajaxLists.js";
 import {createParticipant} from "../../../ajax/ajaxParticipant.js";
 import {reloadUserIncidents} from "../user/loadUserIncidents.js";
+import {setResultMessage} from "../../../utility/utility.js";
 
 let loadIncidentsButton;
 let incidentsList;
@@ -24,6 +25,6 @@ $(document).ready(function () {
         const result = await createParticipant(incidentId, volunteer.username, volunteer.volunteer_type);
         if (result.success && !isFromNotification)
             await reloadUserIncidents();
-        isFromNotification ? $('#notification').html(result.message) : $('#' + incidentId + '-message').text(result.message);
+        isFromNotification ? $('#notification').html(result.message) : setResultMessage(incidentId + '-message', result);
     });
 });

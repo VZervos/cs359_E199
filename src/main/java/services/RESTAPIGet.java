@@ -110,13 +110,6 @@ public class RESTAPIGet extends API {
 
             EditMessagesTable emt = new EditMessagesTable();
             EditIncidentsTable eit = new EditIncidentsTable();
-//            try {
-//                if (Utility.isInTable(senderParam, PREDEFINED_USERNAMES))
-//                    throw new UsernameAlreadyRegisteredException(senderParam);
-//                User.checkCredentialsUniqueness(senderParam, null, null);
-//                Volunteer.checkCredentialsUniqueness(senderParam, null, null);
-//                return ErrorResponse(response, 404, "Error: Sender not found.");
-//            } catch (UsernameAlreadyRegisteredException _) {}
 
             try {
                 if (Utility.isInTable(chatType, PREDEFINED_USERNAMES))
@@ -184,8 +177,6 @@ public class RESTAPIGet extends API {
                 else return ErrorResponse(response, 404, "Error: Usertype not found.");
             }
 
-            // TODO Paragraph 3.7 with messages. Convert to json objects with whether it can readonly or write too, etc.
-            List<String> recipients = null;
             JSONArray recipientsJson = new JSONArray();
             switch (usertype) {
                 case USER_TYPE_ADMIN -> recipientsJson = generateAdminRecipients();

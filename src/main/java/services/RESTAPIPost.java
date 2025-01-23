@@ -98,32 +98,6 @@ public class RESTAPIPost extends API {
             emt.addMessageFromJSON(emt.messageToJSON(message));
             return MessageResponse("Message successfully added.");
         });
-
-//        post(API_PATH + "/participantAddition", (request, response) -> {
-//            response.status(200);
-//            response.type("application/json");
-//            System.out.println(request.body());
-//            Participant participant = new Gson().fromJson(request.body(), Participant.class);
-//
-//            if (participant.getStatus() == null ||
-//                    participant.getVolunteer_type() == null ||
-//                    participant.getVolunteer_username() == null) {
-//                return ErrorResponse(response, 406, "Error: Not all mandatory fields contain information.");
-//            }
-//
-//            EditIncidentsTable eit = new EditIncidentsTable();
-//            List<Incident> incidentList = eit.databaseToIncidents();
-//            Incident incident = incidentList.stream().filter(inc -> inc.getIncident_id() == participant.getIncident_id()).findFirst().orElse(null);
-//
-//            if (incident == null)
-//                return ErrorResponse(response, 404, "Error: Incident not found.");
-//
-//            EditParticipantsTable ept = new EditParticipantsTable();
-//            ept.createNewParticipant(participant);
-//
-//            return MessageResponse("Created participant " + participant.getIncident_id() + "(" + participant.getVolunteer_username() + ").");
-//        });
-
     }
 
     private static void forwardIncidentStatusUpdate(Request request, int incidentId, String status) {
