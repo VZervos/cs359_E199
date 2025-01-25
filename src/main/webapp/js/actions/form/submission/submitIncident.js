@@ -38,8 +38,11 @@ $(document).ready(() => {
             console.log("Incident submitted successfully!");
             const result = await submitIncident(incident);
             console.log(result)
-            if (result.success)
-                location.reload();
+            if (result.success) {
+                const sound = new Audio('/E199_war_exploded/media/submit.mp3');
+                sound.play().catch(error => console.error("Error playing sound:", error));
+                setTimeout(() => location.reload(), 2000);
+            }
             setResultMessage("submission_result", result);
 
         } else if (!isFormValid) {

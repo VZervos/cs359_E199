@@ -52,6 +52,7 @@ export async function reloadUserIncidents() {
     await reloadIncidents(incidents, incidentsListDiv, createIncidentInfo);
 }
 
+// TODO Add filters
 $(document).ready(function () {
     loadIncidentsButton = $('#load-incidents-button');
     incidentsListDiv = $('#incident-list');

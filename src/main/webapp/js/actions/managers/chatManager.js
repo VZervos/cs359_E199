@@ -83,6 +83,8 @@ export async function submitMessage(incidentId, message, sender, recipient, chat
     errorMessage.hideError();
     await loadChatBox(incidentId, recipient, sender, chatBox);
     messageBox.val("")
+    const sound = new Audio('/E199_war_exploded/media/pop.mp3');
+    sound.play().catch(error => console.error("Error playing sound:", error));
 }
 
 export async function loadIncidentSelector() {

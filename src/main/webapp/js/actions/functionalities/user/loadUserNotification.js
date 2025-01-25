@@ -14,6 +14,8 @@ $(document).ready(async function () {
         const notification = await generateNotification(session, filterFunction);
         $('#notification').html(notification);
         console.log('Notification generated:', notification);
+        const sound = new Audio('/E199_war_exploded/media/notification.mp3');
+        sound.play().catch(error => console.error("Error playing sound:", error));
     }, 0);
 
     $('#closeNotificationButton').click(_ => {
