@@ -53,7 +53,7 @@ export async function generateNotification(
                     </h2>
                     <div id="collapse-notification" class="accordion-collapse collapse" aria-labelledby="heading-notification" data-bs-parent="accordion-notification">
                         <div class="accordion-body">
-                            <div class="section-content list-incidents-admin-item row align-items-center" id="${incident_id}">
+                            <div class="section-content row align-items-center" id="${incident_id}">
                                 <div>Danger: ${danger} </div>
                                 <div>Location: ${address}, ${municipality}, ${prefecture}, Greece</div>
                                 <div>Lat/Lon: ${lat}, ${lon}</div>

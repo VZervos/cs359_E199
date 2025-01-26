@@ -25,7 +25,7 @@ export async function reloadIncidents(
                     </h2>
                     <div id="collapse-${incident_id}" class="accordion-collapse collapse" aria-labelledby="heading-${incident_id}" data-bs-parent=${"accordion-" + incident_id}>
                         <div class="accordion-body">
-                            <div class="section-content list-incidents-admin-item row align-items-center" id="${incident_id}">
+                            <div class="section-content row align-items-center" id="${incident_id}">
                                 ${createIncidentInfo(incident)}
                                 ${createIncidentOptions ? createIncidentOptions({incident, ...createIncidentOptionsArgs}) : ""}
                                 <p id="${incident_id}-message"></p>
