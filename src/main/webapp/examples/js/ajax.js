@@ -16,7 +16,6 @@ function getUser() {
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             $("#ajaxContent").html(createTableFromJSON(JSON.parse(xhr.responseText)));
-            //  $("#ajaxContent").html("Successful Login");
         } else if (xhr.status !== 200) {
             $("#ajaxContent").html("User not exists or incorrect password");
         }

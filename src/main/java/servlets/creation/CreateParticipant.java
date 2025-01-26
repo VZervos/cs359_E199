@@ -6,8 +6,6 @@
 package servlets.creation;
 
 import database.tables.EditParticipantsTable;
-import database.tables.EditUsersTable;
-import database.tables.EditVolunteersTable;
 import exceptions.EmailAlreadyRegisteredException;
 import exceptions.TelephoneAlreadyRegisteredException;
 import exceptions.UsernameAlreadyRegisteredException;
@@ -16,8 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mainClasses.Participant;
-import mainClasses.User;
-import mainClasses.Volunteer;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -74,11 +70,8 @@ public class CreateParticipant extends HttpServlet {
         JSONObject responseBody = new JSONObject();
         try {
             writer = response.getWriter();
-//            JSONObject userData = getBodyJson(request);
             String participantDataString = getBodyString(request);
             JSONObject participantData = new JSONObject(participantDataString);
-
-            // TODO: Check ids and stuff
 
             EditParticipantsTable ept = new EditParticipantsTable();
             Participant participant = ept.jsonToParticipant(participantDataString);
@@ -97,28 +90,6 @@ public class CreateParticipant extends HttpServlet {
             e.printStackTrace();
         }
 
-    }
-
-    private void registerUser(String body, JSONObject userData)
-            throws ClassNotFoundException, UsernameAlreadyRegisteredException, TelephoneAlreadyRegisteredException, EmailAlreadyRegisteredException, SQLException {
-        User.checkCredentialsUniqueness(userData);
-        Volunteer.checkCredentialsUniqueness(userData);
-
-        EditUsersTable eut = new EditUsersTable();
-        eut.addUserFromJSON(body);
-    }
-
-    private void registerAdmin(HttpServletRequest request) {
-        // TODO
-    }
-
-    private void registerVolunteer(String body, JSONObject volunteerData)
-            throws ClassNotFoundException, UsernameAlreadyRegisteredException, TelephoneAlreadyRegisteredException, EmailAlreadyRegisteredException, SQLException {
-        User.checkCredentialsUniqueness(volunteerData);
-        Volunteer.checkCredentialsUniqueness(volunteerData);
-
-        EditVolunteersTable evt = new EditVolunteersTable();
-        evt.addVolunteerFromJSON(body);
     }
 
     /**

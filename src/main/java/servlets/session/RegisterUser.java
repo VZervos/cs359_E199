@@ -110,7 +110,6 @@ public class RegisterUser extends HttpServlet {
     }
 
     private void registerAdmin(HttpServletRequest request) {
-        // TODO
     }
 
     private void registerVolunteer(String body, JSONObject volunteerData)

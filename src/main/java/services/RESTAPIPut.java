@@ -24,7 +24,6 @@ public class RESTAPIPut extends API {
             initResponse(response);
             String incidentIdParam = getRequestParam(request, "incident_id");
             String incidentStatusParam = getRequestParam(request, "status");
-            //JSONObject body = getBody(request);
             String requestBody = request.body();
             JSONObject body = new JSONObject(requestBody);
 

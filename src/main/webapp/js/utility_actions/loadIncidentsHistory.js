@@ -1,4 +1,4 @@
-import {getIncidentsList, getParticipantsList} from "../ajax/ajaxLists.js";
+import {getIncidentsList} from "../ajax/ajaxLists.js";
 import {reloadIncidents} from "../actions/managers/incidentManager.js";
 
 let loadIncidentsButton;

@@ -78,7 +78,6 @@ public class RESTAPIGet extends API {
             if (volunteerTypeParam.equals("all")) {
                 evt.getVolunteers("simple").forEach(volunteer -> volunteersJson.append(evt.volunteerToJSON(volunteer)).append(','));
                 evt.getVolunteers("driver").forEach(volunteer -> volunteersJson.append(evt.volunteerToJSON(volunteer)).append(','));
-                ;
             } else {
                 evt.getVolunteers(volunteerTypeParam).forEach(volunteer -> volunteersJson.append(evt.volunteerToJSON(volunteer)).append(','));
             }

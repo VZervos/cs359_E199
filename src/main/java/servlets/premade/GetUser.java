@@ -54,7 +54,6 @@ public class GetUser extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             EditUsersTable eut = new EditUsersTable();
             User su = eut.databaseToUsers(username, password);
             if (su == null) {
