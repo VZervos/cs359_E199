@@ -1,0 +1,288 @@
+% Document class
+\documentclass[a4paper, 12pt]{article}
+
+% Font and Language settings
+\usepackage{fontspec}
+\usepackage{polyglossia}  % Multilingual support
+\usepackage{csquotes}     % Quotation formatting
+\usepackage{hyperref}     % For clickable links
+
+% Language configuration
+\setdefaultlanguage{english}   % Set default document language
+\setotherlanguage{greek}       % Secondary language
+
+% Main font configuration
+\setmainfont{Linux Libertine O}[
+    SmallCapsFeatures={Letters=SmallCaps}, % Enable small caps
+    SmallCapsFont={Linux Libertine O},     % Font for small caps
+    Ligatures=TeX,                         % Enable TeX ligatures
+    Script=Latin                           % Specify script explicitly
+]
+
+% Sans-serif font configuration
+\setsansfont{Linux Libertine O}[
+    SmallCapsFont={Linux Libertine O},     % Font for small caps
+    Ligatures=TeX,                         % Enable TeX ligatures
+    Numbers=OldStyle,                      % Old style numbers
+    Script=Latin                           % Specify script explicitly
+]
+
+% Monospace font
+\setmonofont{Linux Libertine Mono O}
+
+% Math support
+\usepackage{amsmath}
+
+% Graphics and drawing
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{trees}  % TikZ tree diagrams
+
+
+\usepackage{pgfplots}
+\usetikzlibrary{intersections} % For intersection features
+\usepgfplotslibrary{fillbetween} % For fill-between-paths functionality
+\usetikzlibrary{shapes.geometric, positioning}
+
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, text centered, rounded corners, minimum height=3em]
+\tikzstyle{line} = [draw, -latex] % Arrow style: a line with an arrowhead
+\usepackage{amssymb}
+
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, positioning}
+\usepackage{multicol}
+\usetikzlibrary{calc}
+
+\newcommand{\includeimage}[2]{
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{#1}
+        \if\relax\detokenize{#2}\relax
+            % Do nothing if #2 is empty
+        \else
+            \caption{#2}
+        \fi
+    \end{figure}
+}
+
+% Code listings
+\usepackage{listings}
+
+% Table and figure placement
+\usepackage{array}
+\usepackage{float}
+
+\begin{document}
+\title{CS359 project report}
+\date{}
+\maketitle
+\section*{System Overview}
+\subsection*{Purpose}
+The E199 Platform is a web-based emergency management system designed to coordinate responses to incidents like fires and accidents. It facilitates communication between civilians, volunteers, and administrators while managing emergency incidents effectively.
+\subsection*{Technology Stack}
+\begin{itemize}
+    \item Frontend: HTML5, CSS3, JavaScript, Bootstrap 5.3.3
+    \item Backend: Java (Servlets, REST APIs)
+    \item Libraries: jQuery 3.7.1, OpenLayers (for maps)
+    \item Data Format: JSON for data exchange
+\end{itemize}
+\subsection*{User Roles}
+\subsubsection*{Admin}
+\begin{itemize}
+    \item System management
+    \item Incident oversight
+    \item Communication management
+    \item Statistics monitoring
+\end{itemize}
+The figure below displays the Admin Dashboard. Admin can access the system by login and also they can log out when they finish their task. The roles of an Admin include Manage Incidents, Submit Incident, Chat, View Statistics, and View Incidents History.
+\includeimage{images/image_1.png}{Admin Dashboard displaying some of the admin’s roles}
+\subsubsection*{User}
+\begin{itemize}
+    \item Incident reporting
+    \item Chat communication
+    \item Profile management
+    \item Incident history viewing
+\end{itemize}
+The figure below displays the User dashboard after they have access the system by login. The main activities included on the user side include viewing of notifications, submitting incidents, viewing of incidents and incidents history, chatting, and also viewing their personal information on their profiles.  
+\includeimage{images/image_2.png}{User Dashboard displaying some of the user’s roles}
+\subsubsection*{Volunteer}
+\begin{itemize}
+    \item Incident participation
+    \item Status updates
+    \item Profile management
+    \item Communication with admins
+\end{itemize}
+The figure below displays a Volunteer dashboard after they have access the system by login. Volunteers are users with limited functionalities as they cannot submit any incidents but from the dashboard they can view incidents and incidents history, chat, and also view their personal information on their profiles.
+\includeimage{images/image_3.png}{Volunteer Dashboard displaying some of the volunteer’s roles}
+\subsubsection*{Guest}
+\begin{itemize}
+    \item Limited incident reporting
+    \item Basic system access
+    \item Public information viewing
+\end{itemize}
+The figure below displays a Guest user dashboard after they have access the system by login. Guest users are users without any account, they can access the system without registering or login. They are just one-time users of the system. Guest users are limited to submitting inclidents, viewing some incidents, and talking to the help desk.
+\includeimage{images/image_4.png}{Guest Dashboard displaying some of the guest’s roles}
+\section*{Implementation}
+\subsection*{Frontend Architecture}
+Each user type has a specialized dashboard with role-specific features:\\
+\texttt{/dashboard/admin/}
+\begin{lstlisting}
+chat.html                  # Admin communication interface
+history.html               # Incident history management
+manage_incidents           # Incident oversight
+statistics.html            # System analytics
+submit_incident            # Incident creation
+\end{lstlisting}
+\includeimage{images/image_5.png}{Admin Dashboard distinguishing available roles for the admin}
+The figure above displays the Admin Dashboard. An Admin is a super user and has access management of incidents reported by every user. The roles of an Admin include Manage Incidents, Submit Incident, Chat, View Statistics, and View Incidents History.\\
+\texttt{/dashboard/user/}
+\begin{lstlisting}
+chat.html         # User communication
+history.html      # Personal incident history
+list_incidents    # Active incidents view
+my_information    # Profile management
+submit_incident   # Incident reporting
+\end{lstlisting}
+\includeimage{images/image_6.png}{User Dashboard distinguishing available roles for the user}
+The figure above displays the User dashboard after they have access the system by login. The main activities included on the user side include viewing of notifications, submitting incidents, viewing of incidents and incidents history, chatting, and also viewing their personal information on their profiles.
+\subsection*{Backend Architecture}
+\textbf{Core Classes}\\
+\texttt{mainClasses/}
+\begin{lstlisting}
+Admin.java       # Admin user management
+Incident.java    # Incident data structure
+Message.java     # Communication system
+Participant.java # Volunteer participation
+User.java        # Base user functionality
+Volunteer.java   # Volunteer management
+\end{lstlisting}
+\textbf{REST API Structure}\\
+\texttt{services/}
+\begin{lstlisting}
+API.java         # Base API functionality
+RESTAPIDelete.java
+RESTAPIGet.java
+RESTAPIPost.java
+RESTAPIPut.java
+\end{lstlisting}
+\section*{Key Features}
+\subsection*{Incident Management System}
+\subsubsection*{Incident Creation}
+Incident reporting is one of the major functionalities of the system. The creation of an incident can be done by almost any user, whether an admin, guest, or a typical user. The screenshot below displays a form used to create and submit an incident.
+\subsubsection*{Features of Incident Reporting}
+\begin{itemize}
+    \item Type classification (fire, accident)
+    \item Location mapping
+    \item Resource requirement specification
+    \item Priority/danger level assignment
+\end{itemize}
+\subsubsection*{Description of the Incident Submission Form}
+The user chooses the type of incident they would like to report (e.g., fire or accident). They can provide a brief description of the incident and also include more details, such as:
+\begin{itemize}
+    \item Country
+    \item Prefecture
+    \item Municipality
+    \item Address
+\end{itemize}
+\includeimage{images/image_7.png}{Incident Submission Form}
+\subsection*{Incident Tracking}
+\begin{itemize}
+    \item Real-time status updates
+    \item Resource allocation
+    \item Volunteer assignment
+    \item Historical data maintenance
+\end{itemize}
+The reported incidents need to be tracked and the status of the incidents is recorded on the system. The volunteers can check active incidents and also update the status of the incident. Admins can as well manage incidents which are active and also the ones that have been attended to. They can also modify the status of an incident and view real time status of the incident.
+\includeimage{images/image_8.png}{Volunteer Dashboard displaying incidents tracking section}
+\subsection*{Communication System}
+\begin{itemize}
+    \item Public channels
+    \item Private messaging
+    \item Volunteer coordination
+    \item Admin broadcasts
+\end{itemize}
+\includeimage{images/image_9.png}{User Dashboard displaying chat section}
+Chatting is also a major functionality of the system. Users can send messages to one another and also to channels. The chat feature is available to admins, users and volunteers.
+\subsection*{User Management}
+\includeimage{images/image_10.png}{Welcome screen}
+The figure above displays the welcome screen of the application. New users can choose to register on the system to acquire an account. Existing users would be required to login to access the system. Guest users are not required to create an account, they can access the system and perform some limited functions.
+\subsubsection*{Registration System}
+\begin{itemize}
+    \item Role-based registration
+    \item Validation checks
+    \item Profile customization
+    \item Credential management
+\end{itemize}
+\includeimage{images/image_11.png}{}
+\includeimage{images/image_12.png}{Registration form}
+New users of the application will need to click on the register button the welcome screen to access the registration screen. When registering, users need to provide valid personal information as the system has some validation checks. New users will choose their roles (simple user or volunteer) and this will classify them in role-based accounts. A simple user cannot login as an admin or a volunteer.  
+\subsubsection*{Authentication}
+\texttt{session/}
+\begin{lstlisting}
+LoginUser.java
+LogoutUser.java
+GetActiveSession.java
+\end{lstlisting}
+
+\subsection*{Login Process}
+Registered users need to click on the login button to access the login screen. The login process involves the following steps:
+\begin{itemize}
+    \item Users select the appropriate user type: Admin, Volunteer, or User.
+    \item Users enter their username and password that they registered with.
+    \item The system validates the entered credentials.
+    \begin{itemize}
+        \item If the credentials are valid, the user will be logged in.
+        \item If the credentials are invalid, the system will display an error message on the screen.
+    \end{itemize}
+\end{itemize}
+\includeimage{images/image_13.png}{Login form}
+\subsection*{Volunteer Management}
+
+\subsubsection*{Volunteer Types}
+\begin{itemize}
+    \item Simple volunteers
+    \item Driver volunteers
+    \item Specialized roles
+\end{itemize}
+
+\subsubsection*{Participation System}
+\begin{itemize}
+    \item Request management
+    \item Status tracking
+    \item Performance evaluation
+    \item Success metrics
+\end{itemize}
+
+\section*{Security Features}
+
+\subsection*{Authentication}
+\begin{itemize}
+    \item Session-based authentication
+    \item Role-based access control
+    \item Secure password handling
+\end{itemize}
+
+\subsection*{Data Validation}
+
+\texttt{validation/}
+\begin{lstlisting}
+IsEmailAvailable.java
+IsTelephoneAvailable.java
+IsUsernameAvailable.java
+\end{lstlisting}
+
+\section*{Test Case Scenario}
+Testing the functionality will perform a simulation of authenticating one of the volunteers into the system and view some of the features on their dashboard. For the test case, we will simulate the process of registering a new user as a volunteer and afterwards login to the application with the credentials registered. The user will access the welcome screen first then clicks on the register button and will be presented with a register page. Below is the screen displaying the new user registration process. 
+\includeimage{images/image_14.png}{}
+\includeimage{images/image_15.png}{User registering his information on the application}
+After entering all valid information and clicking the Register button, a feedback screen is displayed to the user saying that the registration process was successful
+\includeimage{images/image_16.png}{Successful user registration feedback}
+The user will be presented with a login button, which they can use to access the login screen and login with the appropriate user type and valid credentials
+\includeimage{images/image_17.png}{User logging in as a volunteer}
+Having logged in with valid credentials, the user will be directed to the dashboard. Below is a screenshot displaying the user information
+\includeimage{images/image_18.png}{}
+\includeimage{images/image_19.png}{}
+\includeimage{images/image_20.png}{Volunteer Dashboard displaying personal information of a volunteer}
+From the dashboard, the user can perform other operations such as viewing a list of incidents and chatting.
+\end{document}
