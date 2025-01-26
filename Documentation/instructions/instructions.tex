@@ -1,0 +1,36 @@
+\documentclass[12pt]{article}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\begin{document}
+
+\section*{Installation Instructions}
+
+\begin{enumerate}[label=\arabic*.]
+    \item Run \textbf{XAMPP} and activate the \texttt{Apache} and \texttt{MySQL} modules.
+    \item Open the project, ideally using an IDE (e.g., \textit{IntelliJ}).
+    \item Run the \texttt{REST API}:
+    \begin{itemize}
+        \item Navigate to \texttt{src/main/java/services/RESTAPI.java}.
+    \end{itemize}
+    \item Depending on your environment:
+    \begin{enumerate}[label=\alph*.]
+        \item If using \textit{IntelliJ}, create an \texttt{E199:war exploded} artifact.
+        \item Create a Tomcat configuration for the web app. Ensure the URL is set to:
+        \begin{quote}
+            \url{http://localhost:5000/E199_war_exploded/}
+        \end{quote}
+        Attach the artifact to the configuration if using \textit{IntelliJ}.
+    \end{enumerate}
+    \item Run the web app using the configuration created in Step 4b.
+    \item Open a browser (e.g., \textit{Google Chrome}) with CORS deactivated.
+    \item Paste the URL:
+    \begin{quote}
+        \url{http://localhost:5000/E199_war_exploded/}
+    \end{quote}
+    into the search bar to open the app. Have fun browsing!
+    \item (Bonus) Click anywhere to hear some \textit{qUaLiTy mUsIc}!
+\end{enumerate}
+
+\end{document}
+
