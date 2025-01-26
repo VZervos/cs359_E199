@@ -18,6 +18,7 @@ const createIncidentInfo = (incident) => {
         vehicles,
         firemen,
         start_datetime,
+        end_datetime,
         finalResult,
         description,
     } = incident;
@@ -31,6 +32,7 @@ const createIncidentInfo = (incident) => {
             <div>Vehicles: ${vehicles} </div>
             <div>Firemen:  ${firemen} </div>
             <div>Started: ${start_datetime}</div>
+            <div>Ended: ${end_datetime}</div>
             <div>Result: ${finalResult}</div>
             <div>
                 Description:
@@ -47,12 +49,25 @@ const createIncidentInfo = (incident) => {
 export async function reloadUserIncidents() {
     loadIncidentsButton.text("Reload incidents");
     const incidentsList = await getIncidentsList();
-    await getParticipantsList();
-    const incidents = incidentsList.data.filter(incident => incident.status === "finished").reverse()
+    const formData = new FormData(document.getElementById("filtersForm"));
+    const filters = Object.fromEntries(formData.entries());
+
+    const incidents = incidentsList.data
+        .filter(incident => incident.status === "finished")
+        .filter(incident => {
+            for (const [key, value] of Object.entries(filters)) {
+                const incidentValue = incident[key];
+                if (value && key.includes("datetime") && incidentValue.split(' ')[0] != value)
+                    return false
+                else if (value && !key.includes("datetime") && incidentValue != value)
+                    return false
+            }
+            return true;
+        })
+        .reverse();
     await reloadIncidents(incidents, incidentsListDiv, createIncidentInfo);
 }
 
-// TODO Add filters
 $(document).ready(function () {
     loadIncidentsButton = $('#load-incidents-button');
     incidentsListDiv = $('#incident-list');

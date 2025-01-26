@@ -22,6 +22,7 @@ const createIncidentInfo = (incident) => {
         vehicles,
         firemen,
         start_datetime,
+        end_datetime,
         finalResult,
         description,
         status
@@ -41,6 +42,7 @@ const createIncidentInfo = (incident) => {
             <div>Vehicles: ${vehicles} </div>
             <div>Firemen:  ${firemen} </div>
             <div>Started: ${start_datetime}</div>
+            <div>Ended: ${end_datetime}</div>
             <div>Result: ${finalResult}</div>
             <div>
                 Description:

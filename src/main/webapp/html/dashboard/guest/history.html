@@ -100,75 +100,77 @@
                          data-bs-parent="#filters">
                         <div class="accordion-body">
                             <div class="row align-items-center">
-                                <div class="section-content">
-                                    <label class="field-title" for="prefecture">Prefecture:</label>
-                                    <select
-                                            autocomplete="address-level1"
-                                            class="form-select"
-                                            id="prefecture"
-                                            name="prefecture"
-                                    >
-                                        <option selected value="">Any</option>
-                                        <option value="Chania">Chania</option>
-                                        <option value="Rethymno">Rethymno</option>
-                                        <option value="Heraklion">Heraklion</option>
-                                        <option value="Lasithi">Lasithi</option>
-                                    </select>
-                                </div>
+                                <form id="filtersForm">
+                                    <div class="section-content">
+                                        <label class="field-title" for="prefecture">Prefecture:</label>
+                                        <select
+                                                autocomplete="address-level1"
+                                                class="form-select"
+                                                id="prefecture"
+                                                name="prefecture"
+                                        >
+                                            <option selected value="">Any</option>
+                                            <option value="Chania">Chania</option>
+                                            <option value="Rethymno">Rethymno</option>
+                                            <option value="Heraklion">Heraklion</option>
+                                            <option value="Lasithi">Lasithi</option>
+                                        </select>
+                                    </div>
 
-                                <div class="section-content">
-                                    <label class="field-type" for="type">Incident Type:</label>
-                                    <select
-                                            autocomplete="address-level1"
-                                            class="form-select"
-                                            id="type"
-                                            name="prefecture"
-                                    >
-                                        <option selected value="">Any</option>
-                                        <option value="fire">Fire</option>
-                                        <option value="accident">Accident</option>
-                                    </select>
-                                </div>
+                                    <div class="section-content">
+                                        <label class="field-title" for="type">Incident Type:</label>
+                                        <select
+                                                autocomplete="address-level1"
+                                                class="form-select"
+                                                id="type"
+                                                name="incident_type"
+                                        >
+                                            <option selected value="">Any</option>
+                                            <option value="fire">Fire</option>
+                                            <option value="accident">Accident</option>
+                                        </select>
+                                    </div>
 
-                                <div class="section-content">
-                                    <label class="field-title" for="start">Start date:</label>
-                                    <input id="start"
-                                           name="start"
-                                           title="Start date in US calendar."
-                                           type="date"
-                                    >
-                                </div>
+                                    <div class="section-content">
+                                        <label class="field-title" for="start">Start date:</label>
+                                        <input id="start"
+                                               name="start_datetime"
+                                               title="Start date in US calendar."
+                                               type="date"
+                                        >
+                                    </div>
 
-                                <div class="section-content">
-                                    <label class="field-title" for="end">End date:</label>
-                                    <input id="end"
-                                           name="end"
-                                           title="End date in US calendar."
-                                           type="date"
-                                    >
-                                </div>
+                                    <div class="section-content">
+                                        <label class="field-title" for="end">End date:</label>
+                                        <input id="end"
+                                               name="end_datetime"
+                                               title="End date in US calendar."
+                                               type="date"
+                                        >
+                                    </div>
 
-                                <div class="section-content">
-                                    <label class="field-title" for="firemen">Firemen:</label>
-                                    <input id="firemen"
-                                           maxlength="3"
-                                           name="firemen"
-                                           pattern="[0-9]*"
-                                           title="Number of firemen or leave it empty for any amount."
-                                           type="number"
-                                    >
-                                </div>
+                                    <div class="section-content">
+                                        <label class="field-title" for="firemen">Firemen:</label>
+                                        <input id="firemen"
+                                               maxlength="3"
+                                               name="firemen"
+                                               pattern="[0-9]*"
+                                               title="Number of firemen or leave it empty for any amount."
+                                               type="number"
+                                        >
+                                    </div>
 
-                                <div class="section-content">
-                                    <label class="field-title" for="vehicles">Vehicles:</label>
-                                    <input id="vehicles"
-                                           maxlength="3"
-                                           name="vehicles"
-                                           pattern="[0-9]*"
-                                           title="Number of firemen or leave it empty for any amount."
-                                           type="number"
-                                    >
-                                </div>
+                                    <div class="section-content">
+                                        <label class="field-title" for="vehicles">Vehicles:</label>
+                                        <input id="vehicles"
+                                               maxlength="3"
+                                               name="vehicles"
+                                               pattern="[0-9]*"
+                                               title="Number of firemen or leave it empty for any amount."
+                                               type="number"
+                                        >
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

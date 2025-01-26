@@ -72,6 +72,7 @@ const createIncidentInfo = (incident) => {
         vehicles,
         firemen,
         start_datetime,
+        end_datetime,
         finalResult,
         description,
         status
@@ -115,6 +116,7 @@ const createIncidentInfo = (incident) => {
         <div>User: ${user_type} (${user_phone})</div>
         ${generateVehiclesFiremenSelectors(incident)}
         <div>Started: ${start_datetime}</div>
+        <div>Ended: ${end_datetime}</div>
         ${finalResultField}
         <div>
             Description:

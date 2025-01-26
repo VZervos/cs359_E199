@@ -46,20 +46,16 @@ export async function shareIncident(incidentId, platformId) {
     const incidentsList = await getIncidentsList()
     const incident = incidentsList.data.find(incident => incident.incident_id == incidentId);
     const {
-        incident_id,
         danger,
         address,
         municipality,
         prefecture,
         lat,
         lon,
-        user_type,
-        user_phone,
         vehicles,
         firemen,
         start_datetime,
         finalResult,
-        description
     } = incident;
 
     if (platformId === "facebook") {
