@@ -1,0 +1,104 @@
+% Document class
+\documentclass[a4paper, 12pt]{article}
+
+% Font and Language settings
+\usepackage{fontspec}
+\usepackage{polyglossia}  % Multilingual support
+\usepackage{csquotes}     % Quotation formatting
+\usepackage{hyperref}     % For clickable links
+
+% Language configuration
+\setdefaultlanguage{english}   % Set default document language
+\setotherlanguage{greek}       % Secondary language
+
+% Main font configuration
+\setmainfont{Linux Libertine O}[
+    SmallCapsFeatures={Letters=SmallCaps}, % Enable small caps
+    SmallCapsFont={Linux Libertine O},     % Font for small caps
+    Ligatures=TeX,                         % Enable TeX ligatures
+    Script=Latin                           % Specify script explicitly
+]
+
+% Sans-serif font configuration
+\setsansfont{Linux Libertine O}[
+    SmallCapsFont={Linux Libertine O},     % Font for small caps
+    Ligatures=TeX,                         % Enable TeX ligatures
+    Numbers=OldStyle,                      % Old style numbers
+    Script=Latin                           % Specify script explicitly
+]
+
+% Monospace font
+\setmonofont{Linux Libertine Mono O}
+
+% Math support
+\usepackage{amsmath}
+
+% Graphics and drawing
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{trees}  % TikZ tree diagrams
+
+
+\usepackage{pgfplots}
+\usetikzlibrary{intersections} % For intersection features
+\usepgfplotslibrary{fillbetween} % For fill-between-paths functionality
+\usetikzlibrary{shapes.geometric, positioning}
+
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, text centered, rounded corners, minimum height=3em]
+\tikzstyle{line} = [draw, -latex] % Arrow style: a line with an arrowhead
+\usepackage{amssymb}
+
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, positioning}
+\usepackage{multicol}
+\usetikzlibrary{calc}
+
+\newcommand{\includeimage}[2]{
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{#1}
+        \if\relax\detokenize{#2}\relax
+            % Do nothing if #2 is empty
+        \else
+            \caption{#2}
+        \fi
+    \end{figure}
+}
+
+% Code listings
+\usepackage{listings}
+
+% Table and figure placement
+\usepackage{array}
+\usepackage{float}
+
+\begin{document}
+\begin{center}
+    \textbf{\Large CS359 - Web Programming}\\[0.5cm]
+    \textbf{\Large Grading Report}\\[0.5cm]
+    \textbf{\large Fall Semester 2024-2025}\\[1cm]
+    \textbf{Spyridon Chrisovalantis Zervos (csd4878)}\\[0.2cm]
+    \textbf{Rafail Drakakis (csd5310)}
+\end{center}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Κατηγορία} & \textbf{Ποσοστό} & \textbf{Done (yes/no)} \\ \hline
+        Σχεδίαση - Αναφορά & 15\% & yes \\ \hline
+        Administrator & 25\% & yes \\ \hline
+        Εγγεγραμμένος Χρήστης & 22\% & yes \\ \hline
+        Εθελοντής Πυροσβέστης & 15\% & yes \\ \hline
+        Επισκέπτης & 15\% & yes \\ \hline
+        Σωστή Χρήση REST και AJAX & 4\% & yes \\ \hline
+        Σωστή Χρήση Maps και Οπτικοποίησης & 4\% & yes \\ \hline
+        Έξτρα Λειτουργικότητα (Bonus) & 8\% & yes \\ \hline
+        \textbf{Σύνολο} & \textbf{108\%} & \\ \hline
+    \end{tabular}
+    \caption{Πίνακας Βαθμολόγησης}
+\end{table}
+
+
+\end{document}
